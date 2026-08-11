@@ -1,0 +1,22 @@
+{
+  "_comment": [
+    "Copy the 'binomen' block into your claude_desktop_config.json.",
+    "macOS:   ~/Library/Application Support/Claude/claude_desktop_config.json",
+    "Windows: %APPDATA%\\Claude\\claude_desktop_config.json",
+    "Replace ABSOLUTE_PATH with the checkout path. Restart Claude Desktop after editing.",
+    "BINOMEN_DESCRIPTIONS selects the tool-description variant: narrow | broad | imperative.",
+    "Use it to reproduce the invocation-rate comparison in README section 7."
+  ],
+  "mcpServers": {
+    "binomen": {
+      "command": "ABSOLUTE_PATH/.venv/bin/python",
+      "args": ["-m", "binomen.server"],
+      "env": {
+        "PYTHONPATH": "ABSOLUTE_PATH/src",
+        "BINOMEN_DB": "ABSOLUTE_PATH/data/binomen.sqlite",
+        "BINOMEN_DESCRIPTIONS": "broad",
+        "BINOMEN_LIVE": "1"
+      }
+    }
+  }
+}

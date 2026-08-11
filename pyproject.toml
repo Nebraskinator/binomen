@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "binomen"
+version = "0.1.0"
+description = "Code-aware biological name resolution for agents: an MCP server plus a severity-graded evaluation harness."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Zachary Ruhe" }]
+keywords = ["taxonomy", "nomenclature", "mcp", "bioinformatics", "evaluation"]
+
+dependencies = [
+  "mcp>=1.2.0",
+  "httpx>=0.27",
+]
+
+[project.optional-dependencies]
+eval = ["anthropic>=0.40", "tabulate>=0.9"]
+dev = ["pytest>=8.0", "pytest-asyncio>=0.23", "ruff>=0.6"]
+
+[project.scripts]
+binomen-server = "binomen.server:main"
+binomen-build-index = "binomen.build.build_index:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/binomen"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "C4"]
+ignore = [
+  "E501",   # line length is enforced by the formatter, not the linter
+  "B008",   # function call in default arg -- intentional in a few CLI defaults
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E402"]     # sys.path setup must precede imports
+"eval/*"  = ["E402"]

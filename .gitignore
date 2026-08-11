@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+
+# Built index and downloaded source data are NOT committed.
+# Rebuild with: binomen-build-index
+data/*.sqlite
+data/*.sqlite-journal
+data/taxdump*
+data/cache/
+*.sqlite
+
+# Eval outputs. The example run is committed so the report format is reviewable
+# without an API key; real runs are not.
+eval/runs/*
+!eval/runs/example-run.jsonl
+!eval/runs/example-report.md
+eval/verification-report.json

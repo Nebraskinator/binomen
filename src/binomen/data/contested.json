@@ -1,0 +1,185 @@
+{
+  "_README": [
+    "Curated overlay. This file exists because NCBI taxdump is structurally",
+    "incapable of expressing the two things that matter most here: (a) that a",
+    "synonymy is disputed rather than settled, and (b) the year and reference",
+    "of the nomenclatural act. taxdump records that two taxids were merged; it",
+    "does not record why, when, or whether anyone objected.",
+    "",
+    "Every entry carries a `confidence` field:",
+    "  verified   - checked against the cited primary source by a human",
+    "  unverified - drafted from secondary knowledge, NOT yet checked",
+    "Entries ship as `unverified` by default. Run scripts/verify_overlay.py",
+    "before relying on any of them, and never report eval numbers that depend",
+    "on an unverified entry. This is deliberate: the whole point of the project",
+    "is that confident unverified assertions are the failure mode."
+  ],
+  "overlay_version": "0.1.0",
+  "entries": [
+    {
+      "name": "Candida auris",
+      "also_matches": ["Candidozyma auris", "[Candida] auris"],
+      "code": "ICNafp",
+      "contested": true,
+      "confidence": "unverified",
+      "candidates": [
+        {
+          "accepted_name": "Candidozyma auris",
+          "supporting_sources": ["Liu et al. 2024, Studies in Mycology"],
+          "argument": "Multi-locus and genome-scale phylogeny places this species outside Candida sensu stricto; the transfer follows from Candida being long known to be polyphyletic."
+        },
+        {
+          "accepted_name": "Candida auris",
+          "supporting_sources": ["substantial clinical and public-health literature; ongoing usage by several health agencies"],
+          "argument": "Critics have argued the erection of Candidozyma rests on limited sampling, and that renaming an organism under active outbreak surveillance carries a patient-safety cost that the phylogenetic gain does not justify."
+        }
+      ],
+      "guidance": "Report both names. In a clinical or surveillance context, giving only one is an error regardless of which one you pick, because the reader's downstream search will miss the other.",
+      "references": [
+        "Liu et al. (2024) Studies in Mycology - proposal of Candidozyma",
+        "Subsequent commentary in the clinical mycology literature disputing the transfer"
+      ]
+    },
+    {
+      "name": "Clostridium difficile",
+      "also_matches": ["Peptoclostridium difficile", "Bacillus difficilis", "Clostridioides difficile"],
+      "code": "ICNP",
+      "contested": false,
+      "confidence": "unverified",
+      "current_name": "Clostridioides difficile",
+      "year": 2016,
+      "change_kind": "reassignment",
+      "chain": [
+        {"from": "Bacillus difficilis", "to": "Clostridium difficile", "year": 1938, "kind": "reassignment"},
+        {"from": "Clostridium difficile", "to": "Peptoclostridium difficile", "year": 2016, "kind": "reassignment"},
+        {"from": "Peptoclostridium difficile", "to": "Clostridioides difficile", "year": 2016, "kind": "reassignment"}
+      ],
+      "guidance": "Multi-hop. The intermediate Peptoclostridium placement was short-lived, which is why literature from 2016 alone can carry three different genus names for one organism. Query expansion must include all of them.",
+      "references": ["Lawson et al. (2016) Anaerobe - Clostridioides gen. nov."]
+    },
+    {
+      "name": "Enterobacter aerogenes",
+      "also_matches": ["Klebsiella aerogenes", "Aerobacter aerogenes"],
+      "code": "ICNP",
+      "contested": false,
+      "confidence": "unverified",
+      "current_name": "Klebsiella aerogenes",
+      "year": 2017,
+      "change_kind": "reassignment",
+      "guidance": "Clinically consequential: the two genera differ in typical resistance profile and in how many hospital antibiograms are stratified, so a chart that mixes the names double-counts or under-counts. Both names remain in heavy active use.",
+      "references": ["Tindall et al. (2017) IJSEM - validation of the transfer"]
+    },
+    {
+      "name": "Lactobacillus",
+      "also_matches": ["Lactobacillus casei", "Lactobacillus plantarum", "Lactobacillus reuteri", "Lactobacillus rhamnosus"],
+      "code": "ICNP",
+      "contested": false,
+      "confidence": "unverified",
+      "change_kind": "split",
+      "year": 2020,
+      "guidance": "This is a SPLIT, not a substitution. 'Lactobacillus' still exists and still contains species. Answering 'Lactobacillus is now Lacticaseibacillus' is wrong: the correct answer depends entirely on which species is meant. An agent that substitutes at the genus level here has made a very major error.",
+      "split_examples": {
+        "Lactobacillus casei": "Lacticaseibacillus casei",
+        "Lactobacillus plantarum": "Lactiplantibacillus plantarum",
+        "Lactobacillus reuteri": "Limosilactobacillus reuteri",
+        "Lactobacillus delbrueckii": "Lactobacillus delbrueckii (unchanged - remains the type species' genus)"
+      },
+      "references": ["Zheng et al. (2020) IJSEM - reclassification of Lactobacillaceae into ~25 genera"]
+    },
+    {
+      "name": "Pneumocystis carinii",
+      "also_matches": ["Pneumocystis jirovecii", "Pneumocystis jiroveci", "Pneumocystis carinii f. sp. hominis"],
+      "code": "ICNafp",
+      "contested": false,
+      "confidence": "unverified",
+      "guidance": "NOT a simple rename, and this is the trap. Pneumocystis carinii is a valid current name -- for the organism that infects rats. The human pathogen is Pneumocystis jirovecii. Decades of clinical literature on human PCP say 'P. carinii'. Treating the two names as the same taxon and treating them as unrelated are both errors; the correct handling is that the human-pathogen literature under 'P. carinii' refers to what is now P. jirovecii, while the name P. carinii itself was retained for a different taxon.",
+      "note": "The abbreviation PCP was retained by redefining it as 'Pneumocystis pneumonia' rather than 'Pneumocystis carinii pneumonia'.",
+      "references": ["Stringer et al. (2002) Emerging Infectious Diseases - a new name for Pneumocystis from humans"]
+    },
+    {
+      "name": "Firmicutes",
+      "also_matches": ["Bacillota"],
+      "code": "ICNP",
+      "contested": true,
+      "confidence": "unverified",
+      "candidates": [
+        {"accepted_name": "Bacillota", "supporting_sources": ["ICNP; IJSEM validly published phylum names"],
+         "argument": "Since phylum names came under the Code, phyla must be named after a type genus. Bacillota derives from Bacillus."},
+        {"accepted_name": "Firmicutes", "supporting_sources": ["much of the microbiome literature; several major databases"],
+         "argument": "Adoption has been uneven; a large share of active literature and tooling still uses Firmicutes, so retrieval on the new name alone is incomplete."}
+      ],
+      "guidance": "The contest here is about adoption, not about the underlying phylogeny. Both names denote the same clade. Query expansion must use both.",
+      "references": ["Oren & Garrity (2021) IJSEM - valid publication of phylum names"]
+    },
+    {
+      "name": "Proteobacteria",
+      "also_matches": ["Pseudomonadota"],
+      "code": "ICNP",
+      "contested": true,
+      "confidence": "unverified",
+      "candidates": [
+        {"accepted_name": "Pseudomonadota", "supporting_sources": ["ICNP; IJSEM"], "argument": "Same 2021 phylum-naming rule as Bacillota."},
+        {"accepted_name": "Proteobacteria", "supporting_sources": ["widespread continuing usage"], "argument": "Adoption incomplete."}
+      ],
+      "guidance": "Same class of change as Firmicutes/Bacillota; same handling.",
+      "references": ["Oren & Garrity (2021) IJSEM"]
+    },
+    {
+      "name": "Aster novae-angliae",
+      "also_matches": ["Symphyotrichum novae-angliae"],
+      "code": "ICNafp",
+      "contested": false,
+      "confidence": "unverified",
+      "current_name": "Symphyotrichum novae-angliae",
+      "change_kind": "reassignment",
+      "guidance": "Aster is a genus that was substantially narrowed; most North American species were moved to Symphyotrichum and other segregate genera. Aster still exists and still contains Eurasian species, so genus-level substitution is again wrong.",
+      "references": ["Nesom (1994) Phytologia - reclassification of North American Astereae"]
+    },
+    {
+      "name": "Parus caeruleus",
+      "also_matches": ["Cyanistes caeruleus"],
+      "code": "ICZN",
+      "contested": false,
+      "confidence": "unverified",
+      "current_name": "Cyanistes caeruleus",
+      "change_kind": "reassignment",
+      "guidance": "Bird taxonomy has several competing checklist authorities that do not always agree on generic limits or on the timing of adoption. When they disagree, say which checklist you are following.",
+      "references": ["Multiple global bird checklists; generic split of Parus sensu lato"]
+    },
+    {
+      "name": "Human herpesvirus 1",
+      "also_matches": ["Human alphaherpesvirus 1", "Herpes simplex virus 1", "HSV-1"],
+      "code": "ICTV",
+      "contested": false,
+      "confidence": "unverified",
+      "current_name": "Human alphaherpesvirus 1",
+      "change_kind": "rename",
+      "guidance": "ICTV renames are committee acts on an annual cycle, not consequences of new evidence about this virus. The vernacular 'HSV-1' was never a taxonomic name and remains correct usage; the species name changed.",
+      "references": ["ICTV Master Species List (annual)"]
+    },
+    {
+      "name": "SEPT2",
+      "also_matches": ["SEPTIN2"],
+      "code": "HGNC",
+      "contested": false,
+      "confidence": "unverified",
+      "current_name": "SEPTIN2",
+      "year": 2020,
+      "change_kind": "rename",
+      "guidance": "Renamed because spreadsheet software silently coerced the symbol to a date. The same failure class as taxonomy: a join key changed and nothing announced it. Literature and supplementary tables published before 2020 use SEPT2.",
+      "references": ["HGNC 2020 septin gene family symbol update"]
+    },
+    {
+      "name": "MARCH1",
+      "also_matches": ["MARCHF1"],
+      "code": "HGNC",
+      "contested": false,
+      "confidence": "unverified",
+      "current_name": "MARCHF1",
+      "year": 2020,
+      "change_kind": "rename",
+      "guidance": "Same 2020 date-coercion motivation as the septins.",
+      "references": ["HGNC 2020 MARCH family symbol update"]
+    }
+  ]
+}
