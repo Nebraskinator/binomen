@@ -312,16 +312,16 @@ def main() -> int:
             print(f"WARNING: could not remove {marker} ({e}).\n"
                   f"         The directory now claims a provenance it does not have. "
                   f"Delete that file by hand.")
-    with open(OUT / "nodes.dmp", "w", encoding="utf-8") as f:
+    with open(OUT / "nodes.dmp", "w", encoding="utf-8", newline="") as f:
         for taxid, parent, rank in NODES:
             # taxid | parent | rank | embl | division id | ...
             f.write(field_line([taxid, parent, rank, "", "0", "1", "1", "1", "0", "1", "1", "0", ""]))
-    with open(OUT / "names.dmp", "w", encoding="utf-8") as f:
+    with open(OUT / "names.dmp", "w", encoding="utf-8", newline="") as f:
         for taxid, name, uniq, klass in NAMES:
             f.write(field_line([taxid, name, uniq, klass]))
-    with open(OUT / "merged.dmp", "w", encoding="utf-8") as f:
+    with open(OUT / "merged.dmp", "w", encoding="utf-8", newline="") as f:
         f.writelines(field_line([old, new]) for old, new in MERGED)
-    with open(OUT / "delnodes.dmp", "w", encoding="utf-8") as f:
+    with open(OUT / "delnodes.dmp", "w", encoding="utf-8", newline="") as f:
         f.writelines(field_line([t]) for t in DELETED)
     print(f"wrote fixture taxdump to {OUT} "
           f"({len(NODES)} nodes, {len(NAMES)} names, {len(MERGED)} merges)")

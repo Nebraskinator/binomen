@@ -1,0 +1,26 @@
+# Normalize line endings on commit, check out native.
+#
+# CI runs on Linux, Windows and macOS. Without this, a file committed from
+# Windows with CRLF can break on Linux in ways that look like a code bug --
+# shell scripts fail with "bad interpreter", and diffs show every line changed.
+* text=auto eol=lf
+
+# PowerShell genuinely wants CRLF on Windows.
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# NCBI dump files are text and real taxdumps are LF. Normalize them: they are
+# written by extract_fixture, and on Windows that produces CRLF, which would
+# otherwise be frozen into the repo as a platform artifact rather than a choice.
+*.dmp text eol=lf
+
+# Binary, never touch.
+*.sqlite binary
+*.gz     binary
+*.mcpb   binary
+*.png    binary
+
+# Generated: keep it out of diffs and out of language statistics.
+node/test/conformance.json linguist-generated=true
+eval/runs/example-run.jsonl linguist-generated=true
