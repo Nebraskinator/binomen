@@ -1,70 +1,74 @@
 ## Results
 
-Model `SIMULATED-ANSWERS-NOT-A-REAL-RUN` · tool descriptions `broad` · index `fixture-v1` · 101 cases · live authorities disabled (cached)
+Model `SIMULATED-ANSWERS-NOT-A-REAL-RUN` · tool descriptions `broad` · index `taxdump-2026-08-11` · 101 cases · live authorities disabled (cached)
 
 > **101 cases have unverified ground truth.** These numbers are exploratory and must not be cited. Run `eval/verify_cases.py` first.
 
 
 ### Pass rate by case category
 
-| category | n | baseline | tools | delta |
-|---|---|---|---|---|
-| control | 10 | 60% | 80% | +20 pts |
-| historic | 14 | 21% | 93% | +71 pts |
-| recent | 10 | 60% | 80% | +20 pts |
-| split | 8 | 50% | 88% | +38 pts |
-| homonym | 7 | 71% | 86% | +14 pts |
-| distractor | 10 | 30% | 80% | +50 pts |
-| multihop | 6 | 50% | 67% | +17 pts |
-| literature | 10 | 20% | 70% | +50 pts |
-| crosscode | 12 | 33% | 92% | +58 pts |
-| contested | 8 | 0% | 62% | +62 pts |
-| gene | 6 | 50% | 50% | +0 pts |
+| category | n | baseline | tools | instructed | delta (baseline→instructed) |
+|---|---|---|---|---|---|
+| control | 10 | 70% | 50% | 90% | +20 pts |
+| historic | 14 | 64% | 79% | 79% | +14 pts |
+| recent | 10 | 50% | 40% | 90% | +40 pts |
+| split | 8 | 12% | 62% | 75% | +62 pts |
+| homonym | 7 | 29% | 57% | 86% | +57 pts |
+| distractor | 10 | 40% | 50% | 90% | +50 pts |
+| multihop | 6 | 83% | 33% | 83% | +0 pts |
+| literature | 10 | 10% | 60% | 90% | +80 pts |
+| crosscode | 12 | 50% | 75% | 83% | +33 pts |
+| contested | 8 | 38% | 50% | 75% | +38 pts |
+| gene | 6 | 67% | 33% | 83% | +17 pts |
 
 Read this table by row, not by column mean. 'Accuracy improved' is not the finding; *which categories moved and which did not* is.
 
 
 ### Error class distribution
 
-| error class | baseline | tools |
-|---|---|---|
-| very_major | 21 (21%) | 6 (6%) |
-| major | 39 (39%) | 15 (15%) |
-| minor | 13 (13%) | 18 (18%) |
-| none | 28 (28%) | 62 (61%) |
+| error class | baseline | tools | instructed |
+|---|---|---|---|
+| very_major | 17 (17%) | 16 (16%) | 4 (4%) |
+| major | 33 (33%) | 27 (27%) | 12 (12%) |
+| minor | 15 (15%) | 15 (15%) | 18 (18%) |
+| none | 36 (36%) | 43 (43%) | 67 (66%) |
 
 Severity-weighted error load (very major = 10, major = 4, minor = 1, none = 0):
 
 | condition | total severity | per case |
 |---|---|---|
-| baseline | 379 | 3.75 |
-| tools | 138 | 1.37 |
+| baseline | 317 | 3.14 |
+| tools | 283 | 2.80 |
+| instructed | 106 | 1.05 |
 
 
 ### Tool invocation and abstention
 
+
+**tools**
+
 | measure | value | meaning |
 |---|---|---|
-| tool invocation rate | 81% | cases where at least one tool was called |
-| abstention failures | 18 (18%) | a tool was available and needed, and was not called |
-| correct but unchecked | 11 | answered correctly without checking -- lucky, not reliable |
+| tool invocation rate | 28% | cases where at least one tool was called |
+| abstention failures | 72 (71%) | a tool was available and needed, and was not called |
+| correct but unchecked | 39 | answered correctly without checking -- lucky, not reliable |
 
-**This is the research question.** A model that answers correctly without calling the tool has not demonstrated that it knows the answer; it has demonstrated that this particular name happened to be well represented in its training data with the current form dominant. The 'correct but unchecked' row is the count of cases where accuracy and reliability come apart.
+**instructed**
 
-
-Calls per tool:
-
-| tool | calls |
-|---|---|
-| resolve_name | 82 |
+| measure | value | meaning |
+|---|---|---|
+| tool invocation rate | 95% | cases where at least one tool was called |
+| abstention failures | 0 (0%) | a tool was available and needed, and was not called |
+| correct but unchecked | 0 | answered correctly without checking -- lucky, not reliable |
 
 
 ### False confidence on contested cases
 
 | condition | contested cases | single-answer responses |
 |---|---|---|
-| baseline | 8 | 8 (100%) |
-| tools | 8 | 3 (38%) |
+| baseline | 8 | 5 (62%) |
+| tools | 8 | 4 (50%) |
+| instructed | 8 | 2 (25%) |
 
 On these cases a single answer is wrong however authoritative it sounds.
 
@@ -74,31 +78,31 @@ On these cases a single answer is wrong however authoritative it sounds.
 
 | case | condition | why |
 |---|---|---|
-| historic-010 | baseline | gave a single answer where authorities genuinely disagree |
-| historic-011 | baseline | gave a single answer where authorities genuinely disagree |
-| recent-001 | baseline | gave a single answer where authorities genuinely disagree |
 | recent-001 | tools | gave a single answer where authorities genuinely disagree |
+| recent-004 | tools | gave a single answer where authorities genuinely disagree |
+| split-001 | baseline | applied a genus-level blanket substitution to a split; species that did not move would be silently renamed |
+| split-001 | tools | applied a genus-level blanket substitution to a split; species that did not move would be silently renamed |
+| split-003 | baseline | applied a genus-level blanket substitution to a split; species that did not move would be silently renamed |
 | split-004 | baseline | applied a genus-level blanket substitution to a split; species that did not move would be silently renamed |
+| split-004 | tools | applied a genus-level blanket substitution to a split; species that did not move would be silently renamed |
 | split-005 | baseline | applied a genus-level blanket substitution to a split; species that did not move would be silently renamed |
+| split-005 | tools | applied a genus-level blanket substitution to a split; species that did not move would be silently renamed |
 | split-006 | baseline | applied a genus-level blanket substitution to a split; species that did not move would be silently renamed |
-| split-006 | tools | applied a genus-level blanket substitution to a split; species that did not move would be silently renamed |
-| distractor-002 | baseline | said same=True, truth same=False. Conflated distinct taxa. |
-| distractor-003 | baseline | said same=True, truth same=False. Conflated distinct taxa. |
+| homonym-001 | baseline | gave a single answer where authorities genuinely disagree |
+| homonym-001 | tools | gave a single answer where authorities genuinely disagree |
+| homonym-001 | instructed | gave a single answer where authorities genuinely disagree |
+| distractor-001 | tools | said same=True, truth same=False. Conflated distinct taxa. |
 | distractor-004 | baseline | said same=True, truth same=False. Conflated distinct taxa. |
+| distractor-004 | tools | said same=True, truth same=False. Conflated distinct taxa. |
+| distractor-004 | instructed | said same=True, truth same=False. Conflated distinct taxa. |
+| distractor-006 | baseline | said same=False, truth same=True. Split one taxon into two. |
 | distractor-007 | baseline | said same=True, truth same=False. Conflated distinct taxa. |
+| distractor-007 | tools | said same=True, truth same=False. Conflated distinct taxa. |
+| distractor-008 | baseline | said same=False, truth same=True. Split one taxon into two. |
 | distractor-009 | baseline | said same=True, truth same=False. Conflated distinct taxa. |
 | distractor-009 | tools | said same=True, truth same=False. Conflated distinct taxa. |
 | distractor-010 | baseline | said same=False, truth same=True. Split one taxon into two. |
-| crosscode-009 | baseline | said same=True, truth same=False. Conflated distinct taxa. |
-| contested-001 | baseline | gave a single answer where authorities genuinely disagree |
-| contested-002 | baseline | gave a single answer where authorities genuinely disagree |
-| contested-002 | tools | gave a single answer where authorities genuinely disagree |
-| contested-003 | baseline | gave a single answer where authorities genuinely disagree |
-| contested-004 | baseline | gave a single answer where authorities genuinely disagree |
-| contested-005 | baseline | gave a single answer where authorities genuinely disagree |
-| contested-005 | tools | gave a single answer where authorities genuinely disagree |
-| contested-006 | baseline | gave a single answer where authorities genuinely disagree |
-| contested-007 | baseline | gave a single answer where authorities genuinely disagree |
+| distractor-010 | tools | said same=False, truth same=True. Split one taxon into two. |
 
 
 ### Error class definitions

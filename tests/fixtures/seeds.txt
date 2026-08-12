@@ -1,0 +1,54 @@
+# Seed names for `binomen-build-index --taxdump ... --extract-fixture DIR`.
+#
+# The hand-written fixture was written from the same beliefs about NCBI's data
+# that produced two normalization bugs. This list pulls REAL rows for the taxa
+# the test suite reasons about, so the parser is tested against the archive
+# rather than against my recollection of it.
+#
+# Keep it small -- ancestors and a few children come along automatically.
+
+# multi-hop genus reassignment, and the case that found both bugs
+Clostridioides difficile
+Clostridium perfringens
+# clinically consequential transfer
+Klebsiella aerogenes
+Enterobacter cloacae
+Escherichia coli
+# the 2020 Lactobacillaceae split: moved and unmoved species together
+Lacticaseibacillus casei
+Lactiplantibacillus plantarum
+Limosilactobacillus reuteri
+Lactobacillus delbrueckii
+# cross-code homonym: bacterium and stick insect
+Bacillus subtilis
+Bacillus rossius
+# contested fungal transfer
+Candidozyma auris
+Candida albicans
+# distractor pair: similar names, different organisms, one host-specific
+Pneumocystis jirovecii
+Pneumocystis carinii
+# bracket-only synonym
+Mediterraneibacter gnavus
+# ICTV, committee renaming
+Human alphaherpesvirus 1
+Severe acute respiratory syndrome coronavirus 2
+# plants and animals
+Symphyotrichum novae-angliae
+Aster amellus
+Cyanistes caeruleus
+Parus major
+Homo sapiens
+Saccharomyces cerevisiae
+
+# Shapes the tests reason about. If `--extract-fixture` reports one of these as
+# MISSING, the tests covering it will skip -- which looks like passing.
+# Taxa NCBI records with a bracketed (known-misplaced) genus:
+Mediterraneibacter gnavus
+Thomasclavelia ramosa
+Enterocloster clostridioformis
+# A genuine cross-code homonym, both sides:
+Bacillus rossius
+# Deep synonym history:
+Enterococcus faecalis
+Burkholderia cepacia

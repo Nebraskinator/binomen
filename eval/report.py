@@ -35,6 +35,30 @@ def pct(n, d) -> str:
     return "-" if not d else f"{100 * n / d:.0f}%"
 
 
+def _invocation_block(parts: list, by: dict, cond: str) -> None:
+    """Invocation and abstention for one tool-bearing condition.
+
+    Reported per condition rather than once, because the whole point of the
+    `instructed` condition is that this number moves and the correctness numbers
+    follow it.
+    """
+    rows = [x for (c, cd), lst in by.items() if cd == cond for x in lst]
+    if not rows:
+        return
+    called = sum(1 for x in rows if x["tool_called"])
+    abst = sum(1 for x in rows if x["abstention_failure"])
+    lucky = sum(1 for x in rows if x["abstention_failure"] and x["passed"])
+    parts.append(f"\n**{cond}**\n")
+    parts.append(md_table(
+        ["measure", "value", "meaning"],
+        [["tool invocation rate", pct(called, len(rows)),
+          "cases where at least one tool was called"],
+         ["abstention failures", f"{abst} ({pct(abst, len(rows))})",
+          "a tool was available and needed, and was not called"],
+         ["correct but unchecked", f"{lucky}",
+          "answered correctly without checking -- lucky, not reliable"]]))
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("run", type=Path)
@@ -51,7 +75,10 @@ def main(argv=None) -> int:
     by = defaultdict(list)
     for r in rows:
         by[(r["category"], r["condition"])].append(r["score"])
-    conditions = sorted({r["condition"] for r in rows})
+    # Canonical order, not alphabetical: the story runs left to right.
+    order = ["baseline", "tools", "instructed"]
+    present = {r["condition"] for r in rows}
+    conditions = [c for c in order if c in present] + sorted(present - set(order))
 
     parts: list[str] = []
     parts.append("## Results\n")
@@ -68,7 +95,8 @@ def main(argv=None) -> int:
 
     # --- pass rate by category -------------------------------------------
     parts.append("\n### Pass rate by case category\n")
-    headers = ["category", "n"] + list(conditions) + (["delta"] if len(conditions) == 2 else [])
+    headers = ["category", "n"] + list(conditions) + (
+        [f"delta ({conditions[0]}\u2192{conditions[-1]})"] if len(conditions) >= 2 else [])
     trows = []
     for cat in ORDER:
         cells, vals = [], []
@@ -82,8 +110,8 @@ def main(argv=None) -> int:
         if not n:
             continue
         row = [cat, n] + cells
-        if len(vals) == 2 and None not in vals:
-            d = vals[1] - vals[0]
+        if len(vals) >= 2 and vals[0] is not None and vals[-1] is not None:
+            d = vals[-1] - vals[0]
             row.append(f"{d:+.0f} pts")
         trows.append(row)
     parts.append(md_table(headers, trows))
@@ -112,7 +140,10 @@ def main(argv=None) -> int:
 
     # --- the abstention measure ------------------------------------------
     parts.append("\n\n### Tool invocation and abstention\n")
-    tools_rows = [x for (c, cd), lst in by.items() if cd == "tools" for x in lst]
+    for cond in [c for c in conditions if c in ("tools", "instructed")]:
+        _invocation_block(parts, by, cond)
+
+    tools_rows = []
     if tools_rows:
         called = sum(1 for x in tools_rows if x["tool_called"])
         abst = sum(1 for x in tools_rows if x["abstention_failure"])

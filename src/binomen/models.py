@@ -49,14 +49,16 @@ class NameRecord:
     provenance: Provenance | None = None
 
     def to_dict(self) -> dict:
-        return {
-            "name": self.name,
-            "identifier": self.identifier,
-            "rank": self.rank,
-            "authority": self.authority,
-            "status": self.status.to_dict() if self.status else None,
-            "provenance": self.provenance.to_dict() if self.provenance else None,
-        }
+        d = {"name": self.name}
+        for k, v in (("identifier", self.identifier), ("rank", self.rank),
+                     ("authority", self.authority)):
+            if v:
+                d[k] = v
+        if self.status:
+            d["status"] = self.status.to_dict()
+        if self.provenance:
+            d["provenance"] = self.provenance.to_dict()
+        return d
 
 
 @dataclass
@@ -78,13 +80,18 @@ class ChangeEvent:
     note: str | None = None
 
     def to_dict(self) -> dict:
-        d = {
-            "from": self.from_name,
-            "to": self.to_name,
-            "kind": self.kind,
-            "year": self.year,
-            "reference": self.reference,
-        }
+        """Null fields are omitted, not emitted.
+
+        `"year": null, "reference": null` on every event was pure overhead --
+        absence already means unknown. The distinction that matters (we do not
+        know the year vs. we are guessing at it) is carried by the top-level
+        `as_of_answerable` flag and the accompanying warning, not by a null.
+        """
+        d = {"from": self.from_name, "to": self.to_name, "kind": self.kind}
+        if self.year is not None:
+            d["year"] = self.year
+        if self.reference:
+            d["reference"] = self.reference
         if self.note:
             d["note"] = self.note
         if self.provenance:
@@ -115,19 +122,27 @@ class Candidate:
     lineage_summary: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
-        return {
+        """Non-null fields only, and provenance by source name.
+
+        The full provenance block is repeated once at the top level of the
+        response; naming it here is enough to attribute the candidate without
+        duplicating the version, URL and license per candidate.
+        """
+        d = {
             "accepted_name": self.accepted_name,
-            "identifier": self.identifier,
-            "rank": self.rank,
-            "authority": self.authority,
             "status": self.status.to_dict(),
-            "supporting_sources": self.supporting_sources,
-            "dissenting_sources": self.dissenting_sources,
-            "argument": self.argument,
-            "disambiguation": self.disambiguation,
-            "lineage_summary": self.lineage_summary,
-            "provenance": self.provenance.to_dict(),
+            "sources": self.supporting_sources,
         }
+        for k, v in (("identifier", self.identifier), ("rank", self.rank),
+                     ("authority", self.authority), ("argument", self.argument),
+                     ("disambiguation", self.disambiguation)):
+            if v:
+                d[k] = v
+        if self.dissenting_sources:
+            d["dissenting_sources"] = self.dissenting_sources
+        if self.lineage_summary:
+            d["lineage_summary"] = self.lineage_summary
+        return d
 
 
 @dataclass
@@ -155,21 +170,30 @@ class Resolution:
     as_of: str = field(default_factory=lambda: date.today().isoformat())
 
     def to_dict(self) -> dict:
-        return {
+        d = {
             "query": self.query,
-            "matched_name": self.matched_name,
-            "match_type": self.match_type,
             "governing_code": self.governing_code.to_dict(),
-            "input_status": self.input_status.to_dict() if self.input_status else None,
-            "contested": self.contested,
             "candidates": [c.to_dict() for c in self.candidates],
-            "change_chain": [e.to_dict() for e in self.change_chain],
-            "consulted_sources": self.consulted_sources,
-            "warnings": self.warnings,
-            "resolution_id": self.resolution_id,
-            "as_of": self.as_of,
             "provenance": [p.to_dict() for p in self.provenance],
         }
+        # Only carried when they say something. `contested` and `match_type`
+        # in particular were emitted on every response to say "false" and
+        # "exact", which is the default a caller already assumes.
+        if self.contested:
+            d["contested"] = True
+        if self.match_type != "exact":
+            d["match_type"] = self.match_type
+        if self.matched_name and self.matched_name != self.query:
+            d["matched_name"] = self.matched_name
+        if self.input_status:
+            d["input_status"] = self.input_status.to_dict()
+        if self.change_chain:
+            d["change_chain"] = [e.to_dict() for e in self.change_chain]
+        if self.warnings:
+            d["warnings"] = self.warnings
+        if self.resolution_id:
+            d["resolution_id"] = self.resolution_id
+        return d
 
 
 def utc_now() -> str:

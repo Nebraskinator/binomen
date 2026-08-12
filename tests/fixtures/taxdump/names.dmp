@@ -1,112 +1,1345 @@
+1	|	all	|		|	synonym	|
 1	|	root	|		|	scientific name	|
-131567	|	cellular organisms	|		|	scientific name	|
-10239	|	Viruses	|		|	scientific name	|
 2	|	Bacteria	|	Bacteria <bacteria>	|	scientific name	|
-2	|	eubacteria	|		|	genbank common name	|
-2759	|	Eukaryota	|		|	scientific name	|
-1239	|	Bacillota	|		|	scientific name	|
-1239	|	Firmicutes	|		|	synonym	|
-1224	|	Pseudomonadota	|		|	scientific name	|
-1224	|	Proteobacteria	|		|	synonym	|
-186801	|	Clostridia	|		|	scientific name	|
-186802	|	Eubacteriales	|		|	scientific name	|
-186802	|	Clostridiales	|		|	synonym	|
-186804	|	Peptostreptococcaceae	|		|	scientific name	|
-1870884	|	Clostridioides	|		|	scientific name	|
-1496	|	Clostridioides difficile	|		|	scientific name	|
-1496	|	Clostridium difficile	|		|	synonym	|
-1496	|	Peptoclostridium difficile	|		|	synonym	|
-1496	|	Bacillus difficilis	|		|	synonym	|
-1496	|	(Clostridium) difficile	|		|	equivalent name	|
-1496	|	C. difficile	|		|	genbank common name	|
-1496	|	(Hall and O'Toole 1935) Lawson et al. 2016	|		|	authority	|
-1485	|	Clostridium	|		|	scientific name	|
-1502	|	Clostridium perfringens	|		|	scientific name	|
-91061	|	Bacilli	|		|	scientific name	|
-186826	|	Lactobacillales	|		|	scientific name	|
-33958	|	Lactobacillaceae	|		|	scientific name	|
-1578	|	Lactobacillus	|		|	scientific name	|
-1580	|	Lactobacillus delbrueckii	|		|	scientific name	|
-2767841	|	Lacticaseibacillus	|		|	scientific name	|
-1582	|	Lacticaseibacillus casei	|		|	scientific name	|
-1582	|	Lactobacillus casei	|		|	synonym	|
-2767887	|	Lactiplantibacillus	|		|	scientific name	|
-1590	|	Lactiplantibacillus plantarum	|		|	scientific name	|
-1590	|	Lactobacillus plantarum	|		|	synonym	|
-2742598	|	Limosilactobacillus	|		|	scientific name	|
-1598	|	Limosilactobacillus reuteri	|		|	scientific name	|
-1598	|	Lactobacillus reuteri	|		|	synonym	|
-1385	|	Bacillales	|		|	scientific name	|
-186817	|	Bacillaceae	|		|	scientific name	|
-1386	|	Bacillus	|	Bacillus <bacteria>	|	scientific name	|
-1423	|	Bacillus subtilis	|		|	scientific name	|
-1236	|	Gammaproteobacteria	|		|	scientific name	|
-91347	|	Enterobacterales	|		|	scientific name	|
+2	|	bacteria	|	bacteria <blast name>	|	blast name	|
+2	|	bacteria	|	bacteria <genbank common name>	|	genbank common name	|
+2	|	"Bacteria" Cavalier-Smith 1987	|		|	authority	|
+2	|	Bacteria (ex Cavalier-Smith 1987)	|		|	synonym	|
+2	|	Bacteria Woese et al. 2024	|		|	synonym	|
+2	|	"Bacteriobiota" Luketa 2012	|		|	authority	|
+2	|	Bacteriobiota	|		|	synonym	|
+2	|	eubacteria	|		|	common name	|
+2	|	Monera	|	Monera <bacteria>	|	in-part	|
+2	|	Procaryotae	|	Procaryotae <bacteria>	|	in-part	|
+2	|	Prokaryotae	|	Prokaryotae <bacteria>	|	in-part	|
+2	|	Prokaryota	|	Prokaryota <bacteria>	|	in-part	|
+2	|	prokaryote	|	prokaryote <bacteria>	|	in-part	|
+2	|	prokaryotes	|	prokaryotes <bacteria>	|	in-part	|
+543	|	Enterobacteraceae (ex Lapage 1979) Lapage 1982	|		|	authority	|
+543	|	Enterobacteraceae	|		|	synonym	|
+543	|	Enterobacteriaceae (ex Rahn 1937) Ewing et al. 1980	|		|	authority	|
+543	|	Enterobacteriaceae Rahn 1937 (Approved Lists 1980) emend. Adeolu et al. 2016	|		|	authority	|
 543	|	Enterobacteriaceae	|		|	scientific name	|
-570	|	Klebsiella	|		|	scientific name	|
-548	|	Klebsiella aerogenes	|		|	scientific name	|
-548	|	Enterobacter aerogenes	|		|	synonym	|
-548	|	Aerobacter aerogenes	|		|	synonym	|
+543	|	enterobacteria	|	enterobacteria <blast name>	|	blast name	|
+543	|	enterobacteria	|	enterobacteria <genbank common name>	|	genbank common name	|
+543	|	gamma-3 proteobacteria	|	gamma-3 proteobacteria <enterobacteria,Enterobacteriaceae>	|	in-part	|
+547	|	"Aerobacter" Hormaeche and Edwards 1958	|		|	synonym	|
+547	|	"Cloaca" Castellani and Chalmers 1919	|		|	authority	|
+547	|	Cloaca	|		|	synonym	|
+547	|	Enterobacter Hormaeche and Edwards 1960 (Approved Lists 1980) emend. Brady et al. 2013	|		|	authority	|
 547	|	Enterobacter	|		|	scientific name	|
+548	|	"Aerobacter aerogenes" Hormaeche and Edwards 1958	|		|	authority	|
+548	|	Aerobacter aerogenes	|		|	synonym	|
+548	|	ATCC 13048	|	ATCC 13048 <type strain>	|	type material	|
+548	|	CCUG 1429	|	CCUG 1429 <type strain>	|	type material	|
+548	|	CIP 60.86	|	CIP 60.86 <type strain>	|	type material	|
+548	|	DSM 30053	|	DSM 30053 <type strain>	|	type material	|
+548	|	Enterobacter aerogenes Hormaeche and Edwards 1960	|		|	authority	|
+548	|	Enterobacter aerogenes	|		|	synonym	|
+548	|	HAMBI 101	|	HAMBI 101 <type strain>	|	type material	|
+548	|	HAMBI 1898	|	HAMBI 1898 <type strain>	|	type material	|
+548	|	IFO 13534	|	IFO 13534 <type strain>	|	type material	|
+548	|	JCM 1235	|	JCM 1235 <type strain>	|	type material	|
+548	|	KCTC 2190	|	KCTC 2190 <type strain>	|	type material	|
+548	|	Klebsiella aerogenes (Hormaeche and Edwards 1960) Tindall et al. 2017	|		|	authority	|
+548	|	Klebsiella aerogenes	|		|	scientific name	|
+548	|	Klebsiella mobilis Bascomb et al. 1971	|		|	authority	|
+548	|	Klebsiella mobilis	|		|	synonym	|
+548	|	LMG 2094	|	LMG 2094 <type strain>	|	type material	|
+548	|	LMG:2094	|	LMG:2094 <type strain>	|	type material	|
+548	|	NBRC 13534	|	NBRC 13534 <type strain>	|	type material	|
+548	|	NCAIM B.01467	|	NCAIM B.01467 <type strain>	|	type material	|
+548	|	NCTC 10006	|	NCTC 10006 <type strain>	|	type material	|
+550	|	Achromobacter sp. ATCC13047	|		|	includes	|
+550	|	"Aerobacter cloacae" (Jordan 1890) Bergey et al. 1923	|		|	authority	|
+550	|	"Aerobacter cloacae" (Jordan 1890) Hormaeche and Edwards 1958	|		|	authority	|
+550	|	Aerobacter cloacae	|		|	synonym	|
+550	|	ATCC 13047	|	ATCC 13047 <type strain>	|	type material	|
+550	|	"Bacillus cloacae" Jordan 1890	|		|	authority	|
+550	|	Bacillus cloacae	|		|	synonym	|
+550	|	"Bacterium cloacae" (Jordan 1890) Lehmann and Neumann 1896	|		|	authority	|
+550	|	Bacterium cloacae	|		|	synonym	|
+550	|	CCUG 28448	|	CCUG 28448 <type strain>	|	type material	|
+550	|	CCUG 29301	|	CCUG 29301 <type strain>	|	type material	|
+550	|	CCUG 6323	|	CCUG 6323 <type strain>	|	type material	|
+550	|	CIP 60.85	|	CIP 60.85 <type strain>	|	type material	|
+550	|	"Cloaca cloacae" (Jordan 1890) Castellani and Chalmers 1919	|		|	authority	|
+550	|	Cloaca cloacae	|		|	synonym	|
+550	|	DSM 30054	|	DSM 30054 <type strain>	|	type material	|
+550	|	Enterobacter cloacae (Jordan 1890) Hormaeche and Edwards 1960	|		|	authority	|
 550	|	Enterobacter cloacae	|		|	scientific name	|
+550	|	'Enterobacter hormaechei subsp. grimontii'	|		|	includes	|
+550	|	Enterobacter hormaechei subsp. grimontii	|		|	includes	|
+550	|	Enterobacter sp. DIV140	|		|	includes	|
+550	|	Enterobacter sp. DIV160	|		|	includes	|
+550	|	Enterobacter sp. DIV167	|		|	includes	|
+550	|	Enterobacter sp. ES-2	|		|	includes	|
+550	|	Enterobacter sp. JS08.Deg01	|		|	includes	|
+550	|	Enterobacter sp. NCIM 2164	|		|	includes	|
+550	|	Enterobacter sp. PX-A-E.1	|		|	includes	|
+550	|	HAMBI 1295	|	HAMBI 1295 <type strain>	|	type material	|
+550	|	HAMBI 96	|	HAMBI 96 <type strain>	|	type material	|
+550	|	IFO 13535	|	IFO 13535 <type strain>	|	type material	|
+550	|	JCM 1232	|	JCM 1232 <type strain>	|	type material	|
+550	|	Klebsiella sp. SBP-8	|		|	includes	|
+550	|	LMG 2783	|	LMG 2783 <type strain>	|	type material	|
+550	|	LMG:2783	|	LMG:2783 <type strain>	|	type material	|
+550	|	NBRC 13535	|	NBRC 13535 <type strain>	|	type material	|
+550	|	NCDC 279-56	|	NCDC 279-56 <type strain>	|	type material	|
+550	|	NCTC 10005	|	NCTC 10005 <type strain>	|	type material	|
+561	|	Escherichia Castellani and Chalmers 1919	|		|	authority	|
 561	|	Escherichia	|		|	scientific name	|
+562	|	Achromobacter sp. ATCC 35328	|		|	includes	|
+562	|	ATCC 11775	|	ATCC 11775 <neotype strain>	|	type material	|
+562	|	"Bacillus coli" Migula 1895	|		|	authority	|
+562	|	Bacillus coli	|		|	synonym	|
+562	|	bacterium 10a	|		|	includes	|
+562	|	"Bacterium coli commune" Escherich 1885	|		|	authority	|
+562	|	Bacterium coli commune	|		|	synonym	|
+562	|	"Bacterium coli" (Migula 1895) Lehmann and Neumann 1896	|		|	authority	|
+562	|	Bacterium coli	|		|	synonym	|
+562	|	bacterium E3	|		|	includes	|
+562	|	CCUG 24	|	CCUG 24 <neotype strain>	|	type material	|
+562	|	CCUG 29300	|	CCUG 29300 <neotype strain>	|	type material	|
+562	|	CIP 54.8	|	CIP 54.8 <neotype strain>	|	type material	|
+562	|	DSM 30083	|	DSM 30083 <neotype strain>	|	type material	|
+562	|	E. coli	|		|	common name	|
+562	|	Enterococcus coli	|		|	synonym	|
+562	|	Escherichia coli (Migula 1895) Castellani and Chalmers 1919 (Approved Lists 1980)	|		|	authority	|
 562	|	Escherichia coli	|		|	scientific name	|
-562	|	E. coli	|		|	genbank common name	|
-33154	|	Opisthokonta	|		|	scientific name	|
-4751	|	Fungi	|		|	scientific name	|
-4890	|	Ascomycota	|		|	scientific name	|
-147537	|	Saccharomycetes	|		|	scientific name	|
-4892	|	Saccharomycetales	|		|	scientific name	|
-1573264	|	Metschnikowiaceae	|		|	scientific name	|
-3132688	|	Candidozyma	|		|	scientific name	|
-498019	|	Candidozyma auris	|		|	scientific name	|
-498019	|	Candida auris	|		|	synonym	|
-498019	|	[Candida] auris	|		|	equivalent name	|
-1535326	|	Candida	|	Candida <fungus>	|	scientific name	|
-5476	|	Candida albicans	|		|	scientific name	|
-4894	|	Schizosaccharomycetes	|		|	scientific name	|
-4753	|	Pneumocystis	|		|	scientific name	|
-42068	|	Pneumocystis jirovecii	|		|	scientific name	|
-42068	|	Pneumocystis carinii f. sp. hominis	|		|	synonym	|
-42068	|	Pneumocystis jiroveci	|		|	misspelling	|
-4754	|	Pneumocystis carinii	|		|	scientific name	|
-33090	|	Viridiplantae	|		|	scientific name	|
-4447	|	Liliopsida	|		|	scientific name	|
+562	|	Escherichia/Shigella coli	|		|	equivalent name	|
+562	|	Escherichia sp. 3_2_53FAA	|		|	includes	|
+562	|	Escherichia sp. MAR	|		|	includes	|
+562	|	IAM 12119	|	IAM 12119 <neotype strain>	|	type material	|
+562	|	JCM 1649	|	JCM 1649 <neotype strain>	|	type material	|
+562	|	LMG 2092	|	LMG 2092 <neotype strain>	|	type material	|
+562	|	LMG:2092	|	LMG:2092 <neotype strain>	|	type material	|
+562	|	NBRC 102203	|	NBRC 102203 <neotype strain>	|	type material	|
+562	|	NCCB 54008	|	NCCB 54008 <neotype strain>	|	type material	|
+562	|	NCTC 9001	|	NCTC 9001 <neotype strain>	|	type material	|
+562	|	strain U5/41	|	strain U5/41 <neotype strain>	|	type material	|
+570	|	Calymmatobacterium Aragao and Vianna 1913 (Approved Lists 1980)	|		|	authority	|
+570	|	Calymmatobacterium	|		|	synonym	|
+570	|	"Donovania" Anderson et al. 1944	|		|	authority	|
+570	|	Donovania	|		|	synonym	|
+570	|	"Hyalococcus" Schroeter 1886	|		|	authority	|
+570	|	Hyalococcus	|		|	synonym	|
+570	|	Klebsiella	|		|	scientific name	|
+570	|	Klebsiella Trevisan 1885 (Approved Lists 1980)	|		|	authority	|
+570	|	Klebsiella Trevisan 1885 (Approved Lists 1980) emend. Carter et al. 1999	|		|	authority	|
+570	|	Klebsiella Trevisan 1885 (Approved Lists 1980) emend. Drancourt et al. 2001	|		|	authority	|
+570	|	Klebsiella Trevisan 1885 (Approved Lists 1980) emend. Ma et al. 2021	|		|	authority	|
+570	|	Raoultella Drancourt et al. 2001	|		|	authority	|
+570	|	Raoultella Drancourt et al. 2001 emend. Brady et al. 2024	|		|	authority	|
+570	|	Raoultella	|		|	synonym	|
+1224	|	Alphaproteobacteriota	|		|	synonym	|
+1224	|	"Alphaproteobacteriota" Whitman et al. 2018	|		|	synonym	|
+1224	|	"Proteobacteria" Garrity et al. 2005	|		|	authority	|
+1224	|	proteobacteria	|	proteobacteria <blast name>	|	blast name	|
+1224	|	proteobacteria	|	proteobacteria <genbank common name>	|	genbank common name	|
+1224	|	Proteobacteria Stackebrandt et al. 1988	|		|	authority	|
+1224	|	Proteobacteria	|		|	synonym	|
+1224	|	"Proteobacteriota" Panda et al. 2022	|		|	authority	|
+1224	|	Proteobacteriota	|		|	synonym	|
+1224	|	Pseudomonadota corrig. Garrity et al. 2021	|		|	authority	|
+1224	|	Pseudomonadota	|		|	scientific name	|
+1224	|	purple photosynthetic bacteria and relatives	|		|	common name	|
+1236	|	Gammaproteobacteria Garrity et al. 2005 emend. Williams and Kelly 2013	|		|	authority	|
+1236	|	Gammaproteobacteria	|		|	scientific name	|
+1236	|	gamma proteobacteria	|		|	synonym	|
+1236	|	gamma subdivision	|		|	synonym	|
+1236	|	gamma subgroup	|		|	synonym	|
+1236	|	g-proteobacteria	|	g-proteobacteria <blast name>	|	blast name	|
+1236	|	g-proteobacteria	|	g-proteobacteria <genbank common name>	|	genbank common name	|
+1236	|	Proteobacteria gamma subdivision	|		|	synonym	|
+1236	|	"Pseudomonadia" Oren et al. 2016	|		|	authority	|
+1236	|	Pseudomonadia	|		|	synonym	|
+1236	|	Purple bacteria, gamma subdivision	|		|	synonym	|
+1239	|	"Bacillaeota" Oren et al. 2015	|		|	authority	|
+1239	|	Bacillaeota	|		|	synonym	|
+1239	|	Bacillota corrig. Gibbons and Murray 2021	|		|	synonym	|
+1239	|	Bacillota	|		|	scientific name	|
+1239	|	Bacillus/Clostridium group	|		|	synonym	|
+1239	|	clostridial firmicutes	|		|	common name	|
+1239	|	Clostridium group firmicutes	|		|	synonym	|
+1239	|	firmicutes	|	firmicutes <blast name>	|	blast name	|
+1239	|	firmicutes	|	firmicutes <genbank common name>	|	genbank common name	|
+1239	|	Low G+C firmicutes	|		|	synonym	|
+1239	|	low GC Gram+	|		|	common name	|
+1239	|	low G+C Gram-positive bacteria	|		|	common name	|
+1385	|	Bacillales Prevot 1953 (Approved Lists 1980)	|		|	authority	|
+1385	|	Bacillales	|		|	synonym	|
+1385	|	Bacillus/Staphylococcus group	|		|	synonym	|
+1385	|	Caryophanales Peshkoff 1939 (Approved Lists 1980)	|		|	authority	|
+1385	|	Caryophanales	|		|	scientific name	|
+1386	|	Bacillus	|	Bacillus <firmicutes>	|	scientific name	|
+1386	|	Bacillus Cohn 1872 (Approved lists 1980)	|		|	authority	|
+1386	|	Bacillus Cohn 1872 (Approved lists 1980) emend. Gupta et al. 2020	|		|	authority	|
+1386	|	Bacillus rRNA group 1	|		|	common name	|
+1423	|	Arthrobacter sp. CHR2P1B1-M	|		|	includes	|
+1423	|	ATCC 6051	|	ATCC 6051 <type strain>	|	type material	|
+1423	|	ATCC 6051-U	|	ATCC 6051-U <type strain>	|	type material	|
+1423	|	Bacillus mesentericus	|	Bacillus mesentericus <Bacillus subtilis>	|	in-part	|
+1423	|	Bacillus natto	|		|	synonym	|
+1423	|	Bacillus sp. 10405	|		|	includes	|
+1423	|	Bacillus sp. 15:2	|		|	includes	|
+1423	|	Bacillus sp. AECSB01	|		|	includes	|
+1423	|	Bacillus sp. AECSB04	|		|	includes	|
+1423	|	Bacillus sp. AECSB05	|		|	includes	|
+1423	|	Bacillus sp. AECSB06	|		|	includes	|
+1423	|	Bacillus sp. AECSB07	|		|	includes	|
+1423	|	Bacillus sp. AECSB08	|		|	includes	|
+1423	|	Bacillus sp. AECSB12	|		|	includes	|
+1423	|	Bacillus sp. AECSB13	|		|	includes	|
+1423	|	Bacillus sp. AECSB14	|		|	includes	|
+1423	|	Bacillus sp. BS4(2013)	|		|	includes	|
+1423	|	Bacillus sp. BS9(2013)	|		|	includes	|
+1423	|	Bacillus sp. BV3	|		|	includes	|
+1423	|	Bacillus sp. BV5	|		|	includes	|
+1423	|	Bacillus sp. HE08	|		|	includes	|
+1423	|	Bacillus sp. JKR21	|		|	includes	|
+1423	|	Bacillus sp. LB002	|		|	includes	|
+1423	|	Bacillus sp. LKM-BL	|		|	includes	|
+1423	|	Bacillus sp. PW16b	|		|	includes	|
+1423	|	Bacillus sp. PW19	|		|	includes	|
+1423	|	Bacillus sp. RSP-GLU	|		|	includes	|
+1423	|	Bacillus sp. S2 BC-1	|		|	includes	|
+1423	|	Bacillus sp. SWI06	|		|	includes	|
+1423	|	Bacillus sp. UMX-03	|		|	includes	|
+1423	|	Bacillus subtilis/Bacillus globigii	|	Bacillus subtilis/Bacillus globigii <Bacillus subtilis>	|	in-part	|
+1423	|	Bacillus subtilis (Ehrenberg 1835) Cohn 1872 (Approved Lists 1980)	|		|	authority	|
+1423	|	Bacillus subtilis	|		|	scientific name	|
+1423	|	Bacillus uniflagellatus	|		|	synonym	|
+1423	|	BCRC 10255	|	BCRC 10255 <type strain>	|	type material	|
+1423	|	Brevibacillus sp. BHR3P2B5-M	|		|	includes	|
+1423	|	CCM 2216	|	CCM 2216 <type strain>	|	type material	|
+1423	|	CCRC 10255	|	CCRC 10255 <type strain>	|	type material	|
+1423	|	CCRC:10255	|	CCRC:10255 <type strain>	|	type material	|
+1423	|	CCUG 163 B	|	CCUG 163 B <type strain>	|	type material	|
+1423	|	CFBP 4228	|	CFBP 4228 <type strain>	|	type material	|
+1423	|	CIP 52.65	|	CIP 52.65 <type strain>	|	type material	|
+1423	|	DSM 10	|	DSM 10 <type strain>	|	type material	|
+1423	|	IAM 12118	|	IAM 12118 <type strain>	|	type material	|
+1423	|	IFO 12210	|	IFO 12210 <type strain>	|	type material	|
+1423	|	IFO 13719	|	IFO 13719 <type strain>	|	type material	|
+1423	|	IFO 16412	|	IFO 16412 <type strain>	|	type material	|
+1423	|	IMET 10758	|	IMET 10758 <type strain>	|	type material	|
+1423	|	JCM 1465	|	JCM 1465 <type strain>	|	type material	|
+1423	|	KCTC 3135	|	KCTC 3135 <type strain>	|	type material	|
+1423	|	KCTC-3135	|	KCTC-3135 <type strain>	|	type material	|
+1423	|	KCTC:3135	|	KCTC:3135 <type strain>	|	type material	|
+1423	|	KCTC3135	|	KCTC3135 <type strain>	|	type material	|
+1423	|	LMG 7135	|	LMG 7135 <type strain>	|	type material	|
+1423	|	LMG:7135	|	LMG:7135 <type strain>	|	type material	|
+1423	|	NBRC 13719	|	NBRC 13719 <type strain>	|	type material	|
+1423	|	NBRC 16412	|	NBRC 16412 <type strain>	|	type material	|
+1423	|	NCAIM B.01095	|	NCAIM B.01095 <type strain>	|	type material	|
+1423	|	NCCB 32009	|	NCCB 32009 <type strain>	|	type material	|
+1423	|	NCCB 53016	|	NCCB 53016 <type strain>	|	type material	|
+1423	|	NCCB 70064	|	NCCB 70064 <type strain>	|	type material	|
+1423	|	NCDO 1769	|	NCDO 1769 <type strain>	|	type material	|
+1423	|	NCIB 3610	|	NCIB 3610 <type strain>	|	type material	|
+1423	|	NCIB:3610	|	NCIB:3610 <type strain>	|	type material	|
+1423	|	NCIMB 3610	|	NCIMB 3610 <type strain>	|	type material	|
+1423	|	NCTC 3610	|	NCTC 3610 <type strain>	|	type material	|
+1423	|	NRRL B-4219	|	NRRL B-4219 <type strain>	|	type material	|
+1423	|	NRRL:B:4219	|	NRRL:B:4219 <type strain>	|	type material	|
+1423	|	NRRL NRS-1315	|	NRRL NRS-1315 <type strain>	|	type material	|
+1423	|	NRRL:NRS:1315	|	NRRL:NRS:1315 <type strain>	|	type material	|
+1423	|	NRRL NRS-744	|	NRRL NRS-744 <type strain>	|	type material	|
+1423	|	NRRL:NRS:744	|	NRRL:NRS:744 <type strain>	|	type material	|
+1423	|	PNCM 1514	|	PNCM 1514 <type strain>	|	type material	|
+1423	|	strain 168	|	strain 168 <type strain>	|	type material	|
+1423	|	"Vibrio subtilis" Ehrenberg 1835	|		|	authority	|
+1423	|	Vibrio subtilis	|		|	synonym	|
+1423	|	VKM B-501	|	VKM B-501 <type strain>	|	type material	|
+1423	|	VKM:B:501	|	VKM:B:501 <type strain>	|	type material	|
+1424	|	Bacillus subtilis strain DY	|		|	scientific name	|
+1424	|	Bacillus subtilis (strain DY)	|		|	synonym	|
+1483	|	Bacillus amylosacchariticus	|		|	synonym	|
+1483	|	Bacillus subtilis subsp. amylosacchariticus	|		|	scientific name	|
+1483	|	Bacillus subtilis var. amylosacchariticus	|		|	synonym	|
+1485	|	Anaerobacter Duda et al. 1996	|		|	synonym	|
+1485	|	Anaerobacter	|		|	synonym	|
+1485	|	Clostridium Prazmowski 1880 (Approved Lists 1980) emend. Lawson and Rainey 2016	|		|	authority	|
+1485	|	Clostridium	|		|	scientific name	|
+1496	|	AS 1.2184	|	AS 1.2184 <type strain>	|	type material	|
+1496	|	AS:1.2184	|	AS:1.2184 <type strain>	|	type material	|
+1496	|	ATCC 9689	|	ATCC 9689 <type strain>	|	type material	|
+1496	|	BCRC 10642	|	BCRC 10642 <type strain>	|	type material	|
+1496	|	CCRC 10642	|	CCRC 10642 <type strain>	|	type material	|
+1496	|	CCRC:10642	|	CCRC:10642 <type strain>	|	type material	|
+1496	|	CCUG 4938	|	CCUG 4938 <type strain>	|	type material	|
+1496	|	CIP 104282	|	CIP 104282 <type strain>	|	type material	|
+1496	|	Clostridioides difficile (Hall and O'Toole 1935) Lawson et al. 2016	|		|	authority	|
+1496	|	Clostridioides difficile	|		|	scientific name	|
+1496	|	Clostridium difficile (Hall and O'Toole 1935) Prevot 1938 (Approved Lists 1980)	|		|	synonym	|
+1496	|	Clostridium sp. HMSC19D05	|		|	includes	|
+1496	|	DSM 1296	|	DSM 1296 <type strain>	|	type material	|
+1496	|	DSMZ 1296	|	DSMZ 1296 <type strain>	|	type material	|
+1496	|	JCM 1296	|	JCM 1296 <type strain>	|	type material	|
+1496	|	LMG 15861	|	LMG 15861 <type strain>	|	type material	|
+1496	|	LMG:15861	|	LMG:15861 <type strain>	|	type material	|
+1496	|	NCIMB 10666	|	NCIMB 10666 <type strain>	|	type material	|
+1496	|	NCTC 11209	|	NCTC 11209 <type strain>	|	type material	|
+1496	|	Peptoclostridium difficile	|		|	synonym	|
+1496	|	"Peptoclostridium difficile" Yutin and Galperin 2013	|		|	authority	|
+1502	|	ATCC 13124	|	ATCC 13124 <type strain>	|	type material	|
+1502	|	ATCC 19408	|	ATCC 19408 <type strain>	|	type material	|
+1502	|	ATCC 25768 [[Clostridium plagarum]]	|	ATCC 25768 [[Clostridium plagarum]] <reference strain>	|	type material	|
+1502	|	ATCC-25768 [[Clostridium plagarum]]	|	ATCC-25768 [[Clostridium plagarum]] <reference strain>	|	type material	|
+1502	|	ATCC:25768 [[Clostridium plagarum]]	|	ATCC:25768 [[Clostridium plagarum]] <reference strain>	|	type material	|
+1502	|	ATCC25768 [[Clostridium plagarum]]	|	ATCC25768 [[Clostridium plagarum]] <reference strain>	|	type material	|
+1502	|	"Bacterium welchii" Migula 1900	|		|	authority	|
+1502	|	Bacterium welchii	|		|	synonym	|
+1502	|	BCRC 10913	|	BCRC 10913 <type strain>	|	type material	|
+1502	|	CCRC 10913	|	CCRC 10913 <type strain>	|	type material	|
+1502	|	CCRC:10913	|	CCRC:10913 <type strain>	|	type material	|
+1502	|	CCUG 1795	|	CCUG 1795 <type strain>	|	type material	|
+1502	|	CIP 103409	|	CIP 103409 <type strain>	|	type material	|
+1502	|	Clostridium perfringens	|		|	scientific name	|
+1502	|	Clostridium perfringens (Veillon and Zuber 1898) Hauduroy et al. 1937 (Approved Lists 1980)	|		|	synonym	|
+1502	|	"Clostridium plagarum" (Prevot 1938) Smith and Hobbs 1974	|		|	authority	|
+1502	|	Clostridium plagarum	|		|	synonym	|
+1502	|	Clostridium sp. NCIM 2677	|		|	includes	|
+1502	|	DSM 2943 [[Clostridium plagarum]]	|	DSM 2943 [[Clostridium plagarum]] <reference strain>	|	type material	|
+1502	|	DSM-2943 [[Clostridium plagarum]]	|	DSM-2943 [[Clostridium plagarum]] <reference strain>	|	type material	|
+1502	|	DSM:2943 [[Clostridium plagarum]]	|	DSM:2943 [[Clostridium plagarum]] <reference strain>	|	type material	|
+1502	|	DSM2943 [[Clostridium plagarum]]	|	DSM2943 [[Clostridium plagarum]] <reference strain>	|	type material	|
+1502	|	DSM 756	|	DSM 756 <type strain>	|	type material	|
+1502	|	JCM 1290	|	JCM 1290 <type strain>	|	type material	|
+1502	|	LMG 11264	|	LMG 11264 <type strain>	|	type material	|
+1502	|	LMG:11264	|	LMG:11264 <type strain>	|	type material	|
+1502	|	NCAIM B.01417	|	NCAIM B.01417 <type strain>	|	type material	|
+1502	|	NCCB 89165	|	NCCB 89165 <type strain>	|	type material	|
+1502	|	NCIB 10620 [[Clostridium plagarum]]	|	NCIB 10620 [[Clostridium plagarum]] <reference strain>	|	type material	|
+1502	|	NCIB:10620 [[Clostridium plagarum]]	|	NCIB:10620 [[Clostridium plagarum]] <reference strain>	|	type material	|
+1502	|	NCIB 6125	|	NCIB 6125 <type strain>	|	type material	|
+1502	|	NCIMB 10620 [[Clostridium plagarum]]	|	NCIMB 10620 [[Clostridium plagarum]] <reference strain>	|	type material	|
+1502	|	NCIMB-10620 [[Clostridium plagarum]]	|	NCIMB-10620 [[Clostridium plagarum]] <reference strain>	|	type material	|
+1502	|	NCIMB:10620 [[Clostridium plagarum]]	|	NCIMB:10620 [[Clostridium plagarum]] <reference strain>	|	type material	|
+1502	|	NCIMB10620 [[Clostridium plagarum]]	|	NCIMB10620 [[Clostridium plagarum]] <reference strain>	|	type material	|
+1502	|	NCIMB 6125	|	NCIMB 6125 <type strain>	|	type material	|
+1502	|	NCTC 8237	|	NCTC 8237 <type strain>	|	type material	|
+1502	|	s__Sarcina perfringens	|		|	equivalent name	|
+1578	|	Lactobacillus Beijerinck 1901 (Approved Lists 1980)	|		|	authority	|
+1578	|	Lactobacillus Beijerinck 1901 (Approved Lists 1980) emend. Cai et al. 2012	|		|	authority	|
+1578	|	Lactobacillus Beijerinck 1901 (Approved Lists 1980) emend. Haakensen et al. 2009	|		|	authority	|
+1578	|	Lactobacillus	|		|	scientific name	|
+1578	|	Paralactobacillus Leisner et al. 2000	|		|	authority	|
+1578	|	Paralactobacillus	|		|	synonym	|
+1582	|	ATCC 393	|	ATCC 393 <type strain>	|	type material	|
+1582	|	Bacillus a	|		|	synonym	|
+1582	|	"Bacillus a" von Freudenreich 1890	|		|	authority	|
+1582	|	"Bacillus a" von Freudenreich 1891	|		|	authority	|
+1582	|	Bacillus casei a	|		|	synonym	|
+1582	|	"Bacillus casei a" von Freudenreich and Thoni 1904	|		|	authority	|
+1582	|	"Bacterium casei a" Orla-Jensen 1916	|		|	authority	|
+1582	|	Bacterium casei a	|		|	synonym	|
+1582	|	BCRC 10697	|	BCRC 10697 <type strain>	|	type material	|
+1582	|	"Caseobacterium vulgare" Orla-Jensen 1916	|		|	authority	|
+1582	|	Caseobacterium vulgare	|		|	synonym	|
+1582	|	CCRC 10697	|	CCRC 10697 <type strain>	|	type material	|
+1582	|	CCRC:10697	|	CCRC:10697 <type strain>	|	type material	|
+1582	|	CECT 475	|	CECT 475 <type strain>	|	type material	|
+1582	|	CIP 103137	|	CIP 103137 <type strain>	|	type material	|
+1582	|	DSM 20011	|	DSM 20011 <type strain>	|	type material	|
+1582	|	IAM 12473	|	IAM 12473 <type strain>	|	type material	|
+1582	|	IFO 15883	|	IFO 15883 <type strain>	|	type material	|
+1582	|	JCM 1134	|	JCM 1134 <type strain>	|	type material	|
+1582	|	KCTC 3109	|	KCTC 3109 <type strain>	|	type material	|
+1582	|	Lacticaseibacillus casei (Orla-Jensen 1916) Zheng et al. 2020	|		|	authority	|
+1582	|	Lacticaseibacillus casei	|		|	scientific name	|
+1582	|	"Lactobacillus casei" Bergey et al. 1923	|		|	authority	|
+1582	|	Lactobacillus casei (Orla-Jensen 1916) Hansen and Lessel 1971 (Approved Lists 1980) emend. Dicks et al. 1996	|		|	authority	|
+1582	|	Lactobacillus casei subsp. casei	|		|	synonym	|
+1582	|	Lactobacillus casei	|		|	synonym	|
+1582	|	Lactobacillus sp. NCIM 2363	|		|	includes	|
+1582	|	Lactobacillus sp. NCIM 2732	|		|	includes	|
+1582	|	Lactobacillus sp. T20	|		|	includes	|
+1582	|	Lactobacillus sp. T2	|		|	includes	|
+1582	|	"Lactobacterium casei" (Orla-Jensen 1916) Krasil'nikov 1949	|		|	authority	|
+1582	|	Lactobacterium casei	|		|	synonym	|
+1582	|	LMG 6904	|	LMG 6904 <type strain>	|	type material	|
+1582	|	LMG:6904	|	LMG:6904 <type strain>	|	type material	|
+1582	|	NBRC 15883	|	NBRC 15883 <type strain>	|	type material	|
+1582	|	NCDO 161	|	NCDO 161 <type strain>	|	type material	|
+1582	|	NCIMB 11970	|	NCIMB 11970 <type strain>	|	type material	|
+1582	|	NCTC 13641	|	NCTC 13641 <type strain>	|	type material	|
+1582	|	NRRL B-1922	|	NRRL B-1922 <type strain>	|	type material	|
+1582	|	NRRL:B:1922	|	NRRL:B:1922 <type strain>	|	type material	|
+1582	|	strain Hucker03	|	strain Hucker03 <type strain>	|	type material	|
+1582	|	strain Orla-Jensen 7	|	strain Orla-Jensen 7 <type strain>	|	type material	|
+1582	|	strain OrlandL-323	|	strain OrlandL-323 <type strain>	|	type material	|
+1582	|	strain Tittsler303	|	strain Tittsler303 <type strain>	|	type material	|
+1582	|	"Streptobacterium casei" Orla-Jensen 1919	|		|	authority	|
+1582	|	Streptobacterium casei	|		|	synonym	|
+1584	|	ATCC 9649	|	ATCC 9649 <type strain>	|	type material	|
+1584	|	"Bacillus acidificans longissimus" Lafar 1896	|		|	authority	|
+1584	|	Bacillus acidificans longissimus	|		|	synonym	|
+1584	|	"Bacillus Delbrucki" (sic) Leichmann 1896	|		|	authority	|
+1584	|	Bacillus Delbrucki	|		|	synonym	|
+1584	|	"Bacterium delbrucki" (sic) (Leichmann 1896) Migula 1900	|		|	authority	|
+1584	|	Bacterium delbrucki	|		|	synonym	|
+1584	|	BCRC 12195	|	BCRC 12195 <type strain>	|	type material	|
+1584	|	CCUG 34222	|	CCUG 34222 <type strain>	|	type material	|
+1584	|	CIP 57.8	|	CIP 57.8 <type strain>	|	type material	|
+1584	|	DSM 20074	|	DSM 20074 <type strain>	|	type material	|
+1584	|	IFO 3202	|	IFO 3202 <type strain>	|	type material	|
+1584	|	JCM 1012	|	JCM 1012 <type strain>	|	type material	|
+1584	|	"Lactobacillus delbrucki" (sic) (Leichmann 1896) Beijerinck 1901	|		|	authority	|
+1584	|	Lactobacillus delbrucki	|		|	synonym	|
+1584	|	Lactobacillus delbrueckii (Leichmann 1896) Beijerinck 1901	|		|	authority	|
+1584	|	Lactobacillus delbrueckii	|		|	scientific name	|
+1584	|	Lactobacillus sp. NCIM 2025	|		|	includes	|
+1584	|	Lactobacillus sp. NCIM 2365	|		|	includes	|
+1584	|	"Lactobacterium delbrucki" (sic) (Leichmann 1896) van Steenberge 1920	|		|	authority	|
+1584	|	Lactobacterium delbrucki	|		|	synonym	|
+1584	|	LMG 6412	|	LMG 6412 <type strain>	|	type material	|
+1584	|	LMG:6412	|	LMG:6412 <type strain>	|	type material	|
+1584	|	NBRC 3202	|	NBRC 3202 <type strain>	|	type material	|
+1584	|	NCDO 213	|	NCDO 213 <type strain>	|	type material	|
+1584	|	NCIMB 8130	|	NCIMB 8130 <type strain>	|	type material	|
+1584	|	NRRL B-763	|	NRRL B-763 <type strain>	|	type material	|
+1584	|	NRRL:B:763	|	NRRL:B:763 <type strain>	|	type material	|
+1584	|	"Plocamobacterium delbrucki" (sic) (Leichmann 1896) Pribram 1933	|		|	authority	|
+1584	|	Plocamobacterium delbrucki	|		|	synonym	|
+1584	|	"Thermobacterium cereale" Orla-Jensen 1919	|		|	authority	|
+1584	|	Thermobacterium cereale	|		|	synonym	|
+1584	|	"Ulvina delbrucki" (sic) (Leichmann 1896) Pribram 1933	|		|	authority	|
+1584	|	Ulvina delbrucki	|		|	synonym	|
+1584	|	VKM B-1596	|	VKM B-1596 <type strain>	|	type material	|
+1584	|	VKM:B:1596	|	VKM:B:1596 <type strain>	|	type material	|
+1585	|	ATCC 11842	|	ATCC 11842 <type strain>	|	type material	|
+1585	|	CCUG 41390	|	CCUG 41390 <type strain>	|	type material	|
+1585	|	CIP 101027	|	CIP 101027 <type strain>	|	type material	|
+1585	|	DSM 20081	|	DSM 20081 <type strain>	|	type material	|
+1585	|	IFO 13953	|	IFO 13953 <type strain>	|	type material	|
+1585	|	JCM 1002	|	JCM 1002 <type strain>	|	type material	|
+1585	|	Lactobacillus bulgaricus (Orla-Jensen 1919) Rogosa and Hansen 1971 (Approved Lists 1980)	|		|	synonym	|
+1585	|	Lactobacillus delbrueckii (SUBSP. BULGARICUS)	|		|	equivalent name	|
+1585	|	Lactobacillus delbrueckii subsp. bulgaricus (Orla-Jensen 1919) Weiss et al. 1984	|		|	authority	|
+1585	|	Lactobacillus delbrueckii subsp. bulgaricus	|		|	scientific name	|
+1585	|	Lactobacillus sp. NCIM 2056	|		|	includes	|
+1585	|	LMG 13551	|	LMG 13551 <type strain>	|	type material	|
+1585	|	LMG:13551	|	LMG:13551 <type strain>	|	type material	|
+1585	|	LMG 6901	|	LMG 6901 <type strain>	|	type material	|
+1585	|	LMG:6901	|	LMG:6901 <type strain>	|	type material	|
+1585	|	NBRC 13953	|	NBRC 13953 <type strain>	|	type material	|
+1585	|	NCTC 12712	|	NCTC 12712 <type strain>	|	type material	|
+1585	|	VKM B-1923	|	VKM B-1923 <type strain>	|	type material	|
+1585	|	VKM:B:1923	|	VKM:B:1923 <type strain>	|	type material	|
+1590	|	ATCC 14917	|	ATCC 14917 <type strain>	|	type material	|
+1590	|	ATCC BAA-171 [[Lactobacillus arizonensis]]	|	ATCC BAA-171 [[Lactobacillus arizonensis]] <type strain>	|	type material	|
+1590	|	ATCC:BAA:171 [[Lactobacillus arizonensis]]	|	ATCC:BAA:171 [[Lactobacillus arizonensis]] <type strain>	|	type material	|
+1590	|	B-14768 [[Lactobacillus arizonensis]]	|	B-14768 [[Lactobacillus arizonensis]] <type strain>	|	type material	|
+1590	|	CCUG 30503	|	CCUG 30503 <type strain>	|	type material	|
+1590	|	CCUG 45396 [[Lactobacillus arizonensis]]	|	CCUG 45396 [[Lactobacillus arizonensis]] <type strain>	|	type material	|
+1590	|	CECT 748	|	CECT 748 <type strain>	|	type material	|
+1590	|	CGMCC 1.2437	|	CGMCC 1.2437 <type strain>	|	type material	|
+1590	|	CIP 103151	|	CIP 103151 <type strain>	|	type material	|
+1590	|	CIP 106786 [[Lactobacillus arizonensis]]	|	CIP 106786 [[Lactobacillus arizonensis]] <type strain>	|	type material	|
+1590	|	DSM 13273 [[Lactobacillus arizonensis]]	|	DSM 13273 [[Lactobacillus arizonensis]] <type strain>	|	type material	|
+1590	|	DSM 20174	|	DSM 20174 <type strain>	|	type material	|
+1590	|	IFO 15891	|	IFO 15891 <type strain>	|	type material	|
+1590	|	JCM 11125 [[Lactobacillus arizonensis]]	|	JCM 11125 [[Lactobacillus arizonensis]] <type strain>	|	type material	|
+1590	|	JCM 1149	|	JCM 1149 <type strain>	|	type material	|
+1590	|	Lactiplantibacillus plantarum (Orla-Jensen 1919) Zheng et al. 2020	|		|	authority	|
+1590	|	Lactiplantibacillus plantarum	|		|	scientific name	|
+1590	|	"Lactobacillus arabinosus" Fred et al.	|		|	authority	|
+1590	|	Lactobacillus arabinosus	|		|	synonym	|
+1590	|	Lactobacillus arizonensis Swezey et al. 2000	|		|	authority	|
+1590	|	Lactobacillus arizonensis	|		|	synonym	|
+1590	|	"Lactobacillus plantari" (sic) (Orla-Jensen 1919) Bergey et al. 1923 (Approved Lists 1980)	|		|	authority	|
+1590	|	Lactobacillus plantarum (Orla-Jensen 1919) Bergey et al. 1923 (Approved Lists 1980)	|		|	synonym	|
+1590	|	Lactobacillus sp. DMR09	|		|	includes	|
+1590	|	Lactobacillus sp. HC-2	|		|	includes	|
+1590	|	Lactobacillus sp. Lact08	|		|	includes	|
+1590	|	Lactobacillus sp. Lact09	|		|	includes	|
+1590	|	Lactobacillus sp. Lact14	|		|	includes	|
+1590	|	Lactobacillus sp. M6DWS	|		|	includes	|
+1590	|	Lactobacillus sp. S2	|		|	includes	|
+1590	|	Lactobacillus sp. S8	|		|	includes	|
+1590	|	Lactobacillus sp. XJ25	|		|	includes	|
+1590	|	Lactobacillus sp. Z12	|		|	includes	|
+1590	|	"Lactobacterium plantarum" (Orla-Jensen 1919) Krasil'nikov 1949	|		|	authority	|
+1590	|	Lactobacterium plantarum	|		|	synonym	|
+1590	|	LMG 6907	|	LMG 6907 <type strain>	|	type material	|
+1590	|	LMG:6907	|	LMG:6907 <type strain>	|	type material	|
+1590	|	NBRC 15891	|	NBRC 15891 <type strain>	|	type material	|
+1590	|	NCIB 11974	|	NCIB 11974 <type strain>	|	type material	|
+1590	|	NCIMB 11974	|	NCIMB 11974 <type strain>	|	type material	|
+1590	|	NCTC 13644	|	NCTC 13644 <type strain>	|	type material	|
+1590	|	NRRL B-14768 [[Lactobacillus arizonensis]]	|	NRRL B-14768 [[Lactobacillus arizonensis]] <type strain>	|	type material	|
+1590	|	NRRL B-4496	|	NRRL B-4496 <type strain>	|	type material	|
+1590	|	NRRL:B:4496	|	NRRL:B:4496 <type strain>	|	type material	|
+1590	|	"Streptobacterium plantarum" Orla-Jensen 1919	|		|	authority	|
+1590	|	Streptobacterium plantarum	|		|	synonym	|
+1590	|	Weissella sp. Lact07	|		|	includes	|
+1598	|	ATCC 23272	|	ATCC 23272 <type strain>	|	type material	|
+1598	|	CCUG 33624	|	CCUG 33624 <type strain>	|	type material	|
+1598	|	CIP 101887	|	CIP 101887 <type strain>	|	type material	|
+1598	|	DSM 20016	|	DSM 20016 <type strain>	|	type material	|
+1598	|	IFO 15892	|	IFO 15892 <type strain>	|	type material	|
+1598	|	JCM 1112	|	JCM 1112 <type strain>	|	type material	|
+1598	|	Lactobacillus fermentum biotype II	|		|	synonym	|
+1598	|	Lactobacillus fermentum subsp. reuteri	|		|	synonym	|
+1598	|	Lactobacillus reuteri Kandler et al. 1982	|		|	synonym	|
+1598	|	Lactobacillus reuteri (plasmid pGT232)	|		|	includes	|
+1598	|	Lactobacillus sp. 1B	|		|	includes	|
+1598	|	Lactobacillus sp. I49	|		|	includes	|
+1598	|	Limosilactobacillus reuteri (Kandler et al. 1982) Zheng et al. 2020	|		|	authority	|
+1598	|	Limosilactobacillus reuteri	|		|	scientific name	|
+1598	|	LMG 13557	|	LMG 13557 <type strain>	|	type material	|
+1598	|	LMG:13557	|	LMG:13557 <type strain>	|	type material	|
+1598	|	LMG 9213	|	LMG 9213 <type strain>	|	type material	|
+1598	|	LMG:9213	|	LMG:9213 <type strain>	|	type material	|
+1598	|	NBRC 15892	|	NBRC 15892 <type strain>	|	type material	|
+1598	|	NRRL B-14171	|	NRRL B-14171 <type strain>	|	type material	|
+1598	|	NRRL:B:14171	|	NRRL:B:14171 <type strain>	|	type material	|
+2759	|	Eucarya	|		|	synonym	|
+2759	|	Eucaryotae	|		|	synonym	|
+2759	|	Eukarya	|		|	synonym	|
+2759	|	Eukaryotae	|		|	synonym	|
+2759	|	Eukaryota	|		|	scientific name	|
+2759	|	eukaryotes	|	eukaryotes <blast name>	|	blast name	|
+2759	|	eukaryotes	|	eukaryotes <genbank common name>	|	genbank common name	|
+3193	|	Embryophyta	|		|	scientific name	|
+3193	|	higher plants	|		|	common name	|
+3193	|	land plants	|	land plants <blast name>	|	blast name	|
+3193	|	land plants	|	land plants <genbank common name>	|	genbank common name	|
+3398	|	Angiospermae	|		|	synonym	|
+3398	|	angiosperms	|		|	common name	|
+3398	|	flowering plants	|	flowering plants <blast name>	|	blast name	|
+3398	|	flowering plants	|	flowering plants <genbank common name>	|	genbank common name	|
+3398	|	Magnoliophyta	|		|	synonym	|
+3398	|	Magnoliopsida	|		|	scientific name	|
+4209	|	Asterales Link, 1829	|		|	authority	|
+4209	|	Asterales	|		|	scientific name	|
+4209	|	Campanulales	|		|	includes	|
+4210	|	Asteraceae Bercht. & J.Presl, 1820	|		|	authority	|
 4210	|	Asteraceae	|		|	scientific name	|
-13334	|	Symphyotrichum	|		|	scientific name	|
-1421077	|	Symphyotrichum novae-angliae	|		|	scientific name	|
-1421077	|	Aster novae-angliae	|		|	synonym	|
-13333	|	Aster	|	Aster <plant>	|	scientific name	|
-13335	|	Aster amellus	|		|	scientific name	|
-33208	|	Metazoa	|		|	scientific name	|
-33208	|	Animalia	|		|	synonym	|
+4210	|	Compositae	|		|	equivalent name	|
+4210	|	daisy family	|		|	common name	|
+4751	|	fungi	|		|	blast name	|
+4751	|	Fungi	|		|	scientific name	|
+4751	|	Mycota	|		|	synonym	|
+4753	|	Pneumocystis P. Delanoe & Delanoe, 1912	|		|	authority	|
+4753	|	Pneumocystis	|		|	scientific name	|
+4754	|	Pneumocystis carinii f. sp. carinii	|		|	equivalent name	|
+4754	|	Pneumocystis carinii f. sp. ratti	|		|	equivalent name	|
+4754	|	Pneumocystis carinii P. Delanoe & Delanoe, 1912	|		|	authority	|
+4754	|	Pneumocystis carinii	|		|	scientific name	|
+4890	|	ascomycete fungi	|	ascomycete fungi <blast name>	|	blast name	|
+4890	|	ascomycete fungi	|	ascomycete fungi <genbank common name>	|	genbank common name	|
+4890	|	Ascomycota	|		|	scientific name	|
+4890	|	sac fungi	|		|	common name	|
+4891	|	Hemiascomycetes	|		|	synonym	|
+4891	|	Saccharomycetes G. Winter, 1880	|		|	authority	|
+4891	|	Saccharomycetes	|		|	scientific name	|
+4892	|	Endomycetales	|		|	synonym	|
+4892	|	Saccharomycetales Luerss., 1879	|		|	authority	|
+4892	|	Saccharomycetales	|		|	scientific name	|
+4893	|	Eremotheciaceae	|		|	includes	|
+4893	|	Saccharomycetaceae Luerss., 1879	|		|	authority	|
+4893	|	Saccharomycetaceae	|		|	scientific name	|
+4930	|	Pachytichospora	|		|	synonym	|
+4930	|	Saccharomyces	|		|	scientific name	|
+4932	|	ATCC 18824	|	ATCC 18824 <culture from type material>	|	type material	|
+4932	|	baker's yeast	|		|	common name	|
+4932	|	brewer's yeast	|		|	genbank common name	|
+4932	|	Candida robusta	|		|	synonym	|
+4932	|	CBS 1171	|	CBS 1171 <culture from type material>	|	type material	|
+4932	|	Mycoderma cerevisiae Desm., 1827	|		|	authority	|
+4932	|	Mycoderma cerevisiae	|		|	synonym	|
+4932	|	NRRL Y-12632	|	NRRL Y-12632 <culture from type material>	|	type material	|
+4932	|	NRRL:Y:12632	|	NRRL:Y:12632 <culture from type material>	|	type material	|
+4932	|	Saccharomyces boulardii	|		|	equivalent name	|
+4932	|	Saccharomyces boulardii (nom. inval.)	|		|	synonym	|
+4932	|	Saccharomyces boulardii Seguela, Bastide & Massot, 1984	|		|	authority	|
+4932	|	Saccharomyces capensis	|		|	synonym	|
+4932	|	Saccharomyces cerevisiae (Desm.) Meyen ex E.C. Hansen, 1883	|		|	synonym	|
+4932	|	Saccharomyces cerevisiae	|		|	scientific name	|
+4932	|	Saccharomyces cerevisiae 'var. diastaticus'	|		|	equivalent name	|
+4932	|	Saccharomyces diastaticus J. Andrews & R.B. Gilliland ex Van der Walt, 1965	|		|	authority	|
+4932	|	Saccharomyces diastaticus	|		|	synonym	|
+4932	|	Saccharomyces italicus	|		|	synonym	|
+4932	|	Saccharomyces oviformis	|		|	synonym	|
+4932	|	Saccharomyces sp. Af145-1-1	|		|	includes	|
+4932	|	Saccharomyces uvarum var. melibiosus	|		|	synonym	|
+5475	|	Candida Berkhout, 1923	|		|	authority	|
+5475	|	Candida	|		|	scientific name	|
+5475	|	Torulopsis Berl., 1894	|		|	authority	|
+5475	|	Torulopsis	|		|	synonym	|
+5476	|	ATCC 11006 [[Monilia stellatoidea]]	|	ATCC 11006 [[Monilia stellatoidea]] <culture from type material>	|	type material	|
+5476	|	ATCC 18804	|	ATCC 18804 <culture from neotype>	|	type material	|
+5476	|	BCC 5390	|	BCC 5390 <culture from neotype>	|	type material	|
+5476	|	BCC:5390	|	BCC:5390 <culture from neotype>	|	type material	|
+5476	|	BCRC 20512	|	BCRC 20512 <culture from neotype>	|	type material	|
+5476	|	Candida albicans (C.P. Robin) Berkhout, 1923	|		|	authority	|
+5476	|	Candida albicans	|		|	scientific name	|
+5476	|	Candida albicans var. stellatoidea (C.P. Jones & D.S. Martin) Diddens & Lodder, 1942	|		|	authority	|
+5476	|	Candida albicans var. stellatoidea	|		|	synonym	|
+5476	|	Candida stellatoidea (C.P. Jones & D.S. Martin) Langeron & Guerra, 1939	|		|	authority	|
+5476	|	Candida stellatoidea	|		|	synonym	|
+5476	|	Candida stellatoidea type I	|		|	includes	|
+5476	|	CBS 562	|	CBS 562 <culture from neotype>	|	type material	|
+5476	|	CCRC 20512	|	CCRC 20512 <culture from neotype>	|	type material	|
+5476	|	CCRC:20512	|	CCRC:20512 <culture from neotype>	|	type material	|
+5476	|	CECT 1002	|	CECT 1002 <culture from neotype>	|	type material	|
+5476	|	Dematium albicans (C.P. Robin) E. Laurent, 1889	|		|	authority	|
+5476	|	Dematium albicans	|		|	synonym	|
+5476	|	Endomyces albicans Johan-Olsen, 1897	|		|	authority	|
+5476	|	Endomyces albicans	|		|	synonym	|
+5476	|	IFO 1385	|	IFO 1385 <culture from neotype>	|	type material	|
+5476	|	JCM 1542	|	JCM 1542 <culture from neotype>	|	type material	|
+5476	|	KCTC 7270	|	KCTC 7270 <culture from neotype>	|	type material	|
+5476	|	Monilia albicans (C.P. Robin) Zopf, 1890	|		|	authority	|
+5476	|	Monilia albicans	|		|	synonym	|
+5476	|	Monilia stellatoidea C.P. Jones & D.S. Martin, 1938	|		|	authority	|
+5476	|	Monilia stellatoidea	|		|	synonym	|
+5476	|	MUCL 29800	|	MUCL 29800 <culture from neotype>	|	type material	|
+5476	|	Myceloblastanon albicans (C.P. Robin) M. Ota, 1927	|		|	authority	|
+5476	|	Myceloblastanon albicans	|		|	synonym	|
+5476	|	Mycotorula albicans (C.P. Robin) Langeron & Talice, 1932	|		|	authority	|
+5476	|	Mycotorula albicans	|		|	synonym	|
+5476	|	NBIMCC 72	|	NBIMCC 72 <culture from neotype>	|	type material	|
+5476	|	NBRC 1385	|	NBRC 1385 <culture from neotype>	|	type material	|
+5476	|	NCAIM Y.00971	|	NCAIM Y.00971 <culture from neotype>	|	type material	|
+5476	|	NCYC 597	|	NCYC 597 <culture from neotype>	|	type material	|
+5476	|	NRRL Y-12983	|	NRRL Y-12983 <culture from neotype>	|	type material	|
+5476	|	NRRL:Y:12983	|	NRRL:Y:12983 <culture from neotype>	|	type material	|
+5476	|	Oidium albicans C.P. Robin, 1853	|		|	authority	|
+5476	|	Oidium albicans	|		|	synonym	|
+5476	|	Parasaccharomyces albicans (C.P. Robin) Mello & L.G. Fern., 1918	|		|	authority	|
+5476	|	Parasaccharomyces albicans	|		|	synonym	|
+5476	|	Procandida albicans (C.P. Robin) E.K. Novak & Zsolt, 1961	|		|	authority	|
+5476	|	Procandida albicans	|		|	synonym	|
+5476	|	Procandida stellatoidea (C.P. Jones & D.S. Martin) E.K. Novak & Zsolt, 1961	|		|	authority	|
+5476	|	Procandida stellatoidea	|		|	synonym	|
+5476	|	PYCC 3436	|	PYCC 3436 <culture from neotype>	|	type material	|
+5476	|	Saccharomyces albicans (C.P. Robin) Reess, 1877	|		|	authority	|
+5476	|	Saccharomyces albicans	|		|	synonym	|
+5476	|	Syringospora albicans (C.P. Robin) C.W. Dodge, 1935	|		|	authority	|
+5476	|	Syringospora albicans	|		|	synonym	|
+5476	|	UAMH 8765	|	UAMH 8765 <culture from neotype>	|	type material	|
+6072	|	Eumetazoa	|		|	scientific name	|
+6656	|	Arthropoda	|		|	scientific name	|
+6656	|	arthropods	|	arthropods <blast name>	|	blast name	|
+6656	|	arthropods	|	arthropods <genbank common name>	|	genbank common name	|
+6960	|	Atelocerata	|	Atelocerata <hexapods>	|	in-part	|
+6960	|	Hexapoda	|		|	scientific name	|
+6960	|	hexapods	|	hexapods <blast name>	|	blast name	|
+6960	|	hexapods	|	hexapods <genbank common name>	|	genbank common name	|
+6960	|	Tracheata	|	Tracheata <hexapods>	|	in-part	|
+6960	|	Uniramia	|	Uniramia <hexapods>	|	in-part	|
+7020	|	Phasmatodea	|		|	scientific name	|
+7020	|	Phasmida	|		|	synonym	|
+7020	|	stick insects	|		|	common name	|
+7020	|	walking sticks	|	walking sticks <blast name>	|	blast name	|
+7020	|	walking sticks	|	walking sticks <genbank common name>	|	genbank common name	|
+7496	|	Pterygota	|	Pterygota <insects>	|	scientific name	|
+7496	|	winged insects	|		|	genbank common name	|
 7711	|	Chordata	|		|	scientific name	|
-40674	|	Mammalia	|		|	scientific name	|
+7711	|	chordates	|	chordates <blast name>	|	blast name	|
+7711	|	chordates	|	chordates <genbank common name>	|	genbank common name	|
+7742	|	Vertebrata Cuvier, 1812	|		|	authority	|
+7742	|	Vertebrata	|	Vertebrata <vertebrates>	|	scientific name	|
+7742	|	vertebrates	|	vertebrates <blast name>	|	blast name	|
+7742	|	vertebrates	|	vertebrates <genbank common name>	|	genbank common name	|
+7776	|	Gnathostomata	|	Gnathostomata <vertebrates>	|	scientific name	|
+7776	|	jawed vertebrates	|		|	genbank common name	|
+8287	|	Sarcopterygii	|		|	scientific name	|
+8457	|	Sauropsida	|		|	scientific name	|
+8457	|	sauropsids	|		|	genbank common name	|
+8492	|	Archosauria	|		|	scientific name	|
+8782	|	Aves	|		|	scientific name	|
+8782	|	avian	|		|	synonym	|
+8782	|	birds	|	birds <blast name>	|	blast name	|
+8782	|	birds	|	birds <genbank common name>	|	genbank common name	|
+8825	|	Neognathae	|		|	scientific name	|
+9126	|	Passeriformes	|		|	scientific name	|
+9126	|	song birds	|		|	genbank common name	|
+9153	|	Paridae	|		|	scientific name	|
+9153	|	titmice	|		|	genbank common name	|
+9154	|	Parus Linnaeus, 1758	|		|	authority	|
+9154	|	Parus	|		|	scientific name	|
+9157	|	Great Tit	|		|	genbank common name	|
+9157	|	Kohlmeise	|		|	common name	|
+9157	|	Parus major Linnaeus, 1758	|		|	authority	|
+9157	|	Parus major	|		|	scientific name	|
+9347	|	eutherian mammals	|		|	common name	|
+9347	|	Eutheria	|		|	scientific name	|
+9347	|	Placentalia	|		|	synonym	|
+9347	|	placental mammals	|		|	common name	|
+9347	|	placentals	|	placentals <blast name>	|	blast name	|
+9347	|	placentals	|	placentals <genbank common name>	|	genbank common name	|
+9443	|	Primata	|		|	synonym	|
+9443	|	primate	|		|	equivalent name	|
+9443	|	Primates Linnaeus, 1758	|		|	authority	|
+9443	|	primates	|	primates <blast name>	|	blast name	|
+9443	|	primates	|	primates <genbank common name>	|	genbank common name	|
 9443	|	Primates	|		|	scientific name	|
+9526	|	Catarrhini	|		|	scientific name	|
+9604	|	great apes	|		|	genbank common name	|
+9604	|	Hominidae Gray, 1825	|		|	authority	|
+9604	|	Hominidae	|		|	scientific name	|
+9604	|	Pongidae	|		|	synonym	|
+9605	|	Homo Linnaeus, 1758	|		|	authority	|
 9605	|	Homo	|		|	scientific name	|
+9605	|	humans	|		|	common name	|
+9606	|	Homo sapiens Linnaeus, 1758	|		|	authority	|
 9606	|	Homo sapiens	|		|	scientific name	|
 9606	|	human	|		|	genbank common name	|
-8782	|	Aves	|		|	scientific name	|
-216573	|	Cyanistes	|		|	scientific name	|
-156563	|	Cyanistes caeruleus	|		|	scientific name	|
-156563	|	Parus caeruleus	|		|	synonym	|
-156563	|	blue tit	|		|	genbank common name	|
-9152	|	Parus	|		|	scientific name	|
-9157	|	Parus major	|		|	scientific name	|
-6656	|	Arthropoda	|		|	scientific name	|
-7041	|	Phasmatodea	|		|	scientific name	|
-55087	|	Bacillus	|	Bacillus <stick insect>	|	scientific name	|
-2732005	|	Uroviricota	|		|	scientific name	|
-11118	|	Coronaviridae	|		|	scientific name	|
-694002	|	Betacoronavirus	|		|	scientific name	|
-694009	|	Severe acute respiratory syndrome-related coronavirus	|		|	scientific name	|
-694009	|	SARS-related coronavirus	|		|	equivalent name	|
-2697049	|	Severe acute respiratory syndrome coronavirus 2	|		|	scientific name	|
-2697049	|	SARS-CoV-2	|		|	genbank common name	|
-2697049	|	2019-nCoV	|		|	synonym	|
-10292	|	Herpesviridae	|		|	scientific name	|
+10239	|	Vira	|		|	synonym	|
+10239	|	Viridae	|		|	synonym	|
+10239	|	viruses	|		|	blast name	|
+10239	|	Viruses	|		|	scientific name	|
+10293	|	Alphaherpesvirinae	|		|	scientific name	|
+10293	|	Alphaherpesviruses	|		|	common name	|
 10294	|	Simplexvirus	|		|	scientific name	|
+10298	|	herpes simplex virus 1 HSV-1	|		|	equivalent name	|
+10298	|	Herpes simplex virus 1	|		|	synonym	|
+10298	|	herpes simplex virus HSV-1	|		|	equivalent name	|
+10298	|	Herpes simplex virus type 1	|		|	genbank common name	|
+10298	|	herpes simplex virus type 1 HSV-1	|		|	equivalent name	|
+10298	|	herpes simplex virus type 1 HSV1	|		|	equivalent name	|
+10298	|	herpes simplex virus type-1 HSV-1	|		|	equivalent name	|
+10298	|	HSV-1	|		|	acronym	|
+10298	|	HSV1	|		|	acronym	|
 10298	|	Human alphaherpesvirus 1	|		|	scientific name	|
 10298	|	Human herpesvirus 1	|		|	synonym	|
-10298	|	Herpes simplex virus 1	|		|	equivalent name	|
-10298	|	HHV-1	|		|	acronym	|
+10298	|	Human herpesvirus type 1	|		|	equivalent name	|
+10299	|	Herpes simplex virus (type 1 / strain 17)	|		|	equivalent name	|
+10299	|	Human alphaherpesvirus 1 strain 17	|		|	scientific name	|
+10300	|	Herpes simplex virus (type 1 / strain A44)	|		|	equivalent name	|
+10300	|	Human alphaherpesvirus 1 strain A44	|		|	scientific name	|
+10301	|	Herpes simplex virus (type 1 / strain Angelotti)	|		|	equivalent name	|
+10301	|	Human alphaherpesvirus 1 strain Angelotti	|		|	scientific name	|
+11118	|	Coronaviridae	|		|	scientific name	|
+12429	|	unassigned viruses	|		|	equivalent name	|
+12429	|	unclassified virus	|		|	equivalent name	|
+12429	|	unclassified viruses	|		|	scientific name	|
+27319	|	Metschnikowiaceae	|		|	scientific name	|
+27319	|	Metschnikowiaceae T. Kamienski ex Doweld, 2013	|		|	authority	|
+29397	|	ATCC 12315	|	ATCC 12315 <type strain>	|	type material	|
+29397	|	"Bacillus lactis acidi" Leichmann 1896	|		|	authority	|
+29397	|	Bacillus lactis acidi	|		|	synonym	|
+29397	|	"Bacterium lactis acidi" (Leichmann 1896) Leichmann 1896	|		|	authority	|
+29397	|	Bacterium lactis acidi	|		|	synonym	|
+29397	|	CCUG 31454	|	CCUG 31454 <type strain>	|	type material	|
+29397	|	CIP 101028	|	CIP 101028 <type strain>	|	type material	|
+29397	|	DSM 20072	|	DSM 20072 <type strain>	|	type material	|
+29397	|	JCM 1248	|	JCM 1248 <type strain>	|	type material	|
+29397	|	Lactobacillus delbrueckii lactis	|		|	synonym	|
+29397	|	Lactobacillus delbrueckii subsp. lactis (Orla-Jensen 1919) Weiss et al. 1984	|		|	authority	|
+29397	|	Lactobacillus delbrueckii subsp. lactis	|		|	scientific name	|
+29397	|	Lactobacillus delbrueckii (subsp. lactis)	|		|	synonym	|
+29397	|	"Lactobacillus lactis-acidi" (Leichmann 1896) Bergey et al. 1923	|		|	authority	|
+29397	|	Lactobacillus lactis-acidi	|		|	synonym	|
+29397	|	Lactobacillus lactis (Orla-Jensen 1919) Bergey et al. 1934 (Approved Lists 1980)	|		|	authority	|
+29397	|	Lactobacillus lactis	|		|	synonym	|
+29397	|	Lactobacillus sp. NCIM 2368	|		|	includes	|
+29397	|	"Lactobacterium caucasicum var. lactis" (Orla-Jensen 1919) Krasil'nikov 1949	|		|	authority	|
+29397	|	Lactobacterium caucasicum var. lactis	|		|	synonym	|
+29397	|	LMG 7942	|	LMG 7942 <type strain>	|	type material	|
+29397	|	LMG:7942	|	LMG:7942 <type strain>	|	type material	|
+29397	|	NBRC 102622	|	NBRC 102622 <type strain>	|	type material	|
+29397	|	NRRL B-4525	|	NRRL B-4525 <type strain>	|	type material	|
+29397	|	NRRL:B:4525	|	NRRL:B:4525 <type strain>	|	type material	|
+29397	|	"Thermobacterium lactis" Orla-Jensen 1919	|		|	authority	|
+29397	|	Thermobacterium lactis	|		|	synonym	|
+31979	|	Clostridiaceae Pribram 1933	|		|	authority	|
+31979	|	Clostridiaceae	|		|	scientific name	|
+32523	|	Tetrapoda	|		|	scientific name	|
+32523	|	tetrapods	|		|	genbank common name	|
+32524	|	Amniota	|		|	scientific name	|
+32524	|	amniotes	|		|	genbank common name	|
+32525	|	Theria Parker & Haswell, 1897	|		|	authority	|
+32525	|	Theria	|	Theria <mammals>	|	scientific name	|
+32561	|	Diapsida	|		|	synonym	|
+32561	|	diapsids	|		|	genbank common name	|
+32561	|	Sauria	|		|	scientific name	|
+33038	|	ATCC 29149	|	ATCC 29149 <type strain>	|	type material	|
+33038	|	"Hominicoccus gnavus" (Moore et al. 1976) Krause et al. 2024	|		|	authority	|
+33038	|	Hominicoccus gnavus	|		|	synonym	|
+33038	|	JCM 6515	|	JCM 6515 <type strain>	|	type material	|
+33038	|	Mediterraneibacter gnavus (Moore et al. 1976) Togo et al. 2023	|		|	synonym	|
+33038	|	Mediterraneibacter gnavus	|		|	scientific name	|
+33038	|	Ruminococcus gnavus Moore et al. 1976 (Approved Lists 1980)	|		|	authority	|
+33038	|	Ruminococcus gnavus	|		|	synonym	|
+33038	|	VPI C7-9	|	VPI C7-9 <type strain>	|	type material	|
+33090	|	Chlorobionta Jeffrey, 1982	|		|	authority	|
+33090	|	Chlorobionta	|		|	synonym	|
+33090	|	Chlorophyta/Embryophyta group	|		|	equivalent name	|
+33090	|	chlorophyte/embryophyte group	|		|	equivalent name	|
+33090	|	Chloroplastida Adl et al. 2005	|		|	authority	|
+33090	|	Chloroplastida	|		|	synonym	|
+33090	|	green plants	|	green plants <blast name>	|	blast name	|
+33090	|	green plants	|	green plants <genbank common name>	|	genbank common name	|
+33090	|	plants	|		|	common name	|
+33090	|	Viridiplantae Cavalier-Smith, 1981	|		|	authority	|
+33090	|	Viridiplantae	|		|	scientific name	|
+33154	|	Fungi/Metazoa group	|		|	synonym	|
+33154	|	Opisthokonta Cavalier-Smith 1987	|		|	authority	|
+33154	|	Opisthokonta	|		|	scientific name	|
+33154	|	opisthokonts	|		|	synonym	|
+33208	|	Animalia	|		|	synonym	|
+33208	|	animals	|	animals <blast name>	|	blast name	|
+33208	|	animals	|	animals <genbank common name>	|	genbank common name	|
+33208	|	metazoans	|		|	common name	|
+33208	|	Metazoa	|		|	scientific name	|
+33208	|	multicellular animals	|		|	common name	|
+33213	|	Bilateria	|		|	scientific name	|
+33317	|	Protostomia	|		|	scientific name	|
+33340	|	Neoptera	|		|	scientific name	|
+33341	|	Orthopteroidea	|		|	synonym	|
+33341	|	Polyneoptera	|		|	scientific name	|
+33511	|	deuterostomes	|		|	common name	|
+33511	|	Deuterostomia	|		|	scientific name	|
+33958	|	Lactobacillaceae	|		|	scientific name	|
+33958	|	Lactobacillaceae Winslow et al. 1917 (Approved Lists 1980)	|		|	authority	|
+33958	|	Lactobacillaceae Winslow et al. 1917 (Approved Lists 1980) emend. Zheng et al. 2020	|		|	authority	|
+33958	|	Leuconostocaceae Schleifer 2010	|		|	authority	|
+33958	|	Leuconostocaceae	|		|	synonym	|
+35493	|	Streptophyta Bremer, 1985	|		|	authority	|
+35493	|	Streptophyta	|		|	scientific name	|
+37762	|	Escherichia coli B	|		|	scientific name	|
+37762	|	Escherichia coli (strain B)	|		|	synonym	|
+37763	|	Clostridium perfringens A	|		|	scientific name	|
+37763	|	Clostridium perfringens (type A)	|		|	synonym	|
+37987	|	Pneumocystales O.E. Erikss., 1994	|		|	authority	|
+37987	|	Pneumocystales	|		|	scientific name	|
+40674	|	Mammalia	|		|	scientific name	|
+40674	|	mammals	|	mammals <blast name>	|	blast name	|
+40674	|	mammals	|	mammals <genbank common name>	|	genbank common name	|
+41479	|	Aster L., 1753	|		|	authority	|
+41479	|	Aster	|		|	scientific name	|
+41479	|	Gymnaster Kitam., 1937	|		|	authority	|
+41479	|	Gymnaster	|		|	synonym	|
+41479	|	Kalimeris (Cass.) Cass., 1825	|		|	authority	|
+41479	|	Kalimeris	|		|	synonym	|
+41479	|	Miyamayomena Kitam., 1982	|		|	authority	|
+41479	|	Miyamayomena	|		|	synonym	|
+41479	|	Rhynchospermum Reinw., 1825	|		|	authority	|
+41479	|	Rhynchospermum	|		|	synonym	|
+42068	|	Pneumocystis carinii f. sp. hominis	|		|	includes	|
+42068	|	Pneumocystis jirovecii Frenkel, 1976	|		|	authority	|
+42068	|	Pneumocystis jirovecii	|		|	scientific name	|
+42069	|	Pneumocystis carinii f. sp. mustelae	|		|	scientific name	|
+44281	|	Pneumocystaceae	|		|	scientific name	|
+50557	|	Insecta	|		|	scientific name	|
+50557	|	insects	|	insects <blast name>	|	blast name	|
+50557	|	insects	|	insects <genbank common name>	|	genbank common name	|
+50557	|	true insects	|		|	common name	|
+55086	|	Bacillidae	|		|	scientific name	|
+55087	|	Bacillus	|	Bacillus <walking sticks>	|	scientific name	|
+55087	|	Bacillus Berthold, 1827	|		|	authority	|
+55612	|	Aster novae-angliae L., 1753	|		|	authority	|
+55612	|	Aster novae-angliae	|		|	synonym	|
+55612	|	New England aster	|		|	common name	|
+55612	|	Symphyotrichum novae-angliae (L.) G.L.Nesom, 1995	|		|	authority	|
+55612	|	Symphyotrichum novae-angliae	|		|	scientific name	|
+55612	|	Symphyotrichum novaeangliae	|		|	synonym	|
+58023	|	Tracheophyta	|		|	scientific name	|
+58023	|	Tracheophyta Sinnott ex Cavalier-Smith, 1998	|		|	authority	|
+58023	|	vascular plants	|	vascular plants <blast name>	|	blast name	|
+58023	|	vascular plants	|	vascular plants <common name>	|	common name	|
+58024	|	seed plants	|	seed plants <blast name>	|	blast name	|
+58024	|	seed plants	|	seed plants <common name>	|	common name	|
+58024	|	Spermatophyta	|		|	scientific name	|
+63221	|	Feldhofer 1	|	Feldhofer 1 <holotype>	|	type material	|
+63221	|	Homo neanderthalensis	|		|	synonym	|
+63221	|	Homo sapiens neanderthalensis King, 1864	|		|	authority	|
+63221	|	Homo sapiens neanderthalensis	|		|	scientific name	|
+63221	|	Neandertal	|		|	genbank common name	|
+63221	|	Neandertal man	|		|	common name	|
+63221	|	Neanderthal 1	|	Neanderthal 1 <holotype>	|	type material	|
+63221	|	Neanderthal	|		|	common name	|
+63221	|	Neanderthal man	|		|	common name	|
+69219	|	"Aerobacter dissolvens" (Rosen 1922) Waldee 1945	|		|	authority	|
+69219	|	Aerobacter dissolvens	|		|	synonym	|
+69219	|	"Aplanobacter dissolvens" (Rosen 1922) Rosen 1926	|		|	authority	|
+69219	|	Aplanobacter dissolvens	|		|	synonym	|
+69219	|	ATCC 23373	|	ATCC 23373 <type strain>	|	type material	|
+69219	|	"Bacterium dissolvens" Rosen 1922	|		|	authority	|
+69219	|	Bacterium dissolvens	|		|	synonym	|
+69219	|	CIP 105586	|	CIP 105586 <type strain>	|	type material	|
+69219	|	Enterobacter cloacae subsp. dissolvens (Rosen 1922) Hoffmann et al. 2005	|		|	authority	|
+69219	|	Enterobacter cloacae subsp. dissolvens	|		|	scientific name	|
+69219	|	Enterobacter dissolvens (Rosen 1922) Brenner et al. 1988	|		|	authority	|
+69219	|	Enterobacter dissolvens	|		|	synonym	|
+69219	|	Enterobacter sp. GN02534	|		|	includes	|
+69219	|	Erwinia dissolvens (Rosen 1922) Burkholder 1948 (Approved Lists 1980)	|		|	authority	|
+69219	|	Erwinia dissolvens	|		|	synonym	|
+69219	|	ICMP 1570	|	ICMP 1570 <type strain>	|	type material	|
+69219	|	JCM 6049	|	JCM 6049 <type strain>	|	type material	|
+69219	|	LMG 2683	|	LMG 2683 <type strain>	|	type material	|
+69219	|	LMG:2683	|	LMG:2683 <type strain>	|	type material	|
+69219	|	"Phytomonas dissolvens" (Rosen 1922) Rosen 1926	|		|	authority	|
+69219	|	Phytomonas dissolvens	|		|	synonym	|
+69219	|	"Pseudomonas dissolvens" Rosen 1922	|		|	authority	|
+69219	|	Pseudomonas dissolvens	|		|	synonym	|
+71240	|	dicots	|		|	in-part	|
+71240	|	Dicotyledoneae	|		|	in-part	|
+71240	|	dicotyledons	|		|	in-part	|
+71240	|	eudicots	|	eudicots <blast name>	|	blast name	|
+71240	|	eudicots	|	eudicots <common name>	|	common name	|
+71240	|	eudicotyledons	|		|	scientific name	|
+71274	|	Asteridae	|		|	equivalent name	|
+71274	|	asterids	|		|	scientific name	|
+72897	|	Aster amellus L., 1753	|		|	authority	|
+72897	|	Aster amellus	|		|	scientific name	|
+72897	|	Italian starwort	|		|	common name	|
+72977	|	Symphyotrichum Nees, 1832	|		|	authority	|
+72977	|	Symphyotrichum	|		|	scientific name	|
+75184	|	Bacillus rossius	|		|	scientific name	|
+76804	|	Nidovirales	|		|	scientific name	|
+78536	|	Euphyllophyta	|		|	scientific name	|
+78536	|	euphyllophytes	|		|	equivalent name	|
+79668	|	Clostridium perfringens C	|		|	scientific name	|
+83333	|	Escherichia coli K12	|		|	equivalent name	|
+83333	|	Escherichia coli K-12	|		|	scientific name	|
+83334	|	Escherichia coli O157:H7	|		|	scientific name	|
+83684	|	ATCC 9649	|	ATCC 9649 <type strain>	|	type material	|
+83684	|	BCRC 12195	|	BCRC 12195 <type strain>	|	type material	|
+83684	|	CCUG 34222	|	CCUG 34222 <type strain>	|	type material	|
+83684	|	CIP 57.8	|	CIP 57.8 <type strain>	|	type material	|
+83684	|	DSM 20074	|	DSM 20074 <type strain>	|	type material	|
+83684	|	IFO 3202	|	IFO 3202 <type strain>	|	type material	|
+83684	|	JCM 1012	|	JCM 1012 <type strain>	|	type material	|
+83684	|	Lactobacillus delbrueckii subsp. delbrueckii (Leichmann 1896) Beijerinck 1901	|		|	authority	|
+83684	|	Lactobacillus delbrueckii subsp. delbrueckii	|		|	scientific name	|
+83684	|	LMG 6412	|	LMG 6412 <type strain>	|	type material	|
+83684	|	LMG:6412	|	LMG:6412 <type strain>	|	type material	|
+83684	|	NBRC 3202	|	NBRC 3202 <type strain>	|	type material	|
+83684	|	NCDO 213	|	NCDO 213 <type strain>	|	type material	|
+83684	|	NCIMB 8130	|	NCIMB 8130 <type strain>	|	type material	|
+83684	|	NRRL B-763	|	NRRL B-763 <type strain>	|	type material	|
+83684	|	NRRL:B:763	|	NRRL:B:763 <type strain>	|	type material	|
+83684	|	VKM B-1596	|	VKM B-1596 <type strain>	|	type material	|
+83684	|	VKM:B:1596	|	VKM:B:1596 <type strain>	|	type material	|
+85512	|	Dicondylia	|		|	scientific name	|
+86029	|	Bacillus subtilis subsp. natto	|		|	scientific name	|
+86029	|	Bacillus subtilis var. natto	|		|	equivalent name	|
+87646	|	Parus major major Linnaeus, 1758	|		|	authority	|
+87646	|	Parus major major	|		|	scientific name	|
+88770	|	Panarthropoda	|		|	scientific name	|
+89593	|	Craniata	|	Craniata <chordates>	|	scientific name	|
+91061	|	Bacilli Ludwig et al. 2010	|		|	authority	|
+91061	|	Bacilli	|		|	scientific name	|
+91061	|	Bacillus/Lactobacillus/Streptococcus group	|		|	synonym	|
+91061	|	Firmibacteria Murray 1988	|		|	authority	|
+91061	|	Firmibacteria	|		|	synonym	|
+91347	|	Enterobacterales Adeolu et al. 2016	|		|	authority	|
+91347	|	Enterobacterales	|		|	scientific name	|
+91347	|	Enterobacteriaceae and related endosymbionts	|		|	synonym	|
+91347	|	Enterobacteriaceae group	|		|	synonym	|
+91347	|	Enterobacteriales	|		|	synonym	|
+91347	|	gamma-3 proteobacteria	|	gamma-3 proteobacteria <enterobacteria,Enterobacterales>	|	in-part	|
+91827	|	core eudicots	|		|	equivalent name	|
+91827	|	core eudicotyledons	|		|	equivalent name	|
+91827	|	Gunneridae D.E.Soltis, P.S.Soltis & W.S.Judd, 2007	|		|	authority	|
+91827	|	Gunneridae	|		|	scientific name	|
+91882	|	Asteranae	|		|	includes	|
+91882	|	campanulids	|		|	scientific name	|
+91882	|	euasterids II	|		|	synonym	|
+93214	|	Bacillus redtenbacheri Padewieth, 1899	|		|	authority	|
+93214	|	Bacillus redtenbacheri	|		|	synonym	|
+93214	|	Bacillus rossius redtenbacheri	|		|	scientific name	|
+93215	|	Bacillus rossius rossius	|		|	scientific name	|
+95639	|	Bacillus rossius tripolitanus	|		|	scientific name	|
+102804	|	Asteroideae Lindl., 1829	|		|	authority	|
+102804	|	Asteroideae	|		|	scientific name	|
+102809	|	Astereae Cass., 1819	|		|	authority	|
+102809	|	Astereae	|		|	scientific name	|
+107819	|	Clostridium perfringens D	|		|	scientific name	|
+107819	|	Clostridium perfringens (type D)	|		|	synonym	|
+112251	|	Pneumocystis carinii f. sp. suis	|		|	scientific name	|
+117570	|	Teleostomi	|		|	scientific name	|
+117571	|	bony vertebrates	|		|	genbank common name	|
+117571	|	Euteleostomi	|		|	scientific name	|
+131221	|	Charophyta/Embryophyta group	|		|	synonym	|
+131221	|	charophyte/embryophyte group	|		|	equivalent name	|
+131221	|	Streptophytina	|		|	scientific name	|
+131567	|	biota	|		|	synonym	|
+131567	|	cellular organisms	|		|	scientific name	|
+142051	|	Pneumocystis carinii f. sp. rattus-secundi	|		|	scientific name	|
+147537	|	budding yeasts & allies	|	budding yeasts & allies <blast name>	|	blast name	|
+147537	|	budding yeasts & allies	|	budding yeasts & allies <genbank common name>	|	genbank common name	|
+147537	|	Saccharomycotina	|		|	scientific name	|
+147537	|	true yeasts	|		|	common name	|
+147553	|	Archiascomycota	|	Archiascomycota <Pneumocystomycetes>	|	in-part	|
+147553	|	Pneumocystomycetes	|		|	scientific name	|
+156562	|	Cyanistes Kaup 1829	|		|	authority	|
+156562	|	Cyanistes	|		|	scientific name	|
+156563	|	Blaumeise	|		|	common name	|
+156563	|	blue tit	|		|	genbank common name	|
+156563	|	Cyanistes caeruleus Linnaeus, 1758	|		|	authority	|
+156563	|	Cyanistes caeruleus	|		|	scientific name	|
+156563	|	Parus caeruleus Linnaeus, 1758	|		|	authority	|
+156563	|	Parus caeruleus	|		|	synonym	|
+186801	|	"Clostridia" Rainey 2009	|		|	authority	|
+186801	|	Clostridia Rainey 2010	|		|	authority	|
+186801	|	Clostridia	|		|	scientific name	|
+186802	|	Clostridiales Prevot 1953 (Approved Lists 1980)	|		|	authority	|
+186802	|	Clostridiales	|		|	synonym	|
+186802	|	Eubacteriales Buchanan 1917 (Approved Lists 1980)	|		|	authority	|
+186802	|	Eubacteriales Buchanan 1917 (Approved Lists 1980) emend. Gerritsen et al. 2014	|		|	authority	|
+186802	|	Eubacteriales Buchanan 1917 (Approved Lists 1980) emend. Tindall 2019	|		|	authority	|
+186802	|	Eubacteriales	|		|	scientific name	|
+186803	|	Lachnospiraceae Rainey 2010	|		|	authority	|
+186803	|	Lachnospiraceae	|		|	scientific name	|
+186804	|	Clostridium cluster XI	|		|	synonym	|
+186804	|	Peptostreptococcaceae Ezaki 2010	|		|	authority	|
+186804	|	Peptostreptococcaceae Ezaki 2010 emend. Bello et al. 2024	|		|	authority	|
+186804	|	Peptostreptococcaceae	|		|	scientific name	|
+186817	|	Bacillaceae Fischer 1895 (Approved Lists 1980)	|		|	authority	|
+186817	|	Bacillaceae Fischer 1895 (Approved Lists 1980) emend. Li et al. 2024	|		|	authority	|
+186817	|	Bacillaceae	|		|	scientific name	|
+186826	|	Lactobacillales Ludwig et al. 2010	|		|	authority	|
+186826	|	Lactobacillales	|		|	scientific name	|
+197562	|	Crustacea	|		|	includes	|
+197562	|	crustaceans and hexapods	|		|	genbank common name	|
+197562	|	crustaceans	|		|	blast name	|
+197562	|	Pancrustacea	|		|	scientific name	|
+197563	|	Mandibulata	|		|	scientific name	|
+197563	|	mandibulates	|		|	common name	|
+207598	|	Homininae	|		|	scientific name	|
+207598	|	Homo/Pan/Gorilla group	|		|	synonym	|
+208220	|	Cyanistes caeruleus obscurus	|		|	scientific name	|
+208220	|	Parus caeruleus obscurus Prazak, 1894	|		|	authority	|
+208220	|	Parus caeruleus obscurus	|		|	synonym	|
+208221	|	Parus major newtoni Pra_ak, 1894	|		|	authority	|
+208221	|	Parus major newtoni	|		|	scientific name	|
+213547	|	Verophasmatodea	|		|	scientific name	|
+213889	|	Parus corsus Kleinschmidt, 1903	|		|	authority	|
+213889	|	Parus corsus	|		|	synonym	|
+213889	|	Parus major corsus	|		|	scientific name	|
+213891	|	Parus major ferghanensis Buturlin, 1912	|		|	authority	|
+213891	|	Parus major ferghanensis	|		|	scientific name	|
+213893	|	Parus major excelsus Buvry, 1857	|		|	authority	|
+213893	|	Parus major excelsus	|		|	scientific name	|
+214015	|	Parus major kapustini Portenko, 1954	|		|	authority	|
+214015	|	Parus major kapustini	|		|	scientific name	|
+220668	|	Lactiplantibacillus plantarum WCFS1	|		|	scientific name	|
+220668	|	Lactobacillus plantarum strain WCFS1	|		|	equivalent name	|
+220668	|	Lactobacillus plantarum str. WCFS1	|		|	equivalent name	|
+220668	|	Lactobacillus plantarum WCFS1	|		|	synonym	|
+237561	|	Candida albicans SC5314	|		|	scientific name	|
+262150	|	Bacillini	|		|	scientific name	|
+272563	|	Clostridioides difficile 630	|		|	scientific name	|
+272563	|	Clostridium difficile 630 (epidemic type X)	|		|	equivalent name	|
+272563	|	Clostridium difficile 630	|		|	synonym	|
+272563	|	Clostridium difficile str. 630	|		|	equivalent name	|
+272563	|	Clostridium difficile strain 630	|		|	equivalent name	|
+272563	|	Peptoclostridium difficile 630	|		|	synonym	|
+285006	|	Saccharomyces cerevisiae RM11-1a	|		|	scientific name	|
+294748	|	Candida albicans WO-1	|		|	scientific name	|
+307796	|	Saccharomyces cerevisiae YJM789	|		|	scientific name	|
+314146	|	Euarchontoglires	|		|	scientific name	|
+314293	|	Anthropoidea	|		|	synonym	|
+314293	|	Simiiformes	|		|	scientific name	|
+314295	|	ape	|	ape <primates>	|	common name	|
+314295	|	apes	|		|	genbank common name	|
+314295	|	Hominoidea	|		|	scientific name	|
+321956	|	Lactobacillus delbrueckii subsp. bulgaricus ATCC BAA-365	|		|	scientific name	|
+321956	|	Lactobacillus delbrueckii subsp. bulgaricus Lb-18	|		|	synonym	|
+321956	|	Lactobacillus delbrueckii subsp. bulgaricus strain ATCC BAA-365	|		|	equivalent name	|
+321956	|	Lactobacillus delbrueckii subsp. bulgaricus str. ATCC BAA-365	|		|	equivalent name	|
+336306	|	ATCC 13047	|	ATCC 13047 <type strain>	|	type material	|
+336306	|	CCUG 28448	|	CCUG 28448 <type strain>	|	type material	|
+336306	|	CCUG 29301	|	CCUG 29301 <type strain>	|	type material	|
+336306	|	CCUG 6323	|	CCUG 6323 <type strain>	|	type material	|
+336306	|	CIP 60.85	|	CIP 60.85 <type strain>	|	type material	|
+336306	|	DSM 30054	|	DSM 30054 <type strain>	|	type material	|
+336306	|	Enterobacter cloacae subsp. cloacae (Jordan 1890) Hormaeche and Edwards 1960	|		|	authority	|
+336306	|	Enterobacter cloacae subsp. cloacae	|		|	scientific name	|
+336306	|	Enterobacter sp. 42324	|		|	includes	|
+336306	|	Enterobacter sp. GN02174	|		|	includes	|
+336306	|	Enterobacter sp. GN02616	|		|	includes	|
+336306	|	Enterobacter sp. MDCL 83	|		|	includes	|
+336306	|	Enterobacter sp. PEER 10_2023	|		|	includes	|
+336306	|	Enterobacter sp. PEER 926	|		|	includes	|
+336306	|	HAMBI 1295	|	HAMBI 1295 <type strain>	|	type material	|
+336306	|	HAMBI 96	|	HAMBI 96 <type strain>	|	type material	|
+336306	|	IFO 13535	|	IFO 13535 <type strain>	|	type material	|
+336306	|	JCM 1232	|	JCM 1232 <type strain>	|	type material	|
+336306	|	LMG 2783	|	LMG 2783 <type strain>	|	type material	|
+336306	|	LMG:2783	|	LMG:2783 <type strain>	|	type material	|
+336306	|	NBRC 13535	|	NBRC 13535 <type strain>	|	type material	|
+336306	|	NCDC 279-56	|	NCDC 279-56 <type strain>	|	type material	|
+336306	|	NCTC 10005	|	NCTC 10005 <type strain>	|	type material	|
+337330	|	ATCC 14917	|	ATCC 14917 <type strain>	|	type material	|
+337330	|	CCUG 30503	|	CCUG 30503 <type strain>	|	type material	|
+337330	|	CECT 748	|	CECT 748 <type strain>	|	type material	|
+337330	|	CGMCC 1.2437	|	CGMCC 1.2437 <type strain>	|	type material	|
+337330	|	CIP 103151	|	CIP 103151 <type strain>	|	type material	|
+337330	|	DSM 20174	|	DSM 20174 <type strain>	|	type material	|
+337330	|	IFO 15891	|	IFO 15891 <type strain>	|	type material	|
+337330	|	JCM 1149	|	JCM 1149 <type strain>	|	type material	|
+337330	|	Lactiplantibacillus plantarum subsp. plantarum (Orla-Jensen 1919) Zheng et al. 2020	|		|	authority	|
+337330	|	Lactiplantibacillus plantarum subsp. plantarum	|		|	scientific name	|
+337330	|	Lactobacillus plantarum subsp. plantarum (Orla-Jensen 1919) Bergey et al. 1923 (Approved Lists 1980)	|		|	authority	|
+337330	|	Lactobacillus plantarum subsp. plantarum	|		|	synonym	|
+337330	|	LMG 6907	|	LMG 6907 <type strain>	|	type material	|
+337330	|	LMG:6907	|	LMG:6907 <type strain>	|	type material	|
+337330	|	NBRC 15891	|	NBRC 15891 <type strain>	|	type material	|
+337330	|	NCIB 11974	|	NCIB 11974 <type strain>	|	type material	|
+337330	|	NCIMB 11974	|	NCIMB 11974 <type strain>	|	type material	|
+337330	|	NCTC 13644	|	NCTC 13644 <type strain>	|	type material	|
+337330	|	NRRL B-4496	|	NRRL B-4496 <type strain>	|	type material	|
+337330	|	NRRL:B:4496	|	NRRL:B:4496 <type strain>	|	type material	|
+349123	|	CIP 109821	|	CIP 109821 <type strain>	|	type material	|
+349123	|	DSM 17509	|	DSM 17509 <type strain>	|	type material	|
+349123	|	Lactobacillus reuteri 100-23	|		|	includes	|
+349123	|	Limosilactobacillus reuteri 100-23	|		|	includes	|
+349123	|	Limosilactobacillus reuteri subsp. rodentium Li et al. 2021	|		|	authority	|
+349123	|	Limosilactobacillus reuteri subsp. rodentium	|		|	scientific name	|
+349123	|	strain 100-23	|	strain 100-23 <type strain>	|	type material	|
+353496	|	Lactobacillus delbrueckii subsp. bulgaricus 2038	|		|	scientific name	|
+353496	|	Lactobacillus delbrueckii subsp. bulgaricus str. 2038	|		|	equivalent name	|
+353496	|	Lactobacillus delbrueckii subsp. bulgaricus strain 2038	|		|	equivalent name	|
+354276	|	Enterobacter cloacae complex	|		|	scientific name	|
+367459	|	Clostridioides difficile QCD-32g58	|		|	scientific name	|
+367459	|	Clostridium difficile QCD-32g58	|		|	synonym	|
+367459	|	Clostridium difficile strain QCD-32g58	|		|	equivalent name	|
+367459	|	Clostridium difficile str. QCD-32g58	|		|	equivalent name	|
+367459	|	Peptoclostridium difficile QCD-32g58	|		|	synonym	|
+376913	|	Haplorrhini	|		|	scientific name	|
+381522	|	Cyanistes caeruleus caeruleus	|		|	scientific name	|
+381522	|	Parus caeruleus caeruleus Linnaeus, 1758	|		|	authority	|
+381522	|	Parus caeruleus caeruleus	|		|	synonym	|
+381524	|	Cyanistes caeruleus ogilastrae Hartert, 1905	|		|	authority	|
+381524	|	Cyanistes caeruleus ogilastrae	|		|	synonym	|
+381524	|	Cyanistes caeruleus ogliastrae	|		|	scientific name	|
+381524	|	Cyanistes caeruleus oligastrae	|		|	synonym	|
+381524	|	Parus caeruleus ogilastrae	|		|	synonym	|
+381524	|	Parus caeruleus ogliastrae Hartert, 1905	|		|	authority	|
+381524	|	Parus caeruleus ogliastrae	|		|	synonym	|
+390333	|	Lactobacillus delbrueckii subsp. bulgaricus ATCC 11842 = JCM 1002	|		|	scientific name	|
+390333	|	Lactobacillus delbrueckii subsp. bulgaricus ATCC 11842	|		|	synonym	|
+390333	|	Lactobacillus delbrueckii subsp. bulgaricus DSM 20081	|		|	synonym	|
+390333	|	Lactobacillus delbrueckii subsp. bulgaricus JCM 1002 = ATCC 11842	|		|	equivalent name	|
+390333	|	Lactobacillus delbrueckii subsp. bulgaricus JCM 1002	|		|	synonym	|
+390333	|	Lactobacillus delbrueckii subsp. bulgaricus NCDO 1489	|		|	synonym	|
+411470	|	Mediterraneibacter gnavus ATCC 29149	|		|	scientific name	|
+411470	|	Ruminococcus gnavus ATCC 29149	|		|	equivalent name	|
+436486	|	Dinosauria	|		|	scientific name	|
+436486	|	dinosaurs	|	dinosaurs <blast name>	|	blast name	|
+436486	|	dinosaurs	|	dinosaurs <genbank common name>	|	genbank common name	|
+436489	|	Saurischia	|		|	scientific name	|
+436491	|	Theropoda	|		|	scientific name	|
+436492	|	Coelurosauria	|		|	scientific name	|
+451864	|	Dikarya	|		|	scientific name	|
+451866	|	Taphrinomycotina	|		|	scientific name	|
+455631	|	Clostridioides difficile QCD-66c26	|		|	scientific name	|
+455631	|	Clostridium difficile QCD-66c26	|		|	synonym	|
+455631	|	Clostridium difficile strain QCD-66c26	|		|	equivalent name	|
+455631	|	Clostridium difficile str. QCD-66c26	|		|	equivalent name	|
+455631	|	Peptoclostridium difficile QCD-66c26	|		|	synonym	|
+462209	|	Saccharomyces cerevisiae Y9	|		|	scientific name	|
+491077	|	Lactobacillus reuteri SD2112	|		|	synonym	|
+491077	|	Lactobacillus reuteri strain SD2112	|		|	equivalent name	|
+491077	|	Lactobacillus reuteri str. SD2112	|		|	equivalent name	|
+491077	|	Limosilactobacillus reuteri SD2112	|		|	scientific name	|
+498019	|	B11220	|	B11220 <culture from holotype>	|	type material	|
+498019	|	Candida auris Satoh and Makimura ex F. Hagen, 2023	|		|	authority	|
+498019	|	Candida auris Satoh & Makimura, 2009	|		|	synonym	|
+498019	|	Candida auris	|		|	synonym	|
+498019	|	Candida sp. JHS-2008	|		|	includes	|
+498019	|	Candida sp. KM-143	|		|	includes	|
+498019	|	Candidozyma auris (Satoh & Makimura) Q.M. Wang, Yurkov, Boekhout & F.Y. Bai, 2024	|		|	authority	|
+498019	|	Candidozyma auris	|		|	scientific name	|
+498019	|	CBS 10913	|	CBS 10913 <culture from holotype>	|	type material	|
+498019	|	CBS10913	|	CBS10913 <culture from holotype>	|	type material	|
+498019	|	CDC B11220	|	CDC B11220 <culture from holotype>	|	type material	|
+498019	|	DSM 21092	|	DSM 21092 <culture from holotype>	|	type material	|
+498019	|	JCM 15448	|	JCM 15448 <culture from holotype>	|	type material	|
+498019	|	JCM15448	|	JCM15448 <culture from holotype>	|	type material	|
+498216	|	Lacticaseibacillus casei str. Zhang	|		|	scientific name	|
+498216	|	Lactobacillus casei strain Zhang	|		|	equivalent name	|
+498216	|	Lactobacillus casei str. Zhang	|		|	synonym	|
+523721	|	Areolatae	|		|	scientific name	|
+523864	|	Bacilloidea	|		|	scientific name	|
+524420	|	Bacillinae	|		|	scientific name	|
+525341	|	Lactobacillus reuteri CF48-3A	|		|	synonym	|
+525341	|	Lactobacillus reuteri strain CF48-3A	|		|	equivalent name	|
+525341	|	Lactobacillus reuteri str. CF48-3A	|		|	equivalent name	|
+525341	|	Limosilactobacillus reuteri CF48-3A	|		|	scientific name	|
+543734	|	Lacticaseibacillus casei BL23	|		|	scientific name	|
+543734	|	Lactobacillus casei BL23	|		|	synonym	|
+543734	|	Lactobacillus casei strain BL23	|		|	equivalent name	|
+543734	|	Lactobacillus casei str. BL23	|		|	equivalent name	|
+548681	|	Herpesvirales	|		|	scientific name	|
+559299	|	Candida albicans 1161	|		|	scientific name	|
+644042	|	Lactiplantibacillus plantarum JDM1	|		|	scientific name	|
+644042	|	Lactobacillus plantarum JDM1	|		|	synonym	|
+644042	|	Lactobacillus plantarum strain JDM1	|		|	equivalent name	|
+644042	|	Lactobacillus plantarum str. JDM1	|		|	equivalent name	|
+653685	|	Bacillus subtilis group	|		|	scientific name	|
+685445	|	Enterobacter aerogenes FGI35	|		|	synonym	|
+685445	|	Enterobacter aerogenes strain FGI35	|		|	equivalent name	|
+685445	|	Enterobacter aerogenes str. FGI35	|		|	equivalent name	|
+685445	|	Enterobacter sp. FGI 35	|		|	synonym	|
+685445	|	Klebsiella aerogenes FGI35	|		|	scientific name	|
+694002	|	Betacoronavirus	|		|	scientific name	|
+694002	|	Coronavirus	|	Coronavirus <Betacoronavirus>	|	in-part	|
+694002	|	Coronavirus group 2	|		|	equivalent name	|
+694002	|	Group 2 species	|		|	equivalent name	|
+716545	|	saccharomyceta	|		|	scientific name	|
+741158	|	Denisova hominin	|		|	genbank common name	|
+741158	|	Denisovan	|		|	common name	|
+741158	|	Denisovans	|		|	common name	|
+741158	|	Homo sapiens ssp. 'Denisova'	|		|	equivalent name	|
+741158	|	Homo sapiens ssp. Denisova	|		|	equivalent name	|
+741158	|	Homo sapiens subsp. 'Denisova'	|		|	scientific name	|
+741158	|	Homo sp. Altai	|		|	synonym	|
+742815	|	Lacticaseibacillus casei DN-114001	|		|	scientific name	|
+742815	|	Lactobacillus casei DN-114001	|		|	synonym	|
+742815	|	Lactobacillus casei strain DN-114001	|		|	equivalent name	|
+742815	|	Lactobacillus casei str. DN-114001	|		|	equivalent name	|
+766764	|	Debaryomycetaceae Kurtzman et M. Suzuki 2010	|		|	authority	|
+766764	|	Debaryomycetaceae Kurtzman & M. Suzuki, 2010	|		|	authority	|
+766764	|	Debaryomycetaceae	|		|	scientific name	|
+877976	|	North American clade	|		|	scientific name	|
+886583	|	Australasian lineages	|		|	scientific name	|
+888027	|	Lactobacillus delbrueckii subsp. lactis ATCC 12315	|		|	synonym	|
+888027	|	Lactobacillus delbrueckii subsp. lactis BCRC 12256	|		|	synonym	|
+888027	|	Lactobacillus delbrueckii subsp. lactis DSM 20072	|		|	scientific name	|
+888027	|	Lactobacillus delbrueckii subsp. lactis JCM 1248	|		|	synonym	|
+888027	|	Lactobacillus delbrueckii subsp. lactis strain DSM 20072	|		|	equivalent name	|
+888027	|	Lactobacillus delbrueckii subsp. lactis str. DSM 20072	|		|	equivalent name	|
+935296	|	Enterobacter aerogenes EA1509E	|		|	synonym	|
+935296	|	Enterobacter aerogenes strain EA1509E	|		|	equivalent name	|
+935296	|	Enterobacter aerogenes str. EA1509E	|		|	equivalent name	|
+935296	|	Klebsiella aerogenes EA1509E	|		|	scientific name	|
+935582	|	Mediterraneibacter gnavus E1	|		|	scientific name	|
+935582	|	Ruminococcus gnavus E1	|		|	equivalent name	|
+1028307	|	Enterobacter aerogenes KCTC 2190	|		|	synonym	|
+1028307	|	Enterobacter aerogenes strain KCTC 2190	|		|	equivalent name	|
+1028307	|	Enterobacter aerogenes str. KCTC 2190	|		|	equivalent name	|
+1028307	|	Klebsiella aerogenes KCTC 2190	|		|	scientific name	|
+1045856	|	Enterobacter cloacae EcWSU1	|		|	scientific name	|
+1045856	|	Enterobacter cloacae strain EcWSU1	|		|	equivalent name	|
+1045856	|	Enterobacter cloacae str. EcWSU1	|		|	equivalent name	|
+1073375	|	Lachnospiraceae bacterium CC55_001C	|		|	equivalent name	|
+1073375	|	Mediterraneibacter gnavus CC55_001C	|		|	scientific name	|
+1073375	|	Ruminococcus gnavus CC55_001C	|		|	equivalent name	|
+1125859	|	Pneumocystis jirovecii SE6	|		|	scientific name	|
+1127423	|	Cyanistes caeruleus calamensis Parrot, 1908	|		|	authority	|
+1127423	|	Cyanistes caeruleus calamensis	|		|	scientific name	|
+1127423	|	Parus caeruleus calamensis Parrot, 1908	|		|	authority	|
+1127423	|	Parus caeruleus calamensis	|		|	synonym	|
+1206794	|	Ecdysozoa	|		|	scientific name	|
+1209962	|	Pneumocystis jirovecii SE8	|		|	scientific name	|
+1269760	|	Lactobacillus delbrueckii subsp. lactis CRL581	|		|	scientific name	|
+1319836	|	Cyanistes caeruleus raddei	|		|	scientific name	|
+1319836	|	Cyanistes caeruleus raddei Zarudny, 1908	|		|	authority	|
+1319836	|	Parus caeruleus raddei Sarudny, 1908	|		|	authority	|
+1319836	|	Parus caeruleus raddei	|		|	synonym	|
+1319837	|	Cyanistes caeruleus satunini	|		|	scientific name	|
+1319837	|	Cyanistes caeruleus satunini Zarudny, 1908	|		|	authority	|
+1329799	|	Archelosauria Crawfort et al. 2014	|		|	authority	|
+1329799	|	Archelosauria	|		|	scientific name	|
+1329799	|	Archosauria-Testudines	|		|	synonym	|
+1329799	|	Testudines + Archosauria group	|		|	synonym	|
+1338369	|	Dipnotetrapodomorpha	|		|	scientific name	|
+1408655	|	Pneumocystis jirovecii RU12	|		|	scientific name	|
+1437010	|	Boreoeutheria	|		|	scientific name	|
+1437010	|	Boreotheria	|		|	synonym	|
+1437183	|	Mesangiospermae M.J.Donoghue, J.A.Doyle & P.D.Cantino, 2007	|		|	authority	|
+1437183	|	Mesangiospermae	|		|	scientific name	|
+1437201	|	Pentapetalae D.E.Soltis, P.S.Soltis & W.S.Judd, 2007	|		|	authority	|
+1437201	|	Pentapetalae	|		|	scientific name	|
+1783272	|	Bacillati (Gibbons and Murray 1978) Oren and Goker 2024	|		|	authority	|
+1783272	|	Bacillati	|		|	scientific name	|
+1783272	|	Firmacutes Gibbons and Murray 1978 (Approved Lists 1980)	|		|	authority	|
+1783272	|	Firmacutes	|		|	synonym	|
+1783272	|	"Firmicuteota" Panda et al. 2022	|		|	authority	|
+1783272	|	Firmicuteota	|		|	synonym	|
+1783272	|	Firmicutes corrig. Gibbons and Murray 1978 (Approved Lists 1980)	|		|	synonym	|
+1783272	|	Firmicutes	|		|	synonym	|
+1783272	|	"Terrabacteria" Battistuzzi et al. 2004	|		|	authority	|
+1783272	|	Terrabacteria group	|		|	common name	|
+1783272	|	Terrabacteria	|		|	synonym	|
+1783272	|	"Terrabacterida" Luketa 2012	|		|	authority	|
+1783272	|	Terrabacterida	|		|	synonym	|
+1870884	|	Clostridioides Lawson et al. 2016	|		|	authority	|
+1870884	|	Clostridioides Lawson et al. 2016 emend. Bello et al. 2024	|		|	authority	|
+1870884	|	Clostridioides	|		|	scientific name	|
+2041200	|	Saccharomyces cerevisiae (EX1125) killer virus M2-4	|		|	equivalent name	|
+2041200	|	Saccharomyces killer virus M2-4	|		|	scientific name	|
+2316020	|	Mediterraneibacter	|		|	scientific name	|
+2316020	|	"Mediterraneibacter" Togo et al. 2018	|		|	authority	|
+2316020	|	Mediterraneibacter Togo et al. 2019	|		|	authority	|
+2499399	|	Cornidovirineae	|		|	scientific name	|
+2501931	|	Coronavirinae	|		|	equivalent name	|
+2501931	|	Orthocoronavirinae	|		|	scientific name	|
+2509511	|	Sarbecovirus	|		|	scientific name	|
+2559587	|	Riboviria	|		|	scientific name	|
+2559587	|	RNA viruses and retroviruses	|		|	genbank common name	|
+2559587	|	RNA viruses and viroids	|		|	common name	|
+2559587	|	RNA viruses	|		|	common name	|
+2697049	|	2019-nCoV	|		|	equivalent name	|
+2697049	|	COVID-19 virus	|		|	equivalent name	|
+2697049	|	HCoV-19	|		|	equivalent name	|
+2697049	|	Human coronavirus 2019	|		|	equivalent name	|
+2697049	|	SARS-2	|		|	equivalent name	|
+2697049	|	SARS2	|		|	equivalent name	|
+2697049	|	SARS-CoV-2	|		|	acronym	|
+2697049	|	SARS-CoV2	|		|	equivalent name	|
+2697049	|	Severe acute respiratory syndrome coronavirus 2	|		|	scientific name	|
+2731341	|	double-stranded DNA viruses	|		|	genbank common name	|
+2731341	|	Duplodnaviria	|		|	scientific name	|
+2731360	|	Heunggongvirae	|		|	scientific name	|
+2731361	|	Peploviricota	|		|	scientific name	|
+2731363	|	Herviviricetes	|		|	scientific name	|
+2732396	|	Orthornavirae	|		|	scientific name	|
+2732408	|	Pisuviricota	|		|	scientific name	|
+2732506	|	Pisoniviricetes	|		|	scientific name	|
+2742598	|	Limosilactobacillus	|		|	scientific name	|
+2742598	|	Limosilactobacillus Zheng et al. 2020	|		|	authority	|
+2759736	|	Lacticaseibacillus	|		|	scientific name	|
+2759736	|	Lacticaseibacillus Zheng et al. 2020	|		|	authority	|
+2767842	|	Lactiplantibacillus	|		|	scientific name	|
+2767842	|	Lactiplantibacillus Zheng et al. 2020	|		|	authority	|
+2841720	|	Asterinae Dumort., 1827	|		|	authority	|
+2841720	|	Asterinae	|		|	scientific name	|
+2841736	|	Symphiotrichinae G.L.Nesom, 1994	|		|	authority	|
+2841736	|	Symphiotrichinae	|		|	scientific name	|
+2916678	|	CTG clade	|		|	common name	|
+2916678	|	CUG-Ser1 clade	|		|	genbank common name	|
+2916678	|	Serinales M. Groenew., Hittinger, Opulente & A. Rokas, 2023	|		|	authority	|
+2916678	|	Serinales	|		|	scientific name	|
+3044472	|	Herpesviridae	|		|	equivalent name	|
+3044472	|	Orthoherpesviridae	|		|	scientific name	|
+3050292	|	Simplexvirus humanalpha1	|		|	scientific name	|
+3051026	|	Aster amellus subsp. ibericus	|		|	scientific name	|
+3051026	|	Aster amellus subsp. ibericus (Steven ex M.Bieb.) Avetisyan, 1972	|		|	authority	|
+3051026	|	Aster ibericus Steven ex M.Bieb., 1808	|		|	authority	|
+3051026	|	Aster ibericus	|		|	synonym	|
+3073808	|	core landbirds	|		|	genbank common name	|
+3073808	|	Telluraves	|		|	scientific name	|
+3073809	|	Australaves Ericson, 2011	|		|	authority	|
+3073809	|	Australaves	|		|	scientific name	|
+3078114	|	Neoaves	|		|	scientific name	|
+3082720	|	"Peptostreptococcales" Chuvochina et al. 2023	|		|	authority	|
+3082720	|	Peptostreptococcales Chuvochina et al. 2024	|		|	authority	|
+3082720	|	Peptostreptococcales	|		|	scientific name	|
+3085636	|	"Lachnospirales" Chuvochina et al. 2023	|		|	authority	|
+3085636	|	Lachnospirales Chuvochina et al. 2024	|		|	authority	|
+3085636	|	Lachnospirales	|		|	scientific name	|
+3239874	|	Pichiomycetes M. Groenew., Hittinger, Opulente & A. Rokas, 2023	|		|	authority	|
+3239874	|	Pichiomycetes	|		|	scientific name	|
+3303203	|	CAH clade	|		|	common name	|
+3303203	|	Candidozyma Q.M. Wang, Yurkov, Boekhout & F.Y. Bai, 2024	|		|	authority	|
+3303203	|	Candidozyma	|		|	scientific name	|
+3379134	|	Pseudomonadati (Gibbons and Murray 1978) Oren and Goker 2024	|		|	authority	|
+3379134	|	Pseudomonadati	|		|	scientific name	|
+3418604	|	Betacoronavirus pandemicum	|		|	scientific name	|
+3701028	|	Altocrustacea	|		|	scientific name	|
+3701028	|	Hexanauplia	|		|	includes	|
+3701028	|	Multicrustacea	|		|	includes	|
+3701030	|	Allotriocarida	|		|	scientific name	|
+3712126	|	Candidozyma auris B8441	|		|	scientific name	|

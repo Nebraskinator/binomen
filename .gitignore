@@ -1,24 +1,44 @@
+# --- Python ---
 __pycache__/
 *.py[cod]
 .venv/
 venv/
 *.egg-info/
-dist/
 build/
 .pytest_cache/
 .ruff_cache/
 
-# Built index and downloaded source data are NOT committed.
-# Rebuild with: binomen-build-index
-data/*.sqlite
-data/*.sqlite-journal
-data/taxdump*
-data/cache/
+# --- Indexes and source archives are NOT committed ---
+# They are large, and freezing a taxonomy in git reintroduces exactly the
+# staleness this project exists to detect. Rebuild with `binomen-build-index`,
+# or fetch a prebuilt release with `binomen-fetch-index`.
 *.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.sqlite-journal
+data/cache/
 
-# Eval outputs. The example run is committed so the report format is reviewable
-# without an API key; real runs are not.
+# NCBI archives, wherever they land. The repo root is where you actually end
+# up downloading one, and it is 77 MB.
+taxdump*.tar.gz
+taxdump*.zip
+*.dmp
+!tests/fixtures/taxdump/*.dmp
+
+# --- Build artifacts (release assets, not source) ---
+dist/
+node/node_modules/
+
+# --- Eval outputs ---
+# The example run is committed so the report format is reviewable without an
+# API key; real runs are not, and neither is anything with API responses in it.
 eval/runs/*
 !eval/runs/example-run.jsonl
 !eval/runs/example-report.md
 eval/verification-report.json
+
+# --- Local editor / OS noise ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

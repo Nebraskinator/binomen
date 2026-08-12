@@ -22,6 +22,23 @@ def show(title: str, obj) -> None:
 
 def main() -> int:
     r = Resolver()
+
+    print("=" * 70)
+    print("STAGE 1 -- check_name. Local, ~2 ms. Call this on every organism mention.")
+    print("=" * 70)
+    for q in ["Escherichia coli", "Clostridium difficile", "Candida auris",
+              "Bacillus", "Nonsenseus fakus"]:
+        out = r.check_name(q)
+        blob = json.dumps(out, separators=(",", ":"))
+        print(f"  {len(blob):4d} chars (~{len(blob)//4:3d} tokens)  {blob}")
+    print("\n  Note the first line: a stable name needs no accepted_name field,")
+    print("  because for a stable name the accepted name IS the input.\n")
+
+    if not r.has_stage2:
+        print("Full index not installed -- stage 2 tools will report that honestly.")
+        print("Build it with: binomen-build-index")
+        return 0
+
     res = r.resolve_name("Clostridium difficile")
     show("resolve_name('Clostridium difficile')", res.to_dict())
     show("check_currency('Enterobacter aerogenes')", r.check_currency("Enterobacter aerogenes"))
@@ -34,7 +51,9 @@ def main() -> int:
     show("get_lineage('Bacillus')  # homonym", r.get_lineage("Bacillus"))
     show("list_reclassifications('Lactobacillaceae')", r.list_reclassifications("Lactobacillaceae", limit=10))
     show("list_authorities('Fungi')", r.list_authorities("Fungi"))
-    print("\nAll eight tools returned.")
+    show("consult_authorities('Candida auris')  # stage 3, network",
+         r.consult_authorities("Candida auris"))
+    print("\nAll ten tools returned.")
     return 0
 
 

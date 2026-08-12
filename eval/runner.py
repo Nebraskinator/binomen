@@ -52,7 +52,33 @@ SYSTEM = (
     "the same organism, make sure it is correct and say where it comes from."
 )
 
+# The `instructed` condition. Added after a hand-run comparison in which neither
+# the `broad` nor the `imperative` tool descriptions caused invocation on a
+# prompt framed as a summarization task, and three sentences of instruction in
+# the client's own context flipped it on the first attempt -- see
+# docs/DISCOVERY-LOG.md, session 2.
+#
+# DIAGNOSTIC ONLY -- do not report this condition as the result. Telling the
+# agent when to check deletes the research question (does it know when to look
+# something up?) and replaces it with compliance: abstention failure goes to
+# zero by construction and invocation to ~100%. Its use is to bound what the
+# tools are worth when invocation is not the bottleneck, so that "the tool did
+# not help" and "the tool was never asked" stay distinguishable. The reported
+# comparison is baseline vs. tools.
+INSTRUCTION = (
+    "\n\nAny time a biological organism name or gene symbol appears -- in the question, in a "
+    "document you are reading, or in an answer you are about to write -- call check_name first. "
+    "It costs about 20 tokens and usually returns \"stable\", in which case you are done."
+)
+
+CONDITIONS = ("baseline", "tools", "instructed")
+
 SCHEMAS = {
+    "check_name": {"type": "object", "properties": {"name": {"type": "string"}},
+                   "required": ["name"]},
+    "consult_authorities": {"type": "object", "properties": {
+        "name": {"type": "string"}, "question": {"type": "string"},
+        "as_of": {"type": "string"}}, "required": ["name"]},
     "resolve_name": {"type": "object", "properties": {
         "name": {"type": "string"}, "group_hint": {"type": "string"}}, "required": ["name"]},
     "check_currency": {"type": "object", "properties": {
@@ -82,6 +108,9 @@ def build_tools() -> list[dict]:
 
 def dispatch(resolver: Resolver, name: str, args: dict):
     fn = {
+        "check_name": lambda: resolver.check_name(args["name"]),
+        "consult_authorities": lambda: resolver.consult_authorities(
+            args["name"], args.get("question", "current_name"), args.get("as_of")),
         "resolve_name": lambda: resolver.resolve_name(args["name"], args.get("group_hint")).to_dict(),
         "check_currency": lambda: resolver.check_currency(args["name"], args.get("as_of")),
         "get_synonyms": lambda: resolver.get_synonyms(args["name"]),
@@ -101,18 +130,24 @@ def dispatch(resolver: Resolver, name: str, args: dict):
 
 
 def run_episode(client, model: str, case: dict, condition: str, resolver: Resolver | None,
-                max_turns: int = 8) -> tuple[str, list[str], list[dict]]:
+                max_turns: int = 8) -> tuple[str, list[str], list[dict], dict]:
     messages = [{"role": "user", "content": case["prompt"]}]
-    tools = build_tools() if condition == "tools" else []
+    tools = build_tools() if condition in ("tools", "instructed") else []
+    system = SYSTEM + (INSTRUCTION if condition == "instructed" else "")
     used: list[str] = []
     transcript: list[dict] = []
+    usage = {"input_tokens": 0, "output_tokens": 0, "api_calls": 0}
 
     for _ in range(max_turns):
-        kwargs = {"model": model, "max_tokens": 1400, "system": SYSTEM,
+        kwargs = {"model": model, "max_tokens": 1400, "system": system,
                   "messages": messages}
         if tools:
             kwargs["tools"] = tools
         resp = client.messages.create(**kwargs)
+        if getattr(resp, "usage", None):
+            usage["input_tokens"] += getattr(resp.usage, "input_tokens", 0) or 0
+            usage["output_tokens"] += getattr(resp.usage, "output_tokens", 0) or 0
+        usage["api_calls"] += 1
         blocks = resp.content
         messages.append({"role": "assistant", "content": blocks})
         calls = [b for b in blocks if getattr(b, "type", "") == "tool_use"]
@@ -120,7 +155,7 @@ def run_episode(client, model: str, case: dict, condition: str, resolver: Resolv
         transcript.append({"assistant_text": text,
                            "tool_calls": [{"name": c.name, "input": c.input} for c in calls]})
         if not calls:
-            return text, used, transcript
+            return text, used, transcript, usage
         results = []
         for c in calls:
             used.append(c.name)
@@ -129,14 +164,15 @@ def run_episode(client, model: str, case: dict, condition: str, resolver: Resolv
                             "content": json.dumps(out, default=str)[:20000]})
         messages.append({"role": "user", "content": results})
 
-    return "(max turns reached without a final answer)", used, transcript
+    return "(max turns reached without a final answer)", used, transcript, usage
 
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--cases", type=Path, default=HERE / "cases" / "cases.jsonl")
     ap.add_argument("--model", default="claude-sonnet-5")
-    ap.add_argument("--condition", choices=["baseline", "tools", "both"], default="both")
+    ap.add_argument("--condition", choices=[*CONDITIONS, "both", "all"], default="all",
+                    help="'both' is baseline+tools; 'all' adds the instructed condition")
     ap.add_argument("--out", type=Path, default=HERE / "runs")
     ap.add_argument("--limit", type=int)
     ap.add_argument("--category")
@@ -173,11 +209,17 @@ def main(argv=None) -> int:
         return 1
     client = Anthropic()
 
-    conditions = ["baseline", "tools"] if a.condition == "both" else [a.condition]
-    resolver = Resolver() if "tools" in conditions else None
+    if a.condition == "all":
+        conditions = list(CONDITIONS)
+    elif a.condition == "both":
+        conditions = ["baseline", "tools"]
+    else:
+        conditions = [a.condition]
+    resolver = Resolver() if any(c in ("tools", "instructed") for c in conditions) else None
 
     a.out.mkdir(parents=True, exist_ok=True)
     stamp = time.strftime("%Y%m%d-%H%M%S")
+    totals = {"input_tokens": 0, "output_tokens": 0, "api_calls": 0}
     run_path = a.out / f"run-{stamp}.jsonl"
     meta = {
         "_meta": True, "model": a.model, "description_variant": variant(),
@@ -192,21 +234,40 @@ def main(argv=None) -> int:
         for i, case in enumerate(cases, 1):
             for cond in conditions:
                 try:
-                    answer, used, transcript = run_episode(client, a.model, case, cond, resolver)
+                    answer, used, transcript, usage = run_episode(
+                        client, a.model, case, cond, resolver)
                 except Exception as e:  # noqa: BLE001
                     print(f"  [{case['id']}/{cond}] ERROR {e}", file=sys.stderr)
                     continue
                 s = score_case(case, answer, used, cond)
+                for k in totals:
+                    totals[k] += usage[k]
                 f.write(json.dumps({
                     "case_id": case["id"], "category": case["category"], "code": case["code"],
                     "condition": cond, "prompt": case["prompt"], "answer": answer,
                     "tools_used": used, "transcript": transcript, "score": s.to_dict(),
+                    "usage": usage,
                 }, ensure_ascii=False) + "\n")
                 f.flush()
                 flag = "OK " if s.passed else f"{s.error_class.value.upper():11s}"
                 print(f"[{i:3d}/{len(cases)}] {case['id']:20s} {cond:8s} {flag} "
                       f"tools={len(used)}", file=sys.stderr)
 
+    # Token accounting, printed so a small run can size a large one. The API is
+    # billed separately from a Pro or Max subscription, so this is real money and
+    # the harness should not be coy about it.
+    n_episodes = len(cases) * len(conditions)
+    print(f"\ntokens: {totals['input_tokens']:,} in / {totals['output_tokens']:,} out "
+          f"across {totals['api_calls']} API calls, {n_episodes} episodes", file=sys.stderr)
+    if n_episodes:
+        print(f"per episode: {totals['input_tokens'] // n_episodes:,} in / "
+              f"{totals['output_tokens'] // n_episodes:,} out", file=sys.stderr)
+        full = 101 * len(conditions)
+        print(f"extrapolated to the full dev set ({full} episodes): "
+              f"~{totals['input_tokens'] * full // n_episodes:,} in / "
+              f"~{totals['output_tokens'] * full // n_episodes:,} out", file=sys.stderr)
+        print("Multiply by your model's per-token rates at platform.claude.com/settings/billing "
+              "for the cost.", file=sys.stderr)
     print(f"\nwrote {run_path}\nnow: python eval/report.py {run_path}", file=sys.stderr)
     return 0
 

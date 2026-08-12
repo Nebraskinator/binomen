@@ -1,0 +1,9 @@
+Extracted from a real NCBI taxdump by `binomen-build-index --extract-fixture`.
+release: taxdump-2026-08-11
+taxa: 266   direct hits: 37   merges: 135
+seeds: 24 names from tests/fixtures/seeds.txt
+
+These are real archive rows, not hand-written. Do not replace them with
+synthetic data -- three normalization bugs shipped because the fixture was
+written from assumptions about NCBI rather than from NCBI.
+Regenerate with the same command against a current taxdump.

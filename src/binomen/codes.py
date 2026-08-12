@@ -98,6 +98,7 @@ class Status(str, Enum):
     MISSPELLING = "misspelling"
     HOMONYM = "homonym"
     UNPLACED = "unplaced"
+    INCLUDES = "includes"
     MERGED = "merged"
     DELETED = "deleted"
     CONTESTED = "contested"
@@ -118,7 +119,11 @@ class TaxonStatus:
     note: str | None = None
 
     def to_dict(self) -> dict:
-        d = {"normalized": self.normalized.value, "native": self.native, "source": self.source}
+        """Native term is never dropped -- that is the whole contract. But when
+        it is identical to the normalized label there is nothing to preserve."""
+        d = {"normalized": self.normalized.value}
+        if self.native.lower() != self.normalized.value.replace("_", " "):
+            d["native"] = self.native
         if self.note:
             d["note"] = self.note
         return d
@@ -134,7 +139,11 @@ NCBI_NAME_CLASS_MAP: dict[str, Status] = {
     "synonym": Status.SYNONYM,
     "equivalent name": Status.SYNONYM,
     "genbank synonym": Status.SYNONYM,
-    "includes": Status.SYNONYM,
+    # NOT synonymy. NCBI uses `includes` to say "unidentified material filed
+    # under this taxon" -- "Candida sp. JHS-2008", "Clostridium sp. HMSC19D05".
+    # Mapping it to SYNONYM put strain junk into literature search terms, which
+    # is a query-expansion tool actively degrading the query.
+    "includes": Status.INCLUDES,
     "misspelling": Status.MISSPELLING,
     "misnomer": Status.MISAPPLIED,
     "authority": Status.UNKNOWN,
@@ -144,7 +153,7 @@ NCBI_NAME_CLASS_MAP: dict[str, Status] = {
     "acronym": Status.UNKNOWN,
     "genbank acronym": Status.UNKNOWN,
     "type material": Status.UNKNOWN,
-    "in-part": Status.UNPLACED,
+    "in-part": Status.INCLUDES,
     "anamorph": Status.SYNONYM,
     "teleomorph": Status.SYNONYM,
     "genbank anamorph": Status.SYNONYM,
@@ -276,14 +285,23 @@ class CodeAssignment:
     alternatives: list[Code] = field(default_factory=list)
     description: str = ""
 
-    def to_dict(self) -> dict:
-        return {
-            "code": self.code.value,
-            "confidence": self.confidence,
-            "evidence": self.evidence,
-            "alternatives": [c.value for c in self.alternatives],
-            "description": self.description or CODE_DESCRIPTIONS[self.code],
-        }
+    def to_dict(self, *, verbose: bool = False) -> dict:
+        """Brief by default.
+
+        The description is a ~300-character paragraph explaining what the code
+        is. Returning it on every call cost roughly 70 tokens per invocation of
+        identical boilerplate -- on a "nothing has changed" answer it was most
+        of the response. It is now available on demand from `list_authorities`,
+        which is where a caller goes when they actually need it.
+        """
+        d = {"code": self.code.value, "confidence": self.confidence}
+        if self.alternatives:
+            d["alternatives"] = [c.value for c in self.alternatives]
+        if self.code is Code.UNDETERMINED or verbose:
+            d["evidence"] = self.evidence
+        if verbose:
+            d["description"] = self.description or CODE_DESCRIPTIONS[self.code]
+        return d
 
 
 def detect_code(lineage_names: list[str], *, is_gene: bool = False) -> CodeAssignment:
@@ -342,6 +360,33 @@ def detect_code(lineage_names: list[str], *, is_gene: bool = False) -> CodeAssig
             + (", ".join(lineage_names) if lineage_names else "(empty lineage)")
         ),
     )
+
+
+def code_anchors() -> dict[str, Code]:
+    """Lineage anchor name -> code, for build-time code assignment.
+
+    The build walks the tree once from the root carrying the current code and
+    updating it whenever it passes an anchor, so the *deepest* anchor wins.
+    That matters: NCBI places Microsporidia inside Fungi, so a naive top-down
+    assignment would call them ICNafp; the dual-claimed anchor deeper in the
+    tree correctly overrides that to undetermined.
+
+    This replaces the materialized lineage cache. Code detection needs one
+    byte per taxon, not a serialized 25-element lineage -- storing the latter
+    made the index roughly a gigabyte larger to answer a six-way question.
+    """
+    out: dict[str, Code] = {}
+    for n in _ICNP_ROOTS:
+        out[n] = Code.ICNP
+    for n in _ICTV_ROOTS:
+        out[n] = Code.ICTV
+    for n in _ICZN_ROOTS:
+        out[n] = Code.ICZN
+    for n in _ICNAFP_ROOTS:
+        out[n] = Code.ICNAFP
+    for n in _DUAL_CLAIMED:
+        out[n] = Code.UNDETERMINED
+    return out
 
 
 def status_vocabulary_for(code: Code) -> dict[str, str]:

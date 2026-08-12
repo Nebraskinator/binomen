@@ -6,6 +6,18 @@ It exists so the test suite runs without a 1 GB download and without network
 access. Never use it to answer a real question, and never treat a number in
 it as a citable identifier.
 
+WARNING, LEARNED THE HARD WAY: a hand-written fixture tests the parser against
+its author's beliefs about the data. Two normalization bugs shipped because
+those beliefs were wrong -- NCBI's misplacement brackets ("[Clostridium]
+difficile") and embedded author citations ("Clostridium difficile (Hall and
+O'Toole 1935) Prevot 1938 (Approved Lists 1980)") were both absent here and
+present in the archive. The name STRINGS below have since been corrected
+against taxdump-2026-08-11. When adding cases, prefer real rows:
+
+    binomen-build-index --taxdump taxdump.tar.gz --extract-fixture DIR
+
+which pulls actual archive rows for the names in tests/fixtures/seeds.txt.
+
 The taxa chosen mirror the case categories in eval/cases: genus reassignment,
 a genus split, a homonym, a distractor pair, a multi-hop change, a contested
 split, and one representative per nomenclatural code.
@@ -34,7 +46,9 @@ NODES = [
     (1870884, 186804, "genus"),      # Clostridioides
     (1496, 1870884, "species"),      # Clostridioides difficile
     (1485, 186802, "genus"),         # Clostridium
-    (1502, 1485, "species"),         # Clostridium perfringens  (distractor: stayed put)
+    (1502, 1485, "species"),         # Clostridium perfringens
+    (2763009, 186802, "genus"),      # Mediterraneibacter
+    (2763010, 2763009, "species"),   # Mediterraneibacter gnavus  -- bracket-only synonym  (distractor: stayed put)
 
     (91061, 1239, "class"),          # Bacilli
     (186826, 91061, "order"),        # Lactobacillales
@@ -141,13 +155,28 @@ NAMES = [
     # Peptoclostridium difficile -> Clostridioides difficile
     (1870884, "Clostridioides", "", "scientific name"),
     (1496, "Clostridioides difficile", "", "scientific name"),
-    (1496, "Clostridium difficile", "", "synonym"),
-    (1496, "Peptoclostridium difficile", "", "synonym"),
-    (1496, "Bacillus difficilis", "", "synonym"),
-    (1496, "(Clostridium) difficile", "", "equivalent name"),
+    # NOTE the shape of these strings. NCBI stores prokaryote synonyms as full
+    # nomenclatural citations, not bare binomials -- verified against
+    # taxdump-2026-08-11. A user types "Clostridium difficile"; the archive
+    # contains the line below. The hand-written fixture originally had the bare
+    # form, which is why the suite passed while the real index silently
+    # returned "unknown" for the project's own headline example.
+    (1496, "Clostridium difficile (Hall and O'Toole 1935) Prevot 1938 (Approved Lists 1980)",
+     "", "synonym"),
+    (1496, "Peptoclostridium difficile (Hall and O'Toole 1935) Yutin and Galperin 2013",
+     "", "synonym"),
+    (1496, "Bacillus difficilis Hall and O'Toole 1935", "", "synonym"),
+    (1496, "[Clostridium] difficile", "", "equivalent name"),
     (1496, "C. difficile", "", "genbank common name"),
     (1496, "(Hall and O'Toole 1935) Lawson et al. 2016", "", "authority"),
     (1485, "Clostridium", "", "scientific name"),
+    # Bracket-only: NCBI carries no plain "Ruminococcus gnavus" for this taxon,
+    # only the bracketed form flagging the misplacement. A user will type the
+    # plain binomial, so the normalizer has to fold the brackets or the lookup
+    # silently misses. This is the real shape of the bug the canary caught.
+    (2763009, "Mediterraneibacter", "", "scientific name"),
+    (2763010, "Mediterraneibacter gnavus", "", "scientific name"),
+    (2763010, "[Ruminococcus] gnavus", "", "equivalent name"),
     (1502, "Clostridium perfringens", "", "scientific name"),
 
     (91061, "Bacilli", "", "scientific name"),
@@ -175,7 +204,8 @@ NAMES = [
     (543, "Enterobacteriaceae", "", "scientific name"),
     (570, "Klebsiella", "", "scientific name"),
     (548, "Klebsiella aerogenes", "", "scientific name"),
-    (548, "Enterobacter aerogenes", "", "synonym"),
+    (548, "Enterobacter aerogenes Hormaeche and Edwards 1960 (Approved Lists 1980)",
+     "", "synonym"),
     (548, "Aerobacter aerogenes", "", "synonym"),
     (547, "Enterobacter", "", "scientific name"),
     (550, "Enterobacter cloacae", "", "scientific name"),
@@ -218,6 +248,7 @@ NAMES = [
     (9443, "Primates", "", "scientific name"),
     (9605, "Homo", "", "scientific name"),
     (9606, "Homo sapiens", "", "scientific name"),
+    (9606, "Homo sapiens Linnaeus, 1758", "", "authority"),
     (9606, "human", "", "genbank common name"),
     (8782, "Aves", "", "scientific name"),
     (216573, "Cyanistes", "", "scientific name"),
@@ -263,6 +294,24 @@ def field_line(parts) -> str:
 
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
+    marker = OUT / "PROVENANCE.txt"
+    if marker.exists():
+        if "--force" not in sys.argv:
+            print(f"{OUT} holds a REAL extracted taxdump; leaving it alone.\n"
+                  f"{marker.read_text().splitlines()[1]}\n"
+                  f"Pass --force to overwrite with the synthetic fixture.")
+            return 0
+        # Overwriting real rows with synthetic ones invalidates the marker. If
+        # it survives, the directory claims a provenance it no longer has --
+        # a stale label on changed data, which is the entire subject of this
+        # project and not a thing to leave lying around in its own test suite.
+        try:
+            marker.unlink()
+            print(f"--force: removed {marker.name}; this fixture is synthetic again.")
+        except OSError as e:
+            print(f"WARNING: could not remove {marker} ({e}).\n"
+                  f"         The directory now claims a provenance it does not have. "
+                  f"Delete that file by hand.")
     with open(OUT / "nodes.dmp", "w", encoding="utf-8") as f:
         for taxid, parent, rank in NODES:
             # taxid | parent | rank | embl | division id | ...
