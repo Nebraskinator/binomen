@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "binomen"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Code-aware biological name resolution for agents: an MCP server plus a severity-graded evaluation harness."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -26,6 +26,9 @@ binomen-server = "binomen.server:main"
 binomen-build-index = "binomen.build.build_index:main"
 binomen-doctor = "binomen.doctor:main"
 binomen-fetch-index = "binomen.fetch_index:main"
+
+[tool.hatch.version]
+path = "src/binomen/__init__.py"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/binomen"]

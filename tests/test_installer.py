@@ -180,3 +180,43 @@ class TestWindowsPackagedInstall:
         cands = inst.candidate_config_paths()
         assert len(cands) == 2
         assert "Packages" in str(cands[0])
+
+
+class TestNothingSourceIsGitIgnored:
+    """A `.gitignore` pattern that silently excludes source is invisible until
+    someone clones the repo.
+
+    `build/` -- unanchored, so matching any directory of that name at any depth
+    -- excluded src/binomen/build/ from the first push. Every CI job failed
+    with ModuleNotFoundError and the working tree looked perfect. This is the
+    project's own subject matter arriving through the build system: a rule that
+    looks obviously right, quietly drops something, and reports nothing.
+    """
+
+    def test_no_python_or_data_file_under_src_is_ignored(self):
+        import subprocess
+        root = Path(__file__).resolve().parents[1]
+        sources = [p for ext in ("*.py", "*.sql", "*.json", "*.js")
+                   for p in (root / "src").rglob(ext)
+                   if "__pycache__" not in p.parts]
+        sources += [p for ext in ("*.js", "*.json")
+                    for p in (root / "node").rglob(ext)
+                    if "node_modules" not in p.parts]
+        assert sources, "no sources found; the test is looking in the wrong place"
+        r = subprocess.run(["git", "check-ignore", "-v", *map(str, sources)],
+                           cwd=root, capture_output=True, text=True)
+        # check-ignore exits 1 when nothing matches, which is what we want.
+        assert r.returncode != 0 or not r.stdout.strip(), (
+            "these source files are gitignored and would not reach a clone:\n"
+            + r.stdout)
+
+    def test_every_package_directory_has_an_init(self):
+        """Implicit namespace packages work until they do not, and they hide
+        packaging mistakes -- which is how this test found two at once."""
+        root = Path(__file__).resolve().parents[1] / "src" / "binomen"
+        for d in [root, *(p for p in root.rglob("*") if p.is_dir())]:
+            if "__pycache__" in d.parts:
+                continue
+            if not any(p.suffix == ".py" for p in d.iterdir() if p.is_file()):
+                continue      # data-only directories are not packages
+            assert (d / "__init__.py").exists(), f"{d} is not an importable package"

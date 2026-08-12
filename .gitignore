@@ -4,7 +4,11 @@ __pycache__/
 .venv/
 venv/
 *.egg-info/
-build/
+# Leading slash: anchored to the repo root. An unanchored `build/` matches ANY
+# directory named build at any depth, and silently excluded
+# src/binomen/build/ -- the entire index-building subpackage -- from the first
+# push. Nothing errored; the package simply was not there.
+/build/
 .pytest_cache/
 .ruff_cache/
 
@@ -26,7 +30,7 @@ taxdump*.zip
 !tests/fixtures/taxdump/*.dmp
 
 # --- Build artifacts (release assets, not source) ---
-dist/
+/dist/
 node/node_modules/
 
 # --- Eval outputs ---
