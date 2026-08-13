@@ -41,6 +41,14 @@ eval/runs/*
 !eval/runs/example-report.md
 eval/verification-report.json
 
+# --- Diagnostic captures ---
+# Written by scripts/collect_boot_log.ps1. Copies of Claude Desktop's own logs,
+# which are tens of MB and carry account ids, org ids, session ids and local
+# paths. Useful while chasing a platform bug, never useful to anyone else, and
+# not ours to publish. The scripts that produce them are committed; their output
+# is not.
+/diag/
+
 # --- Local editor / OS noise ---
 .DS_Store
 Thumbs.db

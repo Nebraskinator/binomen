@@ -1,0 +1,28 @@
+{
+  "manifest_version": "0.3",
+  "name": "binomen-probe2",
+  "display_name": "binomen capability probe",
+  "version": "0.0.1",
+  "description": "Throwaway diagnostic: reports which runtime capabilities a Claude Desktop extension actually gets on this host.",
+  "author": { "name": "binomen" },
+  "license": "MIT",
+  "server": {
+    "type": "node",
+    "entry_point": "server/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server/index.js"],
+      "env": {}
+    }
+  },
+  "tools": [
+    {
+      "name": "probe_capabilities",
+      "description": "Report module loading, node:sqlite, filesystem access and index availability. Diagnostic only."
+    }
+  ],
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": { "node": ">=18.0.0" }
+  }
+}

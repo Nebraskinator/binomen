@@ -1,0 +1,9 @@
+{
+  "name": "binomen-probe2",
+  "version": "0.0.1",
+  "private": true,
+  "type": "commonjs",
+  "main": "server/index.js",
+  "description": "binomen capability probe. Throwaway diagnostic, no dependencies.",
+  "dependencies": {}
+}
