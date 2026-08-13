@@ -199,3 +199,29 @@ class TestCompressedArtifacts:
         out = tmp_path / "data"
         assert fetch(f"{base}/manifest.json", which="field", out_dir=out, quiet=True) == 1
         assert not (out / "binomen-field.sqlite").exists()
+
+
+class TestManifestRelease:
+    """The manifest's release string is what the extension compares to decide
+    whether an update exists. A manifest that cannot state its release is worse
+    than no manifest -- updates would silently never fire."""
+
+    def test_release_is_read_from_whichever_artifact_is_published(self, tmp_path):
+        from binomen.fetch_index import _release_of
+        idx = _fake_index(tmp_path / "binomen-field.sqlite", version="taxdump-2026-08-11")
+        assert _release_of(idx) == "taxdump-2026-08-11"
+
+    def test_unreadable_index_reports_unknown_rather_than_guessing(self, tmp_path):
+        from binomen.fetch_index import _release_of
+        junk = tmp_path / "not-a-database.sqlite"
+        junk.write_bytes(b"nonsense")
+        assert _release_of(junk) == "unknown"
+
+    def test_publish_refuses_a_manifest_with_no_release(self, tmp_path, capsys):
+        import binomen.fetch_index as fi
+        junk = tmp_path / "binomen-field.sqlite"
+        junk.write_bytes(b"nonsense")
+        rc = fi.main(["--publish", str(tmp_path / "dist"), "--out", str(tmp_path),
+                      "--only", "field", "--quiet"])
+        assert rc == 1
+        assert "Refusing to publish" in capsys.readouterr().err

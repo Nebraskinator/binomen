@@ -243,6 +243,18 @@ def _get_json(url: str) -> tuple[dict, str]:
         return json.loads(r.read().decode()), r.headers.get("Date", "")
 
 
+def _release_of(index: Path) -> str:
+    """The taxdump release an index was built from, read from its own meta."""
+    import sqlite3
+    try:
+        conn = sqlite3.connect(f"file:{index}?mode=ro", uri=True)
+        row = conn.execute("SELECT value FROM meta WHERE key = 'version'").fetchone()
+        conn.close()
+        return row[0] if row else "unknown"
+    except Exception:  # noqa: BLE001
+        return "unknown"
+
+
 def check_age(path: Path | None = None) -> int:
     """Report how old the installed index is.
 
@@ -292,6 +304,11 @@ def main(argv: list[str] | None = None) -> int:
                     help="(maintainer) write a manifest.json and gzipped artifacts into DIR")
     ap.add_argument("--no-compress", action="store_true",
                     help="with --publish, ship uncompressed artifacts")
+    ap.add_argument("--only", nargs="+", choices=tuple(ARTIFACTS),
+                    metavar="ARTIFACT",
+                    help="with --publish, include only these. The extension needs "
+                         "'field'; stage1/stage2 are developer conveniences and stage2 "
+                         "is 164 MB compressed.")
     ap.add_argument("--quiet", action="store_true")
     a = ap.parse_args(argv)
 
@@ -299,15 +316,24 @@ def main(argv: list[str] | None = None) -> int:
         return check_age()
 
     if a.publish:
-        paths = {k: a.out / v for k, v in ARTIFACTS.items()}
+        wanted = set(a.only) if a.only else set(ARTIFACTS)
+        paths = {k: a.out / v for k, v in ARTIFACTS.items() if k in wanted}
         present = {k: p for k, p in paths.items() if p.exists()}
         if not present:
             print(f"no built indexes found in {a.out}. Run binomen-build-index first.",
                   file=sys.stderr)
             return 1
-        from .db import Stage1
-        version = Stage1(present.get("stage1", next(iter(present.values())))).meta.get(
-            "version", "unknown") if "stage1" in present else "unknown"
+        # Read the release from whichever artifact is present. Every index
+        # carries it in `meta`. Keying this off stage1 specifically meant that
+        # publishing only the field edition produced a manifest saying
+        # "unknown" -- and the extension compares exactly that string to decide
+        # whether an update exists, so updates would have silently never fired.
+        version = _release_of(next(iter(present.values())))
+        if version == "unknown":
+            print(f"could not read a release version from {next(iter(present.values()))}. "
+                  f"Refusing to publish a manifest that cannot be compared against.",
+                  file=sys.stderr)
+            return 1
         a.publish.mkdir(parents=True, exist_ok=True)
         manifest = build_manifest(present, version,
                                   compress_to=None if a.no_compress else a.publish,
