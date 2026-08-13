@@ -345,10 +345,24 @@ def main(argv: list[str] | None = None) -> int:
                 if target.resolve() != p.resolve():
                     shutil.copy2(p, target)
         print(f"wrote {a.publish / 'manifest.json'}")
+        print(f"  release  {version}")
         for k, e in manifest["artifacts"].items():
             raw = e.get("uncompressed_bytes")
             extra = f"  (from {raw/1e6:.0f} MB)" if raw else ""
-            print(f"  {k:7s} {e['file']:30s} {e['bytes']/1e6:7.1f} MB{extra}")
+            print(f"  {k:7s}  {e['file']:30s} {e['bytes']/1e6:7.1f} MB{extra}")
+        # The tag should name the release, so that a downloaded asset is
+        # self-describing without opening it.
+        tag = f"index-{version.removeprefix('taxdump-')}"
+        assets = " ".join(str(a.publish / e["file"]) for e in manifest["artifacts"].values())
+        # One line, no continuations: backslash continuations are a POSIX shell
+        # idiom and break silently in cmd.exe, which is where this gets pasted.
+        print("\nRelease it, tagged to match the index it contains:\n")
+        print(f"  gh release create {tag} {assets} {a.publish / 'manifest.json'} "
+              f'--title "Index - {version}" '
+              f'--notes "NCBI Taxonomy {version}. Public domain (US Government work)."')
+        print(f"\nNo gh? On github.com: Releases > Create a new release, tag it {tag},")
+        print(f"attach every file in {a.publish}, and keep 'Set as the latest release'")
+        print("ticked -- the extension fetches releases/latest/download/manifest.json.")
         print(f"\nUpload the contents of {a.publish} as release assets. Downloaders will "
               f"verify against the manifest.")
         return 0
