@@ -16,6 +16,43 @@
  */
 
 module.exports = {
+  /*
+   * Sent as `instructions` in the initialize result. The spec describes this
+   * field as "Instructions describing how to use the server and its features
+   * ... this information MAY be added to the system prompt."
+   *
+   * This is here rather than in server.js because it is the same kind of thing
+   * as the descriptions below: a measured variable, not decoration. The one
+   * result the discovery log has on invocation is that a description did not
+   * cause the tool to be called on a domain-framed prompt and an instruction in
+   * the client's own context did. `instructions` is the protocol's own channel
+   * for exactly that, and it ships inside the extension -- which matters,
+   * because the target user will never write a CLAUDE.md.
+   *
+   * TREAT THIS AS UNMEASURED. Whether Claude Desktop surfaces the field at all
+   * is unknown, and whether it changes invocation on a domain-framed prompt is
+   * the open research question. It must be run through the harness as its own
+   * condition before any claim is made about it. Do not report it as working
+   * because the tool got called once.
+   */
+  instructions:
+    "binomen resolves biological names against a versioned copy of NCBI Taxonomy. " +
+    "Every value it returns is a lookup, not a generation.\n\n" +
+    "Organism names are not stable identifiers, and a name being familiar is no evidence " +
+    "that it is current. Clostridium difficile is now Clostridioides difficile; " +
+    "Enterobacter aerogenes is now Klebsiella aerogenes. Both old and new names are heavily " +
+    "attested in the literature, so recognising a name tells you nothing about its status.\n\n" +
+    "Because of that, a name cannot be checked from memory -- including yours. Call " +
+    "check_name when an organism name appears and the answer depends on the name being " +
+    "current: writing about an organism, reconciling datasets, or preparing a literature " +
+    "search. It costs about 2 ms and one short line, so the cost of calling it is lower " +
+    "than the cost of being wrong.\n\n" +
+    "Call expand_query before any literature search involving an organism. Searching the " +
+    "current name alone returns few results rather than an error, which reads like a " +
+    "finding and is not one.\n\n" +
+    "Where authorities disagree, binomen returns every candidate rather than choosing. Do " +
+    "not collapse that list to one name.",
+
   check_name:
     "STAGE 1 -- CHEAP. Local lookup, about 2 ms, and the reply is usually one short line. " +
     "Call it freely.\n\n" +
