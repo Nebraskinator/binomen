@@ -91,6 +91,67 @@ settings → Install Extension…
 > 1.28929.0 with "the preview failed" — verified. Revisit when it is supported;
 > it would let the Python implementation ship directly.
 
+### Pre-release checklist
+
+Bump the version in **three** places or the installed build will lie about
+itself, which cost a full round of diagnosis once already:
+
+- `node/manifest.json` → `version`
+- `node/package.json` → `version`
+- `node/src/server.js` → `serverInfo.version`
+
+Then, in order:
+
+```bash
+python scripts/build_mcpb.py     # runs the Node suite and the conformance check
+```
+
+**Install the artifact and confirm it attaches.** Not the working copy — the
+`.mcpb`. This is not optional and it is not paranoia:
+
+> The v0.2.2 blocker was `if (require.main === module) main();` on the last
+> line of `server.js`. Claude Desktop's built-in-Node path forks extensions with
+> Electron's `utilityProcess.fork()`, which does not load the entry module as a
+> Node CLI entry point, so `require.main === module` was false and the server
+> never started. Every direct test passed — `try_node_server.js`, the Node
+> suite, manual runs — because every one of them invoked the file as an entry
+> point. The packaged install was the only path that did not, and it was the
+> only path never exercised outside Claude Desktop.
+
+So the gate is: install it, restart with **"Use Built-in Node.js for MCP" ON**,
+and call one tool. `scripts/collect_boot_log.ps1` reports the version actually
+on disk and dumps `boot.log`, which records `require.main === module` for
+exactly this reason.
+
+Keep `probe2/` around. Installing it beside a failing build and comparing the
+two logs within one restart is what found that bug, and it will find the next
+one faster than reading code will.
+
+### Publishing to GitHub Releases
+
+The extension and the index ride the same release mechanism but move on
+different clocks — the index tracks NCBI, the extension tracks bug fixes.
+
+```
+Tag           v0.2.5                     (extension versions carry a v prefix)
+Assets        binomen.mcpb               ← what a biologist downloads
+              manifest.json              ← what the auto-updater reads
+              binomen-field.sqlite.gz    ← the 46 MB index
+              binomen-stage1.sqlite      ← optional, for the Python server
+```
+
+`docs/RELEASING.md` covers cutting an index release. The extension's updater
+reads `releases/latest/download/manifest.json`, so **`latest` must always point
+at a release carrying a valid index manifest** — publishing an extension-only
+release without one silently breaks first-run downloads for every new user.
+Either attach the current index manifest to every release, or mark
+extension-only releases as pre-releases so they do not become `latest`.
+
+Release notes should lead with what a non-developer needs: whether they have to
+do anything, and whether the index changed. `docs/INSTALL.md` is the link to
+give people; it assumes no terminal and covers the permission prompt, the
+verdict vocabulary, and troubleshooting.
+
 ## The index lives outside the extension
 
 Not in the extension directory. Extension updates replace that directory, and a

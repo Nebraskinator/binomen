@@ -45,8 +45,44 @@ Repo: `github.com/Nebraskinator/binomen` · working copy `D:\phylobyte\binomen`
 That workaround is not acceptable for the target user (bench biologists with no
 terminal), so this is the thing to solve.
 
-**Already ruled out**, each by direct test rather than reasoning:
+### What "built-in Node" actually is
 
+Established from `main.log`, not inferred:
+
+```
+Checking if UtilityProcess should be used for extension binomen
+Using UtilityProcess for extension binomen: appConfig.isUsingBuiltInNodeForMcp
+  is true and built-in node is compatible
+[LocalMcpServerManager] Using built-in Node.js for MCP server: binomen
+```
+
+There is **no bundled `node.exe`**. The install location
+(`C:\Program Files\WindowsApps\Claude_1.28929.0.0_x64__pzs8sxrjxfjjc`) contains
+no such binary. "Built-in Node" means Electron's `utilityProcess.fork()`:
+Node **24.18.0** embedded in **Electron 42.7.0**, with `execPath` reported as
+`Claude.exe`. Two consequences that cost a round of diagnosis each:
+
+- **stderr is not a diagnostic channel here.** `utilityProcess.fork()` accepts
+  only `pipe`/`ignore`/`inherit` for stdio, and the default `inherit` sends the
+  child's stderr to the app's own stream, not to the per-extension log file.
+  The server's `[binomen]` lines appear under system Node and are absent under
+  built-in Node **whether it is healthy or dead**. Their absence proves
+  nothing. The install probe shows the same absence while attaching perfectly.
+- **`cwd` is `C:\WINDOWS\system32`.** Any relative path would resolve wrong.
+  binomen uses none, but this is a trap for future work.
+
+### Ruled out, each by direct test
+
+- **Not a missing host capability.** `probe2/` is a capability probe built to
+  attach first and report through a tool response — the one channel proven to
+  work on this host. Under built-in Node it reports, with no failures:
+  sibling-file `require`, `node:fs`/`crypto`/`zlib`/`stream/promises`, `fetch`,
+  **`node:sqlite` with `DatabaseSync` constructing and round-tripping a row**,
+  `%LOCALAPPDATA%\binomen` present and writable, and **the real 122.9 MB
+  `binomen-field.sqlite` opened read-only, 22 meta rows read**.
+  This retires the `node:sqlite` hypothesis that earlier drafts of this file
+  named as the leading candidate. It was never tested; it is now, and it is
+  wrong.
 - Not the server. `node scripts/try_node_server.js` on Windows answers
   `initialize` in 81 ms, lists tools, serves a tool call, and downloads and
   installs the real 46 MB index from the GitHub release.
@@ -58,24 +94,75 @@ terminal), so this is the thing to solve.
 - Not `user_config`. The optional directory setting and its
   `${user_config.index_location}` substitution were removed in v0.2.1.
 - Not extensions being disabled. A minimal Node probe extension installed and
-  ran fine on the same build.
+  ran fine on the same build, and the v2 capability probe still does.
 - Not `manifest_version` 0.4 / `server.type: "uv"` — that combination *is*
   rejected ("the preview failed"), which is why this ships as manifest 0.3 with
   `type: node`.
 
-**Next thing to try:** run the extension's own server file using Claude
-Desktop's *built-in* Node binary directly, rather than the system one:
+### Fixed in v0.2.3, and why it is a candidate
+
+Diffing `node/src/server.js` against the probe that attaches showed the probe
+registers its stdin listener as its first executed statement and does nothing
+else at startup. `server.js` did the opposite: it logged to stderr, ran
+`openIndex()` — native module load, possible sync SHA-256 of a 123 MB file,
+database open, statement preparation — and registered the listener **last**,
+directly beneath a comment instructing the reader to do the reverse. Anything
+that throws or blocks in that window lands on a process with no listener, which
+from outside is indistinguishable from a crash.
+
+v0.2.3 registers the listener first, defers `openIndex()` into the existing
+`setImmediate` inside a `try`, adds an `index_opening` tool state for the window
+that ordering creates, and writes a `boot.log` **file** (stderr being useless
+here) recording `typeof process.parentPort`, stdin readability, and how far
+startup got.
+
+### The cause
+
+**`if (require.main === module) main();`** — the last line of `server.js`.
+
+Under `utilityProcess.fork()` the host loads the entry module through its own
+bootstrap rather than as a Node CLI entry point, so `require.main === module`
+is not reliably true for the file that *is* the entry point. `main()` was never
+called. No stdin listener, no boot log, no stderr, no reply — a 60-second
+client timeout that looked like a crash, a hang, or a rejected response, and
+could not be told apart from any of them.
+
+It works under system Node because `node server/index.js` makes the file
+`require.main` in the ordinary way. That is why **every direct test passed**:
+`try_node_server.js`, the Node suite, the manual runs. All of them invoked the
+file as an entry point. Only the packaged install did not, and the packaged
+install was the only path never exercised outside Claude Desktop.
+
+The guard was also protecting nothing. No test and no script requires
+`server.js` as a module — `server.test.js` never imports it. It was reflex from
+a shape that suits a library. An MCP stdio server is an entry point.
+
+Fixed in **v0.2.4**: `main()` is called unconditionally, and `boot.log` records
+`require.main === module` so a future host doing the same thing is legible on
+the first read rather than the fourth.
+
+**How it was found.** By installing `probe2/` alongside the real extension and
+comparing them within a single restart:
 
 ```
-dir /s /b "%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc" | findstr node.exe
-node scripts\try_node_server.js "<path to the installed extension>\server\index.js"
+03:18:55.638  probe    Initializing server...
+03:18:55.639  binomen  Initializing server...
+03:18:56.648  probe    <- initialize
+03:18:56.663  probe    -> id=0 result        (15 ms)
+03:18:56.649  binomen  <- initialize
+              binomen  (nothing, ever)
 ```
 
-then the same with the built-in binary in place of `node`. If it fails there and
-succeeds with system Node, the difference is in that runtime and the `[log]`
-lines will show how far it gets. A plausible candidate is `node:sqlite`
-availability or permissions in the packaged runtime, but that is a hypothesis,
-not a finding.
+Two extensions, same host, same second, one attaches. That reduces the
+candidate set to the structural differences between two files, and there was
+one left.
+
+**Method note.** Three rounds were lost to diagnostics that failed silently:
+stderr that went nowhere, a `boot.log` writer that swallowed its own errors, a
+recursive search that hid an ACL denial behind `-ErrorAction SilentlyContinue`.
+A diagnostic that cannot distinguish "no problem" from "no signal" is worse
+than none, because it is believed. The capability probe is built the other way
+round: attach first, then report through a channel already proven to work.
 
 ## Architecture, briefly
 
@@ -127,6 +214,27 @@ only** and must not be reported as the result: telling an agent when to check
 deletes the research question and drives abstention failure to zero by
 construction.
 
+**The `initialize` result's `instructions` field reaches the model.** Confirmed
+by observation, not inference: a client running v0.2.5 rendered the field into
+its system prompt verbatim, under its own heading. The spec describes the field
+as something clients MAY add to the system prompt; at least one does.
+
+This matters because it is the *same channel* as the CLAUDE.md instruction that
+was the only condition to produce a tool call in the table above. The extension
+can now ship its own instruction, which is the whole point — the target user
+will never write a CLAUDE.md.
+
+It also contaminates the harness if left on. The description conditions compare
+`broad` against `imperative`; an instruction present in both is a second
+treatment, and the stronger one. A null result would then mean "wording did not
+matter *given an instruction that did*", which is not the question. So
+`BINOMEN_INSTRUCTIONS=off` suppresses the field, **the description conditions
+must run with it off**, and its own effect is measured as its own condition.
+Same rule as `instructed`: the telling has to be the variable, not the
+apparatus.
+
+Nothing has been measured about its effect yet. It is plumbed, not proven.
+
 **Token budget.** `check_name` on a stable name is ~98 characters. Before the
 staged split, the same question cost ~390 tokens. `tests/test_stages.py` asserts
 these budgets.
@@ -150,6 +258,8 @@ not by review. Recorded because the pattern is the project's own subject matter.
 | `conftest.py` replaced the whole environment, dropping `PATH` on Windows | CI on Windows |
 | Test called `python3`, which does not exist on Windows | first packaging attempt |
 | Fixture piped through stdout, decoded as cp1252, corrupting `Rosa × damascena` | conformance test |
+| `if (require.main === module) main()` never fired under Electron's `utilityProcess.fork()`, so the packaged extension never started | installing a known-good probe beside it and diffing the two |
+| stderr under the built-in-Node path goes to `inherit` and never reaches the extension log — three rounds of diagnosis read its absence as evidence | comparing a working probe's log against a failing one's |
 
 The fixture itself was the root cause of three of these: it was hand-written
 from assumptions about NCBI rather than from NCBI. `--extract-fixture` now

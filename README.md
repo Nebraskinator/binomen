@@ -349,9 +349,15 @@ so these are measurements against your release rather than claims from ours.
 
 ### Install — for a biologist
 
-Download `binomen.mcpb` and double-click it. Claude Desktop shows an install
-dialog; accept it and restart. The name index (about 46 MB) downloads on first
-use and updates itself every couple of weeks.
+**[docs/INSTALL.md](docs/INSTALL.md) is the page to send people.** It assumes no
+terminal and covers first use, the permission prompt, what each verdict means,
+and troubleshooting. The short version:
+
+Download `binomen.mcpb` from
+[the latest release](https://github.com/Nebraskinator/binomen/releases/latest)
+and double-click it. Claude Desktop shows an install dialog; accept it and
+restart. The name index (about 46 MB) downloads on first use and updates itself
+every couple of weeks.
 
 No Python, no terminal, no NCBI download. The extension is ~16 KB — it carries
 the server and no data, so a bug fix does not make anyone re-download the index.
