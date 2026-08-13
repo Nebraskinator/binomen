@@ -57,7 +57,7 @@ jobs:
       - run: pip install -e .
       - name: conformance fixture is current
         run: |
-          python scripts/emit_conformance.py > /tmp/fresh.json
+          python scripts/emit_conformance.py --out /tmp/fresh.json
           if ! diff -q node/test/conformance.json /tmp/fresh.json; then
             echo "::error::node/test/conformance.json is stale."
             echo "Run: make conformance   (then re-run the Node tests)"

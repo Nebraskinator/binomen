@@ -16,7 +16,15 @@ things, or they will disagree about what a name *means*:
 Reimplementing from a prose description and hoping is exactly the mistake this
 project catalogues. So Python emits ground truth and Node replays it.
 
-    python scripts/emit_conformance.py > node/test/conformance.json
+    python scripts/emit_conformance.py                  # writes the file directly
+    python scripts/emit_conformance.py --stdout         # prints it instead
+
+Writes the file itself rather than printing, because piping text between
+processes uses the locale encoding on Windows -- cp1252 there -- and that
+silently corrupted the multiplication sign in "Rosa x damascena" into a
+replacement character. The conformance test caught it, which is the one job it
+has, but the fix is to not route Unicode through a pipe whose encoding nobody
+chose.
 """
 
 from __future__ import annotations
@@ -80,7 +88,10 @@ BLOOM_PROBES = BLOOM_MEMBERS + [
 ]
 
 
-def main() -> int:
+DEFAULT_OUT = Path(__file__).resolve().parents[1] / "node" / "test" / "conformance.json"
+
+
+def build() -> dict:
     bf = BloomFilter.sized(len(BLOOM_MEMBERS), 0.001)
     for m in BLOOM_MEMBERS:
         bf.add(m)
@@ -106,8 +117,26 @@ def main() -> int:
             "probes": [{"input": p, "expected": p in bf} for p in BLOOM_PROBES],
         },
     }
-    json.dump(out, sys.stdout, indent=2, ensure_ascii=False)
-    sys.stdout.write("\n")
+    return out
+
+
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
+    ap.add_argument("--stdout", action="store_true", help="print instead of writing")
+    a = ap.parse_args(argv)
+
+    text = json.dumps(build(), indent=2, ensure_ascii=False) + "\n"
+    if a.stdout:
+        # Force UTF-8 regardless of the console code page.
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stdout.write(text)
+        return 0
+    a.out.parent.mkdir(parents=True, exist_ok=True)
+    a.out.write_text(text, encoding="utf-8", newline="\n")
+    print(f"wrote {a.out} ({len(text)} chars)", file=sys.stderr)
     return 0
 
 

@@ -15,8 +15,38 @@ const ROOT = path.join(__dirname, "..", "..");
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), "binomen-node-"));
 const INDEX = path.join(TMP, "field.sqlite");
 
+/* Locate a Python that can import binomen.
+ *
+ * build_mcpb.py passes BINOMEN_PYTHON so the exact interpreter that has
+ * binomen installed is used. Standalone `node --test` has to guess: "python3"
+ * on Unix, "python" on Windows -- where "python3" is not a command at all and
+ * Windows redirects the missing name to the Microsoft Store, producing an
+ * error that mentions neither Python nor this test.
+ */
+function findPython() {
+  const candidates = process.env.BINOMEN_PYTHON
+    ? [process.env.BINOMEN_PYTHON]
+    : (process.platform === "win32" ? ["python", "py", "python3"] : ["python3", "python"]);
+  // Probe with the same environment the real call uses: PYTHONPATH pointing
+  // at src/. That way a plain checkout works with nothing installed, which is
+  // what a contributor running `node --test` for the first time actually has.
+  const env = { ...process.env, PYTHONPATH: path.join(ROOT, "src") };
+  for (const exe of candidates) {
+    try {
+      execFileSync(exe, ["-c", "import binomen"], { stdio: "ignore", env });
+      return exe;
+    } catch { /* try the next one */ }
+  }
+  throw new Error(
+    `no usable Python found (tried: ${candidates.join(", ")}).\n` +
+    "binomen needs Python 3.10+ on PATH to build the test index.\n" +
+    "Set BINOMEN_PYTHON to the interpreter you want used.");
+}
+
+const PYTHON = findPython();
+
 // Build the index with the Python builder, exactly as a release would.
-execFileSync("python3", [
+execFileSync(PYTHON, [
   "-m", "binomen.build.build_index",
   "--fixture", path.join(ROOT, "tests", "fixtures", "taxdump"),
   "--out", path.join(TMP, "full.sqlite"),

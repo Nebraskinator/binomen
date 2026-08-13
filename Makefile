@@ -51,7 +51,7 @@ test-node:
 	cd node && node --test --no-warnings
 
 conformance:
-	python scripts/emit_conformance.py > node/test/conformance.json
+	python scripts/emit_conformance.py
 
 lint:
 	ruff check src eval scripts tests

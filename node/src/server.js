@@ -32,7 +32,10 @@ const TOOLS = [
 
 const log = (m) => process.stderr.write(`[binomen] ${m}\n`);
 const send = (msg) => process.stdout.write(`${JSON.stringify(msg)}\n`);
-const reply = (id, result) => send({ jsonrpc: "2.0", id, result });
+const reply = (id, result) => {
+  send({ jsonrpc: "2.0", id, result });
+  if (result && result.serverInfo) log("initialize answered");
+};
 const replyError = (id, code, message) => send({ jsonrpc: "2.0", id, error: { code, message } });
 const asText = (obj) => ({ content: [{ type: "text", text: JSON.stringify(obj) }] });
 
@@ -122,12 +125,13 @@ function callTool(name, args) {
 
 function handle(msg) {
   const { id, method, params } = msg;
+  log(`<- ${method}${id !== undefined ? ` (id ${id})` : ""}`);
   switch (method) {
     case "initialize":
       reply(id, {
         protocolVersion: (params && params.protocolVersion) || PROTOCOL_VERSION,
         capabilities: { tools: {} },
-        serverInfo: { name: "binomen", version: "0.2.0" },
+        serverInfo: { name: "binomen", version: "0.2.2" },
       });
       return;
     case "notifications/initialized":
@@ -153,15 +157,14 @@ function handle(msg) {
 }
 
 function main() {
+  log(`node ${process.version} on ${process.platform}`);
+  log(`data dir ${store.dataDir()}`);
   resolver = openIndex();
-  if (!resolver) {
-    firstRunDownload();
-  } else {
-    // Never inside a tool call: check_name is advertised as costing 2 ms, and
-    // that promise is the only reason an agent calls it on every mention.
-    store.checkForUpdate(resolver.release, log).catch(() => {});
-  }
 
+  // Read stdin FIRST, before anything that touches the network or a large
+  // file. The client sends `initialize` immediately and gives up after 60
+  // seconds; a server that is busy fetching a 46 MB index before it starts
+  // listening looks, from the outside, exactly like a server that crashed.
   let buffer = "";
   process.stdin.setEncoding("utf8");
   process.stdin.on("data", (chunk) => {
@@ -175,6 +178,18 @@ function main() {
     }
   });
   process.stdin.on("end", () => process.exit(0));
+
+  // Only now, once the transport is live, start anything slow. setImmediate
+  // puts it behind any message already queued.
+  setImmediate(() => {
+    if (!resolver) {
+      firstRunDownload();
+    } else {
+      // Never inside a tool call either: check_name is advertised as costing
+      // 2 ms, and that promise is the only reason an agent calls it freely.
+      store.checkForUpdate(resolver.release, log).catch(() => {});
+    }
+  });
 }
 
 if (require.main === module) main();

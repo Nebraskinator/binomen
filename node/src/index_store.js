@@ -75,9 +75,43 @@ function writeState(patch) {
   } catch { /* state is an optimisation; losing it costs one extra check */ }
 }
 
+/* Hash by streaming, not by reading the whole file into memory.
+ *
+ * readFileSync on a 123 MB index blocks the event loop for as long as it
+ * takes, and this server has exactly one job while that happens: answer the
+ * client. A blocked event loop cannot, and the client gives up after 60
+ * seconds with "could not attach" -- which looks like a broken extension
+ * rather than a busy one.
+ */
 function sha256File(file) {
   const h = crypto.createHash("sha256");
-  h.update(fs.readFileSync(file));
+  const fd = fs.openSync(file, "r");
+  try {
+    const buf = Buffer.alloc(1 << 20);
+    let n;
+    while ((n = fs.readSync(fd, buf, 0, buf.length, null)) > 0) h.update(buf.subarray(0, n));
+  } finally {
+    fs.closeSync(fd);
+  }
+  return h.digest("hex");
+}
+
+/** Async variant, used on the hot path where responsiveness matters.
+ *
+ * Iterates the read stream directly rather than piping it somewhere to be
+ * discarded. An earlier version routed it into the platform null device, which
+ * on Windows created an actual file named NUL in the working directory -- a
+ * reserved device name that git refuses to index and `del` will not remove.
+ * There was never a reason to write the bytes anywhere; the hash is the point.
+ */
+async function sha256FileAsync(file) {
+  const h = crypto.createHash("sha256");
+  for await (const chunk of fs.createReadStream(file, { highWaterMark: 1 << 20 })) {
+    h.update(chunk);
+    // Yield between chunks so client messages queued during a 123 MB
+    // verification are still answered.
+    await new Promise((r) => setImmediate(r));
+  }
   return h.digest("hex");
 }
 
@@ -151,7 +185,8 @@ async function stageDownload(manifestUrl, entry, log) {
     await pipeline(fs.createReadStream(tmp), zlib.createGunzip(),
                    fs.createWriteStream(raw));
     fs.unlinkSync(tmp);
-    if (entry.uncompressed_sha256 && sha256File(raw) !== entry.uncompressed_sha256) {
+    if (entry.uncompressed_sha256 &&
+        (await sha256FileAsync(raw)) !== entry.uncompressed_sha256) {
       fs.unlinkSync(raw);
       throw new Error("decompressed index failed its checksum");
     }
@@ -159,7 +194,7 @@ async function stageDownload(manifestUrl, entry, log) {
   } else {
     fs.renameSync(tmp, stagedPath());
   }
-  return sha256File(stagedPath());
+  return sha256FileAsync(stagedPath());
 }
 
 /**
@@ -204,6 +239,7 @@ function releaseAgeDays(release) {
 }
 
 module.exports = {
+  sha256File, sha256FileAsync,
   dataDir, indexPath, stagedPath, statePath, readState, writeState,
   promoteStaged, checkForUpdate, releaseAgeDays, stageDownload,
   STALE_AFTER_DAYS, CHECK_EVERY_DAYS, DEFAULT_MANIFEST, INDEX_NAME,

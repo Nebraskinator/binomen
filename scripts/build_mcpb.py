@@ -14,6 +14,7 @@ been run is a draft, and this one cannot be tested by the person installing it.
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -32,8 +33,11 @@ def main() -> int:
         print("node is required to verify the bundle before building it", file=sys.stderr)
         return 1
     print("running the Node test suite")
+    # Pass our own interpreter through: the Node tests shell out to Python to
+    # build a fixture index, and "python3" is not a command on Windows.
+    env = {**os.environ, "BINOMEN_PYTHON": sys.executable}
     r = subprocess.run(["node", "--test", "--no-warnings"], cwd=NODE,
-                       capture_output=True, text=True)
+                       capture_output=True, text=True, env=env)
     if r.returncode != 0:
         print(r.stdout[-4000:], file=sys.stderr)
         print("\nNode tests failed; refusing to package.", file=sys.stderr)
@@ -43,13 +47,17 @@ def main() -> int:
 
     # Conformance must reflect the current Python implementation, or the two
     # halves can drift apart between a change and the next regeneration.
-    print("regenerating the cross-language conformance fixture")
-    fixture = subprocess.run([sys.executable, str(REPO / "scripts" / "emit_conformance.py")],
-                             capture_output=True, text=True, check=True).stdout
+    print("checking the cross-language conformance fixture")
     live = NODE / "test" / "conformance.json"
-    if live.read_text() != fixture:
-        live.write_text(fixture)
-        print("  fixture was stale and has been refreshed -- re-run to package", file=sys.stderr)
+    before = live.read_bytes() if live.exists() else b""
+    # The generator writes the file itself, in UTF-8. Capturing its stdout and
+    # decoding with the locale encoding corrupted non-ASCII characters on
+    # Windows -- see emit_conformance.py.
+    subprocess.run([sys.executable, str(REPO / "scripts" / "emit_conformance.py"),
+                    "--out", str(live)], check=True, capture_output=True)
+    if live.read_bytes() != before:
+        print("  fixture was stale and has been refreshed -- re-run to package",
+              file=sys.stderr)
         return 1
     print("  fixture is current")
 
