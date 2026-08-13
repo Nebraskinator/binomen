@@ -1,3 +1,4 @@
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -62,12 +63,22 @@ def indexes(tmp_path_factory):
     # Every output goes to the temp dir. A test run must never write into the
     # repo's data/ -- it would clobber a real index, and on a read-only checkout
     # it simply fails.
-    subprocess.run([sys.executable, "-m", "binomen.build.build_index",
-                    "--fixture", str(fixture), "--out", str(s2),
-                    "--stage1-out", str(s1), "--field-out", str(fld),
-                    "--version", "fixture-v2", "--quiet"],
-                   check=True, cwd=ROOT,
-                   env={"PYTHONPATH": str(ROOT / "src"), "PATH": "/usr/bin:/bin"})
+    # Inherit the environment rather than replacing it. Passing a bare dict
+    # dropped PATH on Windows, where the interpreter needs it to load DLLs --
+    # which is why windows/3.10 failed in CI while ubuntu/3.10 passed.
+    env = {**os.environ, "PYTHONPATH": str(ROOT / "src")}
+    r = subprocess.run([sys.executable, "-m", "binomen.build.build_index",
+                        "--fixture", str(fixture), "--out", str(s2),
+                        "--stage1-out", str(s1), "--field-out", str(fld),
+                        "--version", "fixture-v2", "--quiet"],
+                       cwd=ROOT, env=env, capture_output=True, text=True)
+    if r.returncode != 0:
+        # Surfacing this is not a nicety. CI reported "exit status 1" fifty-seven
+        # times without once saying what went wrong, which turned a one-line bug
+        # into a guessing game.
+        raise RuntimeError(
+            f"building the fixture index failed (exit {r.returncode}).\n"
+            f"--- stdout ---\n{r.stdout}\n--- stderr ---\n{r.stderr}")
     return {"stage1": s1, "stage2": s2, "field": fld, "real": real}
 
 

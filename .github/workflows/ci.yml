@@ -32,8 +32,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          # node:sqlite. Claude Desktop 1.28929.0 bundles Node 24.
-          node-version: "22.5"
+          # node:sqlite must be available unflagged. It exists from 22.5 but
+          # behind --experimental-sqlite, and CI on 22.5.1 failed with
+          # ERR_UNKNOWN_BUILTIN_MODULE. Claude Desktop 1.28929.0 bundles Node
+          # 24, which is what this actually ships against, so test that.
+          node-version: "24"
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

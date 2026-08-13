@@ -19,7 +19,18 @@
  * absence of a record is reported as absence rather than filled in.
  */
 
-const { DatabaseSync } = require("node:sqlite");
+let DatabaseSync;
+try {
+  ({ DatabaseSync } = require("node:sqlite"));
+} catch (e) {
+  // node:sqlite exists from Node 22.5 but is behind --experimental-sqlite
+  // until it was unflagged. Claude Desktop 1.28929.0 bundles Node 24, where it
+  // is available. An older host should say so plainly rather than emit a
+  // module-loader stack trace that looks like a broken extension.
+  throw new Error(
+    `binomen needs Node 24 or newer for its built-in SQLite support; this host is ` +
+    `running ${process.version}. Update Claude Desktop. (${e.code || e.message})`);
+}
 const { normalizeName, splitDesignation, BloomFilter } = require("./names.js");
 
 const REASON = {
