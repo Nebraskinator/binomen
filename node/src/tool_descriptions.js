@@ -15,44 +15,7 @@
  * so check_name leads with that and it is true.
  */
 
-module.exports = {
-  /*
-   * Sent as `instructions` in the initialize result. The spec describes this
-   * field as "Instructions describing how to use the server and its features
-   * ... this information MAY be added to the system prompt."
-   *
-   * This is here rather than in server.js because it is the same kind of thing
-   * as the descriptions below: a measured variable, not decoration. The one
-   * result the discovery log has on invocation is that a description did not
-   * cause the tool to be called on a domain-framed prompt and an instruction in
-   * the client's own context did. `instructions` is the protocol's own channel
-   * for exactly that, and it ships inside the extension -- which matters,
-   * because the target user will never write a CLAUDE.md.
-   *
-   * TREAT THIS AS UNMEASURED. Whether Claude Desktop surfaces the field at all
-   * is unknown, and whether it changes invocation on a domain-framed prompt is
-   * the open research question. It must be run through the harness as its own
-   * condition before any claim is made about it. Do not report it as working
-   * because the tool got called once.
-   */
-  instructions:
-    "binomen resolves biological names against a versioned copy of NCBI Taxonomy. " +
-    "Every value it returns is a lookup, not a generation.\n\n" +
-    "Organism names are not stable identifiers, and a name being familiar is no evidence " +
-    "that it is current. Clostridium difficile is now Clostridioides difficile; " +
-    "Enterobacter aerogenes is now Klebsiella aerogenes. Both old and new names are heavily " +
-    "attested in the literature, so recognising a name tells you nothing about its status.\n\n" +
-    "Because of that, a name cannot be checked from memory -- including yours. Call " +
-    "check_name when an organism name appears and the answer depends on the name being " +
-    "current: writing about an organism, reconciling datasets, or preparing a literature " +
-    "search. It costs about 2 ms and one short line, so the cost of calling it is lower " +
-    "than the cost of being wrong.\n\n" +
-    "Call expand_query before any literature search involving an organism. Searching the " +
-    "current name alone returns few results rather than an error, which reads like a " +
-    "finding and is not one.\n\n" +
-    "Where authorities disagree, binomen returns every candidate rather than choosing. Do " +
-    "not collapse that list to one name.",
-
+const _BROAD = {
   check_name:
     "STAGE 1 -- CHEAP. Local lookup, about 2 ms, and the reply is usually one short line. " +
     "Call it freely.\n\n" +
@@ -87,5 +50,107 @@ module.exports = {
     "USE BEFORE ANY LITERATURE SEARCH, DATABASE QUERY OR SYSTEMATIC REVIEW involving an " +
     "organism. Searching the current name alone silently misses everything published under " +
     "prior names -- often decades of primary work -- and returns zero results rather than an " +
-    "error, which reads like a finding.",
+    "error, which reads like a finding."
+};
+
+/*
+ * `terse` -- author's wording, shipped verbatim so its behaviour can be
+ * observed rather than argued about.
+ *
+ * The tools block is sent with EVERY request; `_BROAD` costs ~2000 characters
+ * of it. That is the largest recurring cost this extension imposes, and
+ * session 2 measured description wording as the lever that did NOT move
+ * invocation -- so it was the most expensive channel doing the least work.
+ *
+ * What is deliberately absent here, and why it may be fine:
+ *
+ *   - No "authorities disagree, report every candidate" rule. resolve_name's
+ *     response already carries `contested: true` and the literal instruction
+ *     "AUTHORITIES DISAGREE. Report both names." The data decides the policy;
+ *     the description does not need to restate it.
+ *   - No description of what check_name returns. The response is
+ *     self-describing: `verdict`, `escalate`, `reason`, `next`.
+ *
+ * Open questions this wording will answer by being run, not by review:
+ *
+ *   - Does "call it on every name" hold without the cost claim (~2 ms, one
+ *     line) that made the ask reasonable? README calls cost the one claim that
+ *     works.
+ *   - Does expand_query still fire without a trigger condition? It now
+ *     describes capability rather than occasion, and the Candida auris failure
+ *     was a literature-search prompt.
+ *   - Does "if the context requires disambiguating" reintroduce the epistemic
+ *     judgement that check_name's wording removes?
+ */
+const _TERSE = {
+  check_name:
+    "Call on every genus and/or species name you read or write",
+  resolve_name:
+    "Call if a genus and/or species name has changed",
+  get_synonyms:
+    "Call when it is useful to view every name recorded for a taxon",
+  expand_query:
+    "Call when designing a search query concerning a genus and/or species",
+};
+
+
+const DESCRIPTION_SETS = { broad: _BROAD, terse: _TERSE };
+const DESCRIPTION_VARIANTS = Object.keys(DESCRIPTION_SETS);
+
+function descriptions() {
+  const v = String(process.env.BINOMEN_DESCRIPTIONS || "terse").toLowerCase();
+  return DESCRIPTION_SETS[v] || _TERSE;
+}
+
+/*
+ * Instruction variants. Sent once, in the initialize result, and rendered by
+ * the client into the system prompt.
+ *
+ *   terse          author's wording. One sentence. All trigger guidance moved
+ *                  into the tool descriptions, where `check_name` now carries
+ *                  it unconditionally. SHIPPED DEFAULT.
+ *   conditional    asks the model to judge whether the answer depends on the
+ *                  name being current. Failed live on a domain-framed prompt,
+ *                  DISCOVERY-LOG session 3.
+ *   unconditional  triggers on the name itself, no judgement asked, and says
+ *                  why the judgement cannot be made.
+ *   off            send nothing. Required for description-wording comparisons.
+ */
+const INSTRUCTION_SETS = {
+  terse:
+    "binomen resolves genus and species names against a dated copy of NCBI Taxonomy.",
+
+  conditional:
+    "binomen resolves biological names against a dated copy of NCBI Taxonomy. Every " +
+    "value is a lookup, not a generation.\n\n" +
+    "Call check_name when an organism name appears and the answer depends on it being " +
+    "current -- writing about an organism, reconciling datasets, preparing a search. " +
+    "A lookup costs about 2 ms and one line.\n\n" +
+    "Call expand_query before a literature search. The current name alone returns few " +
+    "results rather than an error, which reads like a finding.\n\n" +
+    "Where authorities disagree, report every candidate. Do not pick one.",
+
+  unconditional:
+    "binomen resolves biological names against a dated copy of NCBI Taxonomy. Every " +
+    "value is a lookup, not a generation.\n\n" +
+    "Call check_name on every organism name you read or write. Do not judge which ones " +
+    "need it -- you cannot. Nothing you remember carries a date, and superseded names " +
+    "are usually the more familiar ones. A lookup costs about 2 ms and one line.\n\n" +
+    "Call expand_query before any literature search, including for recent work. The " +
+    "current name alone returns few results rather than an error, which reads like a " +
+    "finding.\n\n" +
+    "Where authorities disagree, report every candidate. Do not pick one.",
+};
+const INSTRUCTION_VARIANTS = Object.keys(INSTRUCTION_SETS);
+
+function instructions() {
+  const v = String(process.env.BINOMEN_INSTRUCTIONS || "terse").toLowerCase();
+  if (v === "off") return null;
+  return INSTRUCTION_SETS[v] || INSTRUCTION_SETS.terse;
+}
+
+module.exports = {
+  descriptions, instructions,
+  DESCRIPTION_SETS, DESCRIPTION_VARIANTS,
+  INSTRUCTION_SETS, INSTRUCTION_VARIANTS,
 };

@@ -49,6 +49,20 @@ eval/verification-report.json
 # is not.
 /diag/
 
+# --- Working notes, not documentation ---
+# Written for whoever is holding this project at the time, not for a reader of
+# the repo. They go stale the moment they are true, name local paths and a
+# local username, and answer questions nobody outside the working session
+# asked. docs/TESTING.md is the public version of what INVOCATION-RUNS.md is
+# the scratchpad for.
+#
+# HANDOFF.md and DISCOVERY-LOG.md were tracked until now; `git rm --cached`
+# stops them growing, but they remain in history. That was judged acceptable:
+# what leaked is a Windows username and two local paths.
+docs/HANDOFF.md
+docs/DISCOVERY-LOG.md
+docs/INVOCATION-RUNS.md
+
 # --- Local editor / OS noise ---
 .DS_Store
 Thumbs.db

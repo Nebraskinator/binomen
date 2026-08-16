@@ -167,3 +167,70 @@ def descriptions() -> dict[str, str]:
         for k, extra in _IMPERATIVE_SUFFIX.items():
             out[k] = out[k] + extra
     return out
+
+
+# ---------------------------------------------------------------------------
+# The terse description set, and the `instructions` field.
+#
+# Both mirror node/src/tool_descriptions.js exactly. The eval harness talks to
+# the API directly rather than through MCP, so to measure what a Claude Desktop
+# user receives it must inject the same text the extension sends. If these
+# copies drift, the harness measures a treatment nobody gets and reports a
+# clean number while doing it -- the same class of error as the hand-written
+# fixture that caused three bugs. tests/test_instructions_parity.py asserts
+# they match by asking Node for its copies.
+#
+# `terse` is the shipped default for both, as of 0.2.6. The tools block is sent
+# with EVERY request; `broad` costs ~2000 characters of it, and session 2
+# measured description wording as the lever that did NOT move invocation. The
+# most expensive channel was doing the least work.
+# ---------------------------------------------------------------------------
+
+_TERSE = {
+    "check_name": "Call on every genus and/or species name you read or write",
+    "resolve_name": "Call if a genus and/or species name has changed",
+    "get_synonyms": "Call when it is useful to view every name recorded for a taxon",
+    "expand_query": "Call when designing a search query concerning a genus and/or species",
+}
+
+DESCRIPTION_SETS = {"narrow": _NARROW, "broad": _BROAD, "terse": _TERSE}
+
+SERVER_INSTRUCTIONS_VARIANTS = {
+    "terse": (
+        "binomen resolves genus and species names against a dated copy of NCBI Taxonomy."
+    ),
+    "conditional": (
+        "binomen resolves biological names against a dated copy of NCBI Taxonomy. Every value "
+        "is a lookup, not a generation.\n\nCall check_name when an organism name appears and "
+        "the answer depends on it being current -- writing about an organism, reconciling "
+        "datasets, preparing a search. A lookup costs about 2 ms and one line.\n\nCall "
+        "expand_query before a literature search. The current name alone returns few results "
+        "rather than an error, which reads like a finding.\n\nWhere authorities disagree, "
+        "report every candidate. Do not pick one."
+    ),
+    "unconditional": (
+        "binomen resolves biological names against a dated copy of NCBI Taxonomy. Every value "
+        "is a lookup, not a generation.\n\nCall check_name on every organism name you read or "
+        "write. Do not judge which ones need it -- you cannot. Nothing you remember carries a "
+        "date, and superseded names are usually the more familiar ones. A lookup costs about "
+        "2 ms and one line.\n\nCall expand_query before any literature search, including for "
+        "recent work. The current name alone returns few results rather than an error, which "
+        "reads like a finding.\n\nWhere authorities disagree, report every candidate. Do not "
+        "pick one."
+    ),
+}
+
+INSTRUCTION_VARIANTS = tuple(SERVER_INSTRUCTIONS_VARIANTS)
+
+
+def instructions_variant() -> str:
+    v = os.environ.get("BINOMEN_INSTRUCTIONS", "terse").lower()
+    return v if v in SERVER_INSTRUCTIONS_VARIANTS else "terse"
+
+
+def server_instructions(variant: str | None = None) -> str:
+    """The instructions text the extension sends, for a given variant."""
+    return SERVER_INSTRUCTIONS_VARIANTS[variant or instructions_variant()]
+
+
+SERVER_INSTRUCTIONS = SERVER_INSTRUCTIONS_VARIANTS["terse"]

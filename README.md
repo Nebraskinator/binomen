@@ -594,9 +594,9 @@ unused.
 Invocation rate is not a UX detail. A resolver that is never called has no
 effect on any outcome, so it is the dominant term.
 
-**First measurement, by hand, n=1 prompt** (full write-up in
-`docs/DISCOVERY-LOG.md`). One prompt, held constant, one variable at a time,
-fresh session each run, Claude Code / Sonnet 5:
+**First measurement, by hand, n=1 prompt** (method and the rules that keep the
+numbers meaning something: `docs/TESTING.md`). One prompt, held constant, one
+variable at a time, fresh session each run, Claude Code / Sonnet 5:
 
 > Summarize the current treatment guidelines for C. difficile infection.
 

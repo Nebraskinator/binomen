@@ -165,6 +165,30 @@ def split_designation(name: str, code: str | None = None) -> tuple[str, str] | N
     return binomial, designation
 
 
+_ABBREV_RE = re.compile(r"^([A-Za-z])\.\s*(.+)$")
+
+
+def split_abbreviation(name: str) -> tuple[str, str] | None:
+    """Split "C. difficile" into ("c", "difficile") -- genus initial, remainder.
+
+    The abbreviated genus is how these organisms actually appear in prose.
+    "E. coli" outnumbers "Escherichia coli" in most clinical writing, and a
+    resolver that answers `unknown` to it is answering `unknown` to the common
+    case -- while its own input schema advertises that it accepts the form.
+
+    Returned folded, ready to build a lookup key against normalize_name'd text.
+    None when the string is not of that shape, which includes a bare genus, a
+    full binomial, and a gene symbol.
+    """
+    m = _ABBREV_RE.match(name.strip())
+    if not m:
+        return None
+    initial, rest = m.group(1).lower(), normalize_name(m.group(2))
+    if not rest or not rest[:1].isalpha():
+        return None
+    return initial, rest
+
+
 def is_bracketed(name: str) -> bool:
     """Did the source flag this name's generic placement as wrong?"""
     return "[" in name or "]" in name

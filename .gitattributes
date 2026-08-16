@@ -24,3 +24,6 @@
 # Generated: keep it out of diffs and out of language statistics.
 node/test/conformance.json linguist-generated=true
 eval/runs/example-run.jsonl linguist-generated=true
+docs/MODEL-CONTEXT-terse.md linguist-generated=true
+docs/MODEL-CONTEXT-conditional.md linguist-generated=true
+docs/MODEL-CONTEXT-unconditional.md linguist-generated=true

@@ -31,7 +31,24 @@ try {
     `binomen needs Node 24 or newer for its built-in SQLite support; this host is ` +
     `running ${process.version}. Update Claude Desktop. (${e.code || e.message})`);
 }
-const { normalizeName, splitDesignation, BloomFilter } = require("./names.js");
+const {
+  normalizeName, splitDesignation, splitAbbreviation, BloomFilter,
+} = require("./names.js");
+
+const ABBREV_COVERAGE =
+  "Expansions cover names with recorded nomenclatural history. A binomial that has never "
+  + "moved is certified by a filter that cannot be enumerated, so it would not appear here "
+  + "-- absence from this list is not evidence of absence from the index.";
+
+/**
+ * Restore display form from a folded lookup key.
+ *
+ * Only the first letter: a binomial is a capitalised genus and a lowercase
+ * epithet, so a title-case helper would corrupt every one of them.
+ */
+function capitaliseGenus(norm) {
+  return norm ? norm[0].toUpperCase() + norm.slice(1) : norm;
+}
 
 const REASON = {
   superseded: "recorded as a synonym; the accepted name differs",
@@ -55,6 +72,12 @@ class Resolver {
       taxon: this.db.prepare(
         "SELECT taxid, accepted, rank, code, authority, synonyms FROM taxa WHERE taxid = ?"),
       note: this.db.prepare("SELECT payload FROM notes WHERE norm = ?"),
+      // `norm` is indexed, so this is a range scan over one initial rather
+      // than a table scan -- about 40 ms warm against ~900k rows, which is the
+      // only reason it can sit inside the cheap stage-1 call at all.
+      expand: this.db.prepare(
+        "SELECT DISTINCT norm FROM lookup WHERE norm LIKE ? ESCAPE '\\' "
+        + "ORDER BY norm LIMIT 40"),
     };
   }
 
@@ -117,6 +140,12 @@ class Resolver {
                reason: "matched under more than one nomenclatural code" };
     }
 
+    // Abbreviation before strain. "C. difficile 630" is both shapes at once,
+    // and the abbreviated genus is the part that cannot be looked up as
+    // written, so it has to be settled first.
+    const abbrev = this._checkAbbreviation(q);
+    if (abbrev) return abbrev;
+
     // Might be a strain: binomial plus a laboratory designation. The
     // designation is not governed by any code and never changes; the binomial
     // is what moves, and every strain inherits its species' transfer. So the
@@ -151,6 +180,62 @@ class Resolver {
       do_not: "Do not substitute a name you remember. The string may be a misspelling, " +
               `an infraspecific or strain designation, or newer than ${this.release}.`,
     };
+  }
+
+  /**
+   * Resolve an abbreviated genus by enumerating what it could stand for.
+   *
+   * The input schema has always promised this form and the lookup has never
+   * supported it: checkName("C. difficile") returned `unknown` alongside "Do
+   * not substitute a name you remember", which is the worst available answer --
+   * indistinguishable from "no such organism" and offering no way forward.
+   *
+   * Enumerating rather than guessing is the point. "S. aureus" matches twelve
+   * binomials in NCBI including a plant (Senecio), a fish (Stegastes) and a
+   * pothos (Scindapsus). Everyone reads it as Staphylococcus. That is the same
+   * conflation this package exists to catch, running the other way: one string,
+   * several organisms.
+   *
+   * Mirrors _check_abbreviation in src/binomen/resolver.py.
+   */
+  _checkAbbreviation(q) {
+    const split = splitAbbreviation(q);
+    if (!split) return null;
+    const [initial, rest] = split;
+    const esc = rest.replace(/\\/g, "\\\\").replace(/%/g, "\\%").replace(/_/g, "\\_");
+    // LIKE matches the whole string, so a trinomial ending in the same epithet
+    // comes back too: "spermophilus elegans aureus" answers 's% aureus'. It
+    // abbreviates to "S. e. aureus", not "S. aureus", so it goes on token count.
+    const want = rest.split(/\s+/).length + 1;
+    const names = this._stmt.expand.all(`${initial}% ${esc}`)
+      .map((r) => r.norm)
+      .filter((n) => n[0] === initial && n.split(/\s+/).length === want);
+    if (!names.length) return null;
+
+    if (names.length > 1) {
+      return {
+        name: q, verdict: "ambiguous_abbreviation", escalate: true, next: "resolve_name",
+        reason: `abbreviated genus; ${names.length} names in the index match it`,
+        expansions: names.map(capitaliseGenus),
+        coverage_warning: ABBREV_COVERAGE,
+        do_not: "Do not assume the familiar expansion. Abbreviations collide across "
+              + "kingdoms, and the reader's organism may not be yours.",
+      };
+    }
+
+    const expanded = names[0];
+    const via = { abbreviation: q, expanded: capitaliseGenus(expanded) };
+    const rows = this._stmt.lookup.all(expanded);
+    if (!rows.length) {
+      const codes = this.codesMatching(expanded);
+      if (codes.length !== 1) return null;
+      return { name: q, verdict: "stable", code: codes[0], escalate: false,
+               resolved_via: via, coverage_warning: ABBREV_COVERAGE, as_of: this.release };
+    }
+    const out = this._verdict(q, rows);
+    out.resolved_via = via;
+    out.coverage_warning = ABBREV_COVERAGE;
+    return out;
   }
 
   _verdict(q, rows) {

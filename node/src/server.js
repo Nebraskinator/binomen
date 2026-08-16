@@ -16,7 +16,8 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
-const DESCRIPTIONS = require("./tool_descriptions.js");
+const TEXT = require("./tool_descriptions.js");
+const DESCRIPTIONS = TEXT.descriptions();
 const store = require("./index_store.js");
 
 const PROTOCOL_VERSION = "2025-06-18";
@@ -37,33 +38,21 @@ const PROTOCOL_VERSION = "2025-06-18";
 const SUPPORTED_PROTOCOL_VERSIONS = ["2025-06-18", "2025-03-26", "2024-11-05"];
 
 /*
- * Whether to send `instructions` in the initialize result. On by default;
- * `BINOMEN_INSTRUCTIONS=off` suppresses it.
+ * Which wording this process is running.
  *
- * This switch exists because the field is not a feature, it is a treatment.
+ * Both are treatments, not features, and both are selected by environment
+ * variable so a comparison can be run without rebuilding:
  *
- * Confirmed by observation: a client running this server renders the field into
- * its system prompt under a heading of its own. That is the same channel as the
- * CLAUDE.md instruction which, in the one discovery run on record, was the only
- * condition that caused the tool to be called on a domain-framed prompt --
- * where neither `broad` nor `imperative` tool descriptions did.
+ *   BINOMEN_DESCRIPTIONS   terse (default) | broad
+ *   BINOMEN_INSTRUCTIONS   terse (default) | conditional | unconditional | off
  *
- * Which means shipping it unconditionally would quietly contaminate the
- * harness. The description-wording conditions compare `broad` against
- * `imperative`; if an instruction is present in the model's context in both,
- * the variable under test is no longer the only thing acting, and it is the
- * weaker of the two. Any null result would then be uninterpretable -- not
- * "wording does not matter" but "wording did not matter given an instruction
- * that did".
- *
- * So the harness must be able to turn it off, and the description conditions
- * must run with it off. Its own effect is measured as its own condition. This
- * is the same rule already written down for the `instructed` condition: telling
- * an agent when to check deletes the research question, so the telling has to
- * be the thing being varied rather than part of the apparatus.
+ * `off` exists because the description conditions must run without an
+ * instruction present, or they measure wording in the presence of something
+ * stronger. An unrecognised value falls back to the shipping default rather
+ * than sending nothing: silently dropping a treatment because of a typo would
+ * produce a clean negative result for a condition that never ran.
  */
-const INSTRUCTIONS_ENABLED =
-  String(process.env.BINOMEN_INSTRUCTIONS || "on").toLowerCase() !== "off";
+const instructionsText = TEXT.instructions;
 
 const NAME_ARG = {
   type: "object",
@@ -150,7 +139,9 @@ function boot(m) {
         `require.main===module ${require.main === module}\n` +
         `require.main ${require.main ? require.main.filename : "(undefined)"}\n` +
         `stdin isTTY=${process.stdin.isTTY} readable=${process.stdin.readable}\n` +
-        `cwd ${process.cwd()}\n`);
+        `cwd ${process.cwd()}\n` +
+        `descriptions ${process.env.BINOMEN_DESCRIPTIONS || 'terse (default)'}\n` +
+        `instructions ${process.env.BINOMEN_INSTRUCTIONS || 'terse (default)'}\n`);
     }
     fs.appendFileSync(bootLogPath, `${Date.now() % 100000} ${m}\n`);
   } catch { /* diagnostics must never be the thing that breaks the server */ }
@@ -306,8 +297,8 @@ function handle(msg) {
         protocolVersion: agreed,
         capabilities: { tools: {} },
         serverInfo: { name: "binomen", title: "binomen — biological name checker",
-                      version: "0.2.5" },
-        ...(INSTRUCTIONS_ENABLED ? { instructions: DESCRIPTIONS.instructions } : {}),
+                      version: "0.2.7" },
+        ...(() => { const t = instructionsText(); return t ? { instructions: t } : {}; })(),
       });
       return;
     }

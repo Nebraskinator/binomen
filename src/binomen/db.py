@@ -141,6 +141,33 @@ class Stage1:
         n = normalize_name(name)
         return [code for code, bf in self.blooms.items() if n in bf]
 
+    def expand_abbreviation(self, initial: str, rest: str, limit: int = 40) -> list[str]:
+        """Names in the verdict table that an abbreviated genus could stand for.
+
+        `norm` is indexed, so `LIKE 'c% difficile'` is a range scan over one
+        initial rather than a table scan -- about 40 ms warm against a million
+        rows, which is the only reason this can sit inside the cheap stage-1
+        call at all.
+
+        LIKE matches the whole string, so a trinomial ending in the same epithet
+        comes back too: "spermophilus elegans aureus" answers a query for
+        's% aureus'. It abbreviates to "S. e. aureus", not "S. aureus", so it is
+        dropped on token count rather than returned.
+
+        INCOMPLETE BY CONSTRUCTION, and every caller must say so. This table
+        holds only names carrying nomenclatural history; a binomial that has
+        never moved is certified by a Bloom filter instead, and a Bloom filter
+        cannot be enumerated -- that is the same property (absence is certain,
+        presence is not a list) the hybrid index is built on. "Entamoeba coli"
+        is exactly this case and does not appear in an expansion of "E. coli".
+        """
+        esc = rest.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        rows = self.conn.execute(
+            "SELECT DISTINCT norm FROM verdicts WHERE norm LIKE ? ESCAPE '\\' "
+            "ORDER BY norm LIMIT ?", (f"{initial}% {esc}", limit))
+        want = len(rest.split()) + 1
+        return [r[0] for r in rows if r[0][:1] == initial and len(r[0].split()) == want]
+
     def provenance(self) -> Provenance:
         return Provenance(
             source=self._meta.get("source", "NCBI Taxonomy"),

@@ -165,6 +165,32 @@ class BloomFilter {
   }
 }
 
+const ABBREV_RE = /^([A-Za-z])\.\s*(.+)$/;
+
+/**
+ * Split "C. difficile" into ["c", "difficile"] -- genus initial, remainder.
+ *
+ * The abbreviated genus is how these organisms actually appear in prose.
+ * "E. coli" outnumbers "Escherichia coli" in most clinical writing, and a
+ * resolver that answers `unknown` to it is answering `unknown` to the common
+ * case -- while its own input schema advertises that it accepts the form.
+ *
+ * Returned folded, ready to build a lookup key against normalizeName'd text.
+ * null when the string is not of that shape, which includes a bare genus, a
+ * full binomial, and a gene symbol.
+ *
+ * Mirrors split_abbreviation in src/binomen/build/build_index.py.
+ */
+function splitAbbreviation(name) {
+  const m = ABBREV_RE.exec(String(name || "").trim());
+  if (!m) return null;
+  const initial = m[1].toLowerCase();
+  const rest = normalizeName(m[2]);
+  if (!rest || !/^\p{L}/u.test(rest)) return null;
+  return [initial, rest];
+}
+
 module.exports = {
-  normalizeName, isBracketed, stripAuthority, splitDesignation, BloomFilter,
+  normalizeName, isBracketed, stripAuthority, splitDesignation, splitAbbreviation,
+  BloomFilter,
 };

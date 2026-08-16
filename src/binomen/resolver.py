@@ -34,7 +34,12 @@ from datetime import date
 
 from .authorities import authorities_for
 from .authorities.base import AuthorityResult
-from .build.build_index import is_bracketed, split_designation, strip_authority
+from .build.build_index import (
+    is_bracketed,
+    split_abbreviation,
+    split_designation,
+    strip_authority,
+)
 from .codes import (
     CODE_DESCRIPTIONS,
     Code,
@@ -49,6 +54,15 @@ from .db import DEFAULT_DB, Backbone, IndexNotBuilt, IndexStale, Stage1
 from .models import Candidate, ChangeEvent, Provenance, Resolution
 
 GENE_SYMBOL_RE = re.compile(r"^[A-Z][A-Z0-9\-]{1,14}$")
+
+
+def _capitalise_genus(norm: str) -> str:
+    """Restore display form from a folded lookup key.
+
+    Only the first letter: a binomial is a capitalised genus and a lowercase
+    epithet, so `.title()` would corrupt every one of them.
+    """
+    return norm[:1].upper() + norm[1:] if norm else norm
 # Open-nomenclature qualifiers and strain designations. Real strings in NCBI,
 # useless as literature search terms.
 _UNSEARCHABLE = re.compile(
@@ -133,6 +147,12 @@ class Resolver:
 
         rows = self.s1.verdict(q)
         if not rows and not self.s1.codes_matching(q):
+            # Abbreviation before strain. "C. difficile 630" is both shapes at
+            # once, and the abbreviated genus is the part that cannot be looked
+            # up as written, so it has to be settled first.
+            abbrev = self._check_abbreviation(q)
+            if abbrev:
+                return abbrev
             # Might be a strain: binomial + laboratory designation. The
             # designation is not governed by any code and never changes; the
             # binomial is what moves, and every strain inherits its species'
@@ -165,6 +185,66 @@ class Resolver:
                     "next": "resolve_name", "reason": _REASON["multi_code"]}
         return {"name": q, "verdict": "stable", "code": codes[0], "escalate": False,
                 "as_of": self.s1.meta.get("version", "unknown")}
+
+    _ABBREV_COVERAGE = (
+        "Expansions cover names with recorded nomenclatural history. A binomial that has "
+        "never moved is certified by a filter that cannot be enumerated, so it would not "
+        "appear here -- absence from this list is not evidence of absence from the index.")
+
+    def _check_abbreviation(self, q: str) -> dict | None:
+        """Resolve an abbreviated genus by enumerating what it could stand for.
+
+        The input schema has always promised this form and the lookup has never
+        supported it: `check_name("C. difficile")` returned `unknown` alongside
+        "Do not substitute a name you remember", which is the worst available
+        answer -- indistinguishable from "no such organism" and offering no way
+        forward. It also quietly wasted real invocations, since a model reaching
+        for this tool writes "E. coli" about as often as it writes the binomial.
+
+        Enumerating rather than guessing is the point. "S. aureus" matches
+        twelve binomials in NCBI including a plant (Senecio), a fish (Stegastes)
+        and a pothos (Scindapsus). Everyone reads it as Staphylococcus. That is
+        the same conflation this package exists to catch, running in the
+        opposite direction: one string, several organisms.
+        """
+        split = split_abbreviation(q)
+        if not split:
+            return None
+        assert self.s1 is not None
+        names = self.s1.expand_abbreviation(*split)
+        if not names:
+            return None
+
+        if len(names) > 1:
+            return {
+                "name": q, "verdict": "ambiguous_abbreviation", "escalate": True,
+                "next": "resolve_name",
+                "reason": f"abbreviated genus; {len(names)} names in the index match it",
+                "expansions": [_capitalise_genus(n) for n in names],
+                "coverage_warning": self._ABBREV_COVERAGE,
+                "do_not": ("Do not assume the familiar expansion. Abbreviations collide "
+                           "across kingdoms, and the reader's organism may not be yours."),
+            }
+
+        expanded = names[0]
+        via = {"abbreviation": q, "expanded": _capitalise_genus(expanded)}
+        rows = self.s1.verdict(expanded)
+        if not rows:
+            codes = self.s1.codes_matching(expanded)
+            if len(codes) != 1:
+                return None
+            return {"name": q, "verdict": "stable", "code": codes[0], "escalate": False,
+                    "resolved_via": via, "coverage_warning": self._ABBREV_COVERAGE,
+                    "as_of": self.s1.meta.get("version", "unknown")}
+        r = rows[0]
+        out = {"name": q, "verdict": r["verdict"], "code": r["code"], "escalate": True,
+               "reason": _REASON[r["verdict"]],
+               "next": "consult_authorities" if r["verdict"] == "contested"
+                       else "resolve_name",
+               "resolved_via": via, "coverage_warning": self._ABBREV_COVERAGE}
+        if r["verdict"] == "superseded" and r["accepted"]:
+            out["accepted_name"] = r["accepted"]
+        return out
 
     def _check_strain(self, q: str) -> dict | None:
         """Resolve a strain name via its binomial, recombining the designation."""

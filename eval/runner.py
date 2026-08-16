@@ -44,7 +44,7 @@ sys.path.insert(0, str(HERE.parent / "src"))
 from scorer import score_case
 
 from binomen.resolver import Resolver
-from binomen.tool_descriptions import descriptions, variant
+from binomen.tool_descriptions import descriptions, instructions_variant, server_instructions, variant
 
 SYSTEM = (
     "You are assisting a working scientist. Answer the question directly and concisely. "
@@ -71,7 +71,31 @@ INSTRUCTION = (
     "It costs about 20 tokens and usually returns \"stable\", in which case you are done."
 )
 
-CONDITIONS = ("baseline", "tools", "instructed")
+# The `server_instructions` condition.
+#
+# Distinct from `instructed`, and the distinction is the point. `instructed` is
+# a hand-written imperative that exists to bound what the tools are worth when
+# invocation is not the bottleneck; nobody ships it. `server_instructions` is
+# the text the extension actually sends in its MCP `initialize` result, which at
+# least one client renders into the system prompt verbatim under its own
+# heading. So this condition measures a treatment that real users receive
+# without doing anything -- which is what makes it reportable where `instructed`
+# is not.
+#
+# The harness talks to the API directly rather than through MCP, so it has to
+# inject the text itself. It comes from binomen.tool_descriptions, and
+# tests/test_instructions_parity.py asserts that copy is byte-identical to the
+# one the extension sends. Without that check this condition could report a
+# clean number for a treatment nobody receives.
+#
+# Standing observation, n=1, recorded before any run: with this text live in a
+# real client, "give me the latest research into candida auris" produced a
+# taxonomic claim from memory and called no tool. See the domain-framed pair in
+# the case set (recent-001 / recent-011).
+CONDITIONS = ("baseline", "tools", "server_instructions", "instructed")
+
+# Conditions in which the model is given tools at all.
+WITH_TOOLS = ("tools", "server_instructions", "instructed")
 
 SCHEMAS = {
     "check_name": {"type": "object", "properties": {"name": {"type": "string"}},
@@ -132,8 +156,14 @@ def dispatch(resolver: Resolver, name: str, args: dict):
 def run_episode(client, model: str, case: dict, condition: str, resolver: Resolver | None,
                 max_turns: int = 8) -> tuple[str, list[str], list[dict], dict]:
     messages = [{"role": "user", "content": case["prompt"]}]
-    tools = build_tools() if condition in ("tools", "instructed") else []
-    system = SYSTEM + (INSTRUCTION if condition == "instructed" else "")
+    tools = build_tools() if condition in WITH_TOOLS else []
+    system = SYSTEM
+    if condition == "server_instructions":
+        # Placed where a client puts it: appended to the system prompt, as its
+        # own block, attributed to the server.
+        system += f"\n\n# MCP Server Instructions\n\n## binomen\n\n{server_instructions()}"
+    elif condition == "instructed":
+        system += INSTRUCTION
     used: list[str] = []
     transcript: list[dict] = []
     usage = {"input_tokens": 0, "output_tokens": 0, "api_calls": 0}
@@ -172,7 +202,9 @@ def main(argv=None) -> int:
     ap.add_argument("--cases", type=Path, default=HERE / "cases" / "cases.jsonl")
     ap.add_argument("--model", default="claude-sonnet-5")
     ap.add_argument("--condition", choices=[*CONDITIONS, "both", "all"], default="all",
-                    help="'both' is baseline+tools; 'all' adds the instructed condition")
+                    help="'both' is baseline+tools (the reported comparison); "
+                         "'all' adds server_instructions and the diagnostic-only "
+                         "instructed condition")
     ap.add_argument("--out", type=Path, default=HERE / "runs")
     ap.add_argument("--limit", type=int)
     ap.add_argument("--category")
@@ -215,7 +247,7 @@ def main(argv=None) -> int:
         conditions = ["baseline", "tools"]
     else:
         conditions = [a.condition]
-    resolver = Resolver() if any(c in ("tools", "instructed") for c in conditions) else None
+    resolver = Resolver() if any(c in WITH_TOOLS for c in conditions) else None
 
     a.out.mkdir(parents=True, exist_ok=True)
     stamp = time.strftime("%Y%m%d-%H%M%S")
@@ -223,6 +255,11 @@ def main(argv=None) -> int:
     run_path = a.out / f"run-{stamp}.jsonl"
     meta = {
         "_meta": True, "model": a.model, "description_variant": variant(),
+        # Which instructions text the `server_instructions` condition used.
+        # Recorded unconditionally: a run that does not say which treatment it
+        # applied cannot be compared with another one, and two runs of
+        # `server_instructions` can now differ in the only way that matters.
+        "instructions_variant": instructions_variant(),
         "cases_file": str(a.cases), "n_cases": len(cases), "conditions": conditions,
         "offline": os.environ.get("BINOMEN_OFFLINE") == "1",
         "unverified_cases": len(unverified),
