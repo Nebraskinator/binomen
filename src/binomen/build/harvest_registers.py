@@ -65,6 +65,7 @@ from pathlib import Path
 
 import httpx
 
+from .budget import enforce_budget, enforce_bundle_budget, zipped_mb  # noqa: F401
 from .build_index import normalize_name
 
 CLB = "https://api.checklistbank.org"
@@ -622,61 +623,6 @@ def overlay_lpsn_medical_use(registers: Path, lpsn: Path) -> dict[str, int]:
     db.commit()
     db.close()
     return stats
-
-
-def zipped_mb(paths: list[Path]) -> float:
-    """Compressed size of the shipped bundle, in MB.
-
-    The number that matters is the compressed one: an `.mcpb` is a zip, so this
-    is what a biologist waits for on a download. Disk footprint after install is
-    the looser constraint. SQLite compresses well -- 64 MB of databases became
-    24 MB -- so measuring the uncompressed size would refuse builds that ship
-    fine.
-    """
-    import tempfile
-
-    with tempfile.NamedTemporaryFile(suffix=".zip", delete=False) as tmp:
-        scratch = Path(tmp.name)
-    try:
-        with zipfile.ZipFile(scratch, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
-            for p in paths:
-                z.write(p, p.name)
-        return scratch.stat().st_size / 1e6
-    finally:
-        scratch.unlink(missing_ok=True)
-
-
-def enforce_bundle_budget(paths: list[Path], *, max_zip_mb: float = 25.0,
-                          max_disk_mb: float = 100.0) -> dict[str, float]:
-    """Fail the build when the bundle outgrows what was agreed to ship.
-
-    An invariant rather than a warning, for the reason FINDINGS §8 gives about
-    every fix that stuck in this project: a size preference erodes one register
-    at a time, and the erosion is invisible until someone waits on an install.
-    """
-    disk = sum(p.stat().st_size for p in paths) / 1e6
-    zipped = zipped_mb(paths)
-    if zipped > max_zip_mb or disk > max_disk_mb:
-        raise SystemExit(
-            f"bundle is {zipped:.1f} MB compressed / {disk:.1f} MB on disk, over the "
-            f"{max_zip_mb:.0f} / {max_disk_mb:.0f} MB budget.\n"
-            f"Shrink a register or raise the budget deliberately -- not in passing.")
-    return {"zipped_mb": zipped, "disk_mb": disk}
-
-
-def enforce_budget(path: Path, max_mb: float) -> None:
-    """Fail the build when the shipped artefact outgrows what we agreed to ship.
-
-    A size preference erodes one register at a time and the erosion is invisible
-    until a biologist waits ten minutes for an install, so this is an invariant
-    and not a warning. Same reasoning as the write-time echo assertion above:
-    FINDINGS §8's fixes that stick are the structural ones.
-    """
-    mb = path.stat().st_size / 1e6
-    if mb > max_mb:
-        raise SystemExit(
-            f"register database is {mb:.1f} MB, over the {max_mb:.0f} MB budget.\n"
-            f"Shrink a register or raise the budget deliberately -- do not raise it in passing.")
 
 
 # ---------------------------------------------------------------- driver

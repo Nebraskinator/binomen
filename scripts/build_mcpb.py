@@ -106,8 +106,13 @@ def main() -> int:
     # Budget first, so a build that cannot ship fails before it writes anything.
     # The ceiling that matters is the compressed one: an .mcpb is a zip, and that
     # is what a biologist waits for on a download.
-    from binomen.build.harvest_registers import enforce_bundle_budget
-    sizes = enforce_bundle_budget(list(data.values()), max_zip_mb=25.0, max_disk_mb=100.0)
+    # Import from the checkout rather than requiring an installed package: this
+    # script has to run wherever the repo is, and the version that imported
+    # `harvest_registers` broke packaging for anyone whose environment lacked
+    # httpx. `budget` needs nothing but the standard library.
+    sys.path.insert(0, str(REPO / "src"))
+    from binomen.build.budget import enforce_bundle_budget
+    sizes = enforce_bundle_budget(list(data.values()))
     print(f"data {sizes['disk_mb']:.1f} MB on disk, {sizes['zipped_mb']:.1f} MB compressed")
 
     with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:

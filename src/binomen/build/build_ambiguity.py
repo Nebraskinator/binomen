@@ -40,8 +40,8 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+from .budget import enforce_budget
 from .build_index import strip_authority
-from .harvest_registers import enforce_budget
 
 REPO = Path(__file__).resolve().parents[3]
 DEFAULT_IN = REPO / "data" / "binomen-stage1.sqlite"
