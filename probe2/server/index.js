@@ -123,6 +123,89 @@ function gather() {
     return `ok (round-tripped ${n} row)`;
   });
 
+  // --- two databases at once, from inside the bundle --------------------
+  // The question ADR-0002 leaves open. The shipped design puts NCBI-derived
+  // data (public domain) and register data (CC BY-SA) in two files so neither
+  // licence claim needs qualifying, and a lookup has to read across them. Three
+  // things could break that here and nowhere else:
+  //
+  //   1. ATTACH may be unavailable or refused under this build of node:sqlite.
+  //   2. The files live inside the installed extension directory, which on
+  //      Windows is under C:\Program Files\WindowsApps -- read-only. SQLite
+  //      opening a database wants to touch the directory unless the open is
+  //      genuinely read-only.
+  //   3. cwd is C:\WINDOWS\system32, so anything but a __dirname-relative path
+  //      resolves somewhere else entirely.
+  //
+  // The fallback if ATTACH fails is two handles and two lookups in JS, so both
+  // are measured rather than one being assumed.
+  {
+    const path2 = require("node:path");
+    const fs2 = require("node:fs");
+    const dataDir2 = path2.join(__dirname, "data");
+    const ambFile = path2.join(dataDir2, "ambiguity.sqlite");
+    const regFile = path2.join(dataDir2, "registers.sqlite");
+
+    out.bundled_data_dir = dataDir2;
+    out.bundled_files_exist = attempt(() =>
+      `${fs2.existsSync(ambFile)} / ${fs2.existsSync(regFile)}`);
+    out.bundled_dir_writable = attempt(() => {
+      const f = path2.join(dataDir2, `w-${process.pid}.tmp`);
+      try {
+        fs2.writeFileSync(f, "x");
+        fs2.unlinkSync(f);
+        return "writable";
+      } catch (e) {
+        // Expected to fail on a packaged install, and that is fine -- it is
+        // recorded because a read-only directory is the condition under which
+        // the two opens below actually matter.
+        return `read-only (${(e && e.code) || e})`;
+      }
+    });
+
+    out.open_two_readonly = attempt(() => {
+      const { DatabaseSync } = require("node:sqlite");
+      const a = new DatabaseSync(ambFile, { readOnly: true });
+      const r = new DatabaseSync(regFile, { readOnly: true });
+      const n1 = a.prepare("SELECT count(*) AS n FROM amb").get().n;
+      const n2 = r.prepare("SELECT count(*) AS n FROM register").get().n;
+      a.close();
+      r.close();
+      return `ok (${n1} ambiguity rows, ${n2} register rows)`;
+    });
+
+    out.attach_and_join = attempt(() => {
+      const { DatabaseSync } = require("node:sqlite");
+      const a = new DatabaseSync(ambFile, { readOnly: true });
+      // A parameter is not allowed in ATTACH, and the path is ours rather than
+      // user input, so this is the one place a literal is correct.
+      a.exec(`ATTACH DATABASE '${regFile.replace(/'/g, "''")}' AS reg`);
+      const row = a.prepare(
+        "SELECT amb.norm AS norm, amb.accepted AS ncbi, reg.register.accepted_name AS register " +
+        "FROM amb JOIN reg.register ON reg.register.norm = amb.norm " +
+        "WHERE amb.norm = ?").get("borreliella burgdorferi");
+      a.close();
+      return row
+        ? `ok (NCBI '${row.ncbi}' vs register '${row.register}')`
+        : "attached but the join returned nothing";
+    });
+
+    out.two_handle_lookup = attempt(() => {
+      // The fallback: no ATTACH, two indexed lookups, joined in JS.
+      const { DatabaseSync } = require("node:sqlite");
+      const a = new DatabaseSync(ambFile, { readOnly: true });
+      const r = new DatabaseSync(regFile, { readOnly: true });
+      const q = "borreliella burgdorferi";
+      const hit = a.prepare("SELECT accepted FROM amb WHERE norm = ?").get(q);
+      const reg = r.prepare("SELECT accepted_name FROM register WHERE norm = ?").get(q);
+      a.close();
+      r.close();
+      return hit && reg
+        ? `ok (NCBI '${hit.accepted}' vs register '${reg.accepted_name}')`
+        : "one of the two lookups missed";
+    });
+  }
+
   // --- filesystem: where can this process actually see and write ---------
   // If LOCALAPPDATA is redirected inside the MSIX container, the extension has
   // been looking for its index somewhere the installer never wrote to.

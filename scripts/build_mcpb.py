@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
-"""Package the Node server as dist/binomen.mcpb — the double-click install.
+"""Package the Node server and its data as dist/binomen.mcpb.
 
-The bundle carries the server and no data. That decoupling is deliberate: a new
-index does not require a new extension, and a fixed bug does not make anyone
-re-download 46 MB. The index arrives on first run and updates itself.
+The bundle carries the server AND the two shipped databases, so installing it is
+the whole installation: no download step, no first-run wait, nothing for a bench
+biologist to do but double-click. That reverses the earlier decoupling, and the
+reason is in docs/adr/0001-ambiguity-only-local-database.md — an index holding
+only ambiguous names is small enough to ship, where the 123 MB stage-2 index
+never was.
 
     python scripts/build_mcpb.py
 
-Refuses to build if the Node tests do not pass. A setup artifact that has not
-been run is a draft, and this one cannot be tested by the person installing it.
+Two databases rather than one, because LPSN is CC BY-SA and NCBI Taxonomy is
+public domain, and merging them would put a share-alike claim on the public
+domain half. See docs/adr/0002-two-files-for-licence-containment.md.
+
+Refuses to build if the Node tests do not pass, or if the bundle is over budget.
+A setup artifact that has not been run is a draft, and this one cannot be tested
+by the person installing it.
 """
 
 from __future__ import annotations
@@ -73,6 +81,8 @@ def main() -> int:
         "server/resolver.js": NODE / "src" / "resolver.js",
         "server/names.js": NODE / "src" / "names.js",
         "server/index_store.js": NODE / "src" / "index_store.js",
+        "server/ambiguity.js": NODE / "src" / "ambiguity.js",
+        "server/registers.js": NODE / "src" / "registers.js",
         "server/tool_descriptions.js": NODE / "src" / "tool_descriptions.js",
     }
     missing = [k for k, v in files.items() if not v.exists()]
@@ -80,17 +90,41 @@ def main() -> int:
         print(f"missing sources: {missing}", file=sys.stderr)
         return 1
 
-    with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED) as z:
+    # The data. `ambiguity.js` and `registers.js` look for these at
+    # ../data relative to their own directory, which is where these land.
+    data = {
+        "data/ambiguity.sqlite": REPO / "data" / "ambiguity.sqlite",
+        "data/registers.sqlite": REPO / "data" / "registers.sqlite",
+    }
+    absent = [k for k, v in data.items() if not v.exists()]
+    if absent:
+        print(f"missing data: {absent}", file=sys.stderr)
+        print("build them with binomen-build-ambiguity and binomen-harvest-registers",
+              file=sys.stderr)
+        return 1
+
+    # Budget first, so a build that cannot ship fails before it writes anything.
+    # The ceiling that matters is the compressed one: an .mcpb is a zip, and that
+    # is what a biologist waits for on a download.
+    from binomen.build.harvest_registers import enforce_bundle_budget
+    sizes = enforce_bundle_budget(list(data.values()), max_zip_mb=25.0, max_disk_mb=100.0)
+    print(f"data {sizes['disk_mb']:.1f} MB on disk, {sizes['zipped_mb']:.1f} MB compressed")
+
+    with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for arc, src in files.items():
+            z.write(src, arc)
+        for arc, src in data.items():
             z.write(src, arc)
 
     size = OUT.stat().st_size
-    print(f"\nwrote {OUT} ({size/1024:.0f} KB)")
+    print(f"\nwrote {OUT} ({size/1e6:.1f} MB)")
     print(f"  {manifest['display_name']}  v{manifest['version']}")
     print(f"  tools: {', '.join(t['name'] for t in manifest['tools'])}")
+    for arc, src in data.items():
+        print(f"  {arc}  {src.stat().st_size/1e6:.1f} MB")
     print("\nInstall: double-click it, or Claude Desktop >"
           " Settings > Extensions > Advanced settings > Install Extension...")
-    print("The index (about 46 MB) downloads on first use.")
+    print("Nothing downloads on first use: the data is in the bundle.")
     return 0
 
 

@@ -33,14 +33,41 @@ public domain, not because it is correct in the nomenclatural sense.
 
 | Source | Code | Terms | Redistributable | Configuration |
 |---|---|---|---|---|
-| LPSN (DSMZ) | ICNP | DSMZ terms; registration required | **No** | `BINOMEN_LPSN_USER`, `BINOMEN_LPSN_PASSWORD` |
-| MycoBank | ICNafp | Site terms | **No** | `BINOMEN_MYCOBANK_ENDPOINT` |
-| Index Fungorum | ICNafp | Site terms | **No** | — |
-| ICTV MSL | viruses | Openly published | Yes, cite the MSL number | `BINOMEN_ICTV_MSL`, `BINOMEN_ICTV_VERSION` |
+| LPSN (DSMZ) | ICNP | **CC BY-SA 4.0**; registration required for the API | **Yes**, share-alike + link to the source page | `BINOMEN_LPSN_USER`, `BINOMEN_LPSN_PASSWORD` |
+| Index Fungorum (Kew) | ICNafp | **CC BY 4.0** under Kew's science-data terms, DOI `10.48580/d38h` | Yes, with attribution | — (ChecklistBank dataset 1028) |
+| Species Fungorum Plus (Kew) | ICNafp | **CC BY 4.0**, DOI `10.15468/ts7wsb` | Yes, with attribution | — (dataset 2073; the Apr 2024 fallback) |
+| ICTV MSL | viruses | Openly published, CC BY | Yes, cite the MSL number | — (ChecklistBank dataset 1014) |
+| MycoBank | ICNafp | Site terms | Unverified — query and cite | `BINOMEN_MYCOBANK_ENDPOINT` |
 
-For the non-redistributable sources `binomen` queries and cites. It does not
-ship derived data and the HTTP cache is gitignored. If you build something on top
-of this that redistributes, check the terms yourself — they change.
+**On the fungal register's licence.** ChecklistBank leaves dataset 1028's
+`license` field empty, which is an omission at registration rather than a
+different grant. Kew's own terms settle it: general website content is
+all-rights-reserved and bars commercial use without a licence, but the terms
+carve out "pages containing science data and digital resources", which "are
+available under the Creative Commons Attribution Licence (CC-BY) and © copyright
+The Trustees of the Royal Botanic Gardens, Kew." Nomenclatural data is science
+data, and attribution travels in every row's `link`. Two further supports: Kew
+publishes the same nomenclator as dataset 2073 under `cc by`, and GBIF hosts a
+Kew Index Fungorum crawl under CC BY 4.0.
+
+This matters beyond compliance. Under CC BY a hospital laboratory or an industry
+researcher may use the tool; under non-commercial terms they could not, and a
+non-commercial file could not lawfully sit beside LPSN's CC BY-SA data in any
+case, since share-alike forbids adding that restriction.
+
+Catalogue of Life 2026 was checked as an alternative and is no fresher — it still
+holds *Candida auris* as accepted.
+
+Verified 2026-08-21 against lpsn.dsmz.de/text/copyright and the GBIF/ChecklistBank
+dataset registries. An earlier version of this table said LPSN was not
+redistributable and that fungal bulk reuse was not granted; both were wrong, and
+the LPSN claim is one of the eight instrument faults recorded in `FINDINGS.md` §8.
+Registers are harvested from ChecklistBank's versioned exports, which need no
+credentials; LPSN's own API is used only to add `lorn_status` (medical-use
+recommendations), which the mirror does not carry.
+
+Share-alike is why the registers ship as their own database rather than as columns
+on the NCBI index — see `docs/adr/0002-two-files-for-licence-containment.md`.
 
 ## Tier 4
 

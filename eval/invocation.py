@@ -269,7 +269,7 @@ def _classes(rows: list) -> dict:
 
 
 def report(path: Path) -> None:
-    all_rows = [json.loads(l) for l in path.read_text(encoding="utf-8").splitlines() if l.strip()]
+    all_rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
     meta = next((r for r in all_rows if r.get("_meta")), {})
     body = [r for r in all_rows if not r.get("_meta")]
     errored = [r for r in body if "error" in r]
@@ -464,8 +464,8 @@ def main() -> int:
         report(a.report)
         return 0
 
-    prompts = [json.loads(l) for l in a.prompts.read_text(encoding="utf-8").splitlines()
-               if l.strip()]
+    prompts = [json.loads(line) for line in a.prompts.read_text(encoding="utf-8").splitlines()
+               if line.strip()]
 
     grid = list(itertools.product(a.models, a.descriptions, a.instructions, prompts,
                                   range(a.replicates)))

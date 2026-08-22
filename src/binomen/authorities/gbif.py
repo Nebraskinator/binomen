@@ -61,12 +61,26 @@ class GBIF:
         lineage = [x for x in lineage if x]
 
         # GBIF distinguishes the name you matched from the accepted name it
-        # points to. When `accepted` is present the match was a synonym, so that
-        # is the name to report; otherwise the matched name is itself accepted.
+        # points to -- but /species/match does NOT reliably return an `accepted`
+        # field. It usually gives only `status: SYNONYM` plus an
+        # `acceptedUsageKey`. The old expression fell through to
+        # `canonicalName`, which is the name you asked about, so every synonym
+        # was reported as its own accepted name. In a comparison against NCBI
+        # that reads as "the authority says this retired name is still current"
+        # -- it produced 46 false positives out of 48 in one 100-name run.
+        #
+        # So: when GBIF says SYNONYM, resolve the key it points at. One extra
+        # request, and only on synonyms.
+        accepted = payload.get("accepted")
+        if not accepted and "synonym" in str(native).lower():
+            accepted = self._resolve_accepted(payload.get("acceptedUsageKey"))
         return AuthorityResult(
             authority=self.name,
             found=True,
-            accepted_name=payload.get("canonicalName") if not payload.get("accepted") else payload.get("accepted"),
+            # Still no accepted name after resolving? Report None. Never the
+            # query: silence is recoverable, a wrong name is not.
+            accepted_name=accepted or (None if "synonym" in str(native).lower()
+                                       else payload.get("canonicalName")),
             identifier=str(payload.get("acceptedUsageKey") or payload.get("usageKey")),
             rank=(payload.get("rank") or "").lower() or None,
             author_citation=self._authorship(payload),
@@ -77,6 +91,16 @@ class GBIF:
             confidence=(payload.get("confidence") or 0) / 100 if payload.get("confidence") else None,
             raw=payload,
         )
+
+    def _resolve_accepted(self, key) -> str | None:
+        """Follow acceptedUsageKey to the name GBIF actually accepts."""
+        if not key:
+            return None
+        try:
+            payload, _, _ = get_json(self.name, f"{BASE}/species/{key}")
+        except Exception:  # noqa: BLE001
+            return None
+        return payload.get("canonicalName") or payload.get("scientificName")
 
     @staticmethod
     def _authorship(payload: dict) -> str | None:

@@ -24,6 +24,8 @@ dev = ["pytest>=8.0", "pytest-asyncio>=0.23", "ruff>=0.6"]
 [project.scripts]
 binomen-server = "binomen.server:main"
 binomen-build-index = "binomen.build.build_index:main"
+binomen-harvest-registers = "binomen.build.harvest_registers:main"
+binomen-build-ambiguity = "binomen.build.build_ambiguity:main"
 binomen-doctor = "binomen.doctor:main"
 binomen-fetch-index = "binomen.fetch_index:main"
 

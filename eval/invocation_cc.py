@@ -369,8 +369,8 @@ def main() -> int:
         print(f"missing {SERVER}", file=sys.stderr)
         return 1
 
-    prompts = [json.loads(l) for l in a.prompts.read_text(encoding="utf-8").splitlines()
-               if l.strip()]
+    prompts = [json.loads(line) for line in a.prompts.read_text(encoding="utf-8").splitlines()
+               if line.strip()]
 
     if a.smoke:
         p = next(x for x in prompts if x["id"] == "nf-01")

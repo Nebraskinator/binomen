@@ -44,7 +44,12 @@ sys.path.insert(0, str(HERE.parent / "src"))
 from scorer import score_case
 
 from binomen.resolver import Resolver
-from binomen.tool_descriptions import descriptions, instructions_variant, server_instructions, variant
+from binomen.tool_descriptions import (
+    descriptions,
+    instructions_variant,
+    server_instructions,
+    variant,
+)
 
 SYSTEM = (
     "You are assisting a working scientist. Answer the question directly and concisely. "

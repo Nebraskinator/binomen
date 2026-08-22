@@ -1,6 +1,6 @@
 {
   "name": "binomen-probe2",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "type": "commonjs",
   "main": "server/index.js",

@@ -171,18 +171,38 @@ let indexState = "opening";   // opening | ready | absent
  * previous session downloaded it; this one installs it.
  */
 function openIndex() {
+  const { Resolver } = require("./resolver.js");
+
+  // The fetched stage-2 index first, when someone has one: it carries ranks,
+  // author citations, lineages and the contested overlay, which the bundled
+  // file drops to stay small enough to ship.
   store.promoteStaged(log);
   const file = store.indexPath();
-  if (!fs.existsSync(file)) return null;
-  try {
-    const { Resolver } = require("./resolver.js");
-    const r = new Resolver(file);
-    log(`index ${r.release} (${path.basename(file)})`);
-    return r;
-  } catch (e) {
-    log(`could not open ${file}: ${e.message}`);
-    return null;
+  if (fs.existsSync(file)) {
+    try {
+      const r = new Resolver(file);
+      log(`index ${r.release} (${path.basename(file)})`);
+      return r;
+    } catch (e) {
+      log(`could not open ${file}: ${e.message}`);
+      // Fall through: a corrupt download must not cost the user the bundled
+      // data that shipped with the extension and is known good.
+    }
   }
+
+  // The bundled backbone, which ships inside the extension. This is the common
+  // install and the reason there is no download step.
+  try {
+    const { AmbiguityStore, locate } = require("./ambiguity.js");
+    if (locate()) {
+      const r = new Resolver(new AmbiguityStore());
+      log(`bundled index ${r.release}`);
+      return r;
+    }
+  } catch (e) {
+    log(`could not open the bundled index: ${e.message}`);
+  }
+  return null;
 }
 
 /** First run: no index yet. Fetch it in the background; tools say so meanwhile. */
@@ -297,7 +317,7 @@ function handle(msg) {
         protocolVersion: agreed,
         capabilities: { tools: {} },
         serverInfo: { name: "binomen", title: "binomen — biological name checker",
-                      version: "0.2.7" },
+                      version: "0.3.0" },
         ...(() => { const t = instructionsText(); return t ? { instructions: t } : {}; })(),
       });
       return;
@@ -395,6 +415,12 @@ function main() {
 
     if (!resolver) {
       firstRunDownload();
+    } else if (resolver.store && resolver.store.bundled) {
+      // A bundled install has no fetched index to update, and checking would
+      // stage a 46 MB download that undoes the one property this design exists
+      // for: no download step. Stage-2 depth stays available to anyone who runs
+      // binomen-fetch-index deliberately.
+      log("bundled data; no update check");
     } else {
       // Never inside a tool call either: check_name is advertised as costing
       // 2 ms, and that promise is the only reason an agent calls it freely.

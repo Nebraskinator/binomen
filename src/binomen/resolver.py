@@ -129,6 +129,17 @@ class Resolver:
 
     # ================================================================ stage 1
     def check_name(self, name: str) -> dict:
+        """The backbone's verdict on a name.
+
+        No register consultation here. Registers are read by the shipped Node
+        server (`node/src/registers.js`) from the database this package *builds*
+        (`binomen.build.harvest_registers`) -- the split ADR-0003 draws between
+        the product and its builder. This resolver answers what NCBI Taxonomy
+        records, which is what the build and analysis scripts need from it.
+        """
+        return self._check_name_ncbi(name)
+
+    def _check_name_ncbi(self, name: str) -> dict:
         """Is there anything about this name that needs a closer look?
 
         The whole point is that the usual answer is no, and saying no costs

@@ -68,3 +68,20 @@ docs/INVOCATION-RUNS.md
 Thumbs.db
 .idea/
 .vscode/
+
+# --- Agent tooling, not part of the tool ---
+# Skills, their lockfile and their per-repo configuration are how *this working
+# copy* is driven; they are not functionality, documentation or tests of binomen,
+# and packaging them would ship one person's editor setup to every user.
+.claude/
+.agents/
+skills-lock.json
+AGENTS.md
+docs/agents/
+
+# --- Session scratch ---
+COMMIT_MSG.tmp
+lpsn-icnp-100.json
+# A personal working spec rather than project documentation. Delete this line if
+# it should ship.
+RUHEZC*.md

@@ -5,25 +5,34 @@ three artifacts, two languages and a release process, and none of that fits in
 anyone's head.
 
 ```
-  NCBI taxdump                    you, quarterly
-        |  binomen-build-index
+  NCBI taxdump                    you, quarterly        ChecklistBank
+        |  binomen-build-index                                    |
+        v                                                         |
+  binomen.sqlite        525 MB    full backbone                   |
+  binomen-stage1.sqlite 107 MB    verdicts + blooms               |
+  binomen-field.sqlite  123 MB    optional depth                  |
+        |  binomen-build-ambiguity          binomen-harvest-registers
+        v                                                         v
+  ambiguity.sqlite       48 MB    NCBI-derived, public domain
+  registers.sqlite       19 MB    LPSN + Index Fungorum + ICTV, CC BY-SA
+        |  python scripts/build_mcpb.py
         v
-  binomen.sqlite        525 MB    full backbone      (developers, eval harness)
-  binomen-stage1.sqlite 107 MB    verdicts + blooms  (Python server)
-  binomen-field.sqlite  123 MB    the shippable one  (Node extension)
-        |  binomen-fetch-index --publish dist/
-        v
-  dist/manifest.json + *.sqlite.gz
-        |  upload as a GitHub release, tagged index-YYYY-MM-DD
-        v
-  binomen.mcpb          ~60 KB    Node server, no index inside
+  binomen.mcpb         24.1 MB    server AND data, one file
         |  user double-clicks
         v
-  Claude Desktop installs it
-        |  first run: fetch binomen-field.sqlite.gz  (46 MB)
-        v
-  working, and checking for a newer index every few weeks
+  Claude Desktop installs it -- and that is the whole installation:
+  no fetch, no first-run wait, no network at query time
 ```
+
+Two databases rather than one because NCBI Taxonomy is public domain and LPSN is
+CC BY-SA, and share-alike is viral: merging them would put a licence claim on the
+public-domain half. See `docs/adr/0002-two-files-for-licence-containment.md`.
+
+The bundled databases hold only names that carry an *ambiguity* -- a superseded
+name, a name with alternatives, a homonym, or a register that disagrees with the
+backbone. That is what makes 1,007,862 stage-1 rows fit in 48 MB, and it makes
+the check itself trivial: presence is the finding. See
+`docs/adr/0001-ambiguity-only-local-database.md`.
 
 ## Why three indexes
 
@@ -75,9 +84,16 @@ fails the second, and there is a test that plants exactly that.
 
 ## Releasing the extension
 
-The `.mcpb` carries the Node server and no data — around 60 KB. It is decoupled
-from the index on purpose: a new index does not require a new extension, and a
-fixed bug does not require anyone to re-download 46 MB.
+The `.mcpb` carries the Node server **and** its data — 24.1 MB, of which 24 MB
+is the two databases. That reverses an earlier decision, and the reason is worth
+stating: decoupling saved the maintainer a re-upload and cost every biologist a
+first-run download, a progress state to understand, and a way for the install to
+fail on an institutional network. An index holding only ambiguous names is small
+enough that the trade is no longer necessary.
+
+A bug-fix release does mean re-downloading the data. At 24 MB that is a worse
+deal for the maintainer and a better one for the user, which is the right way
+round for a tool whose target user has no terminal.
 
 ```bash
 make mcpb        # builds dist/binomen.mcpb
@@ -136,7 +152,7 @@ different clocks — the index tracks NCBI, the extension tracks bug fixes.
 Tag           v0.2.5                     (extension versions carry a v prefix)
 Assets        binomen.mcpb               ← what a biologist downloads
               manifest.json              ← what the auto-updater reads
-              binomen-field.sqlite.gz    ← the 46 MB index
+              binomen-field.sqlite.gz    ← the optional full index
               binomen-stage1.sqlite      ← optional, for the Python server
 ```
 
@@ -152,10 +168,13 @@ do anything, and whether the index changed. `docs/INSTALL.md` is the link to
 give people; it assumes no terminal and covers the permission prompt, the
 verdict vocabulary, and troubleshooting.
 
-## The index lives outside the extension
+## The optional fetched index lives outside the extension
 
-Not in the extension directory. Extension updates replace that directory, and a
-46 MB re-download on every bug-fix release is unacceptable.
+The bundled databases ship *inside* the extension directory, alongside the server
+that reads them. The optional full index does not: extension updates replace that
+directory, and a 123 MB re-download on every bug-fix release would be
+unacceptable. Anyone who runs `binomen-fetch-index` gets it here, and the server
+prefers it when present.
 
 ```
 Windows  %LOCALAPPDATA%\binomen\

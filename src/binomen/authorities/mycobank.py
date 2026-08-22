@@ -22,10 +22,16 @@ Two ICNafp-specific properties that neither NCBI nor GBIF surfaces well:
   repealed. NCBI still carries 'anamorph' and 'teleomorph' name classes, which
   we surface rather than flatten to 'synonym'.
 
-LICENSING: MycoBank and Index Fungorum permit querying; bulk redistribution is
-not clearly granted. Query-and-cite. Left as a documented extension point --
-see docs/EXTENDING.md -- with the interface fully specified so adding it is a
-contained change.
+LICENSING: verified 2026-08-21, and the previous note here was wrong. Species
+Fungorum Plus -- Kew's fungal nomenclator, the same underlying data as Index
+Fungorum -- is **CC BY 4.0** (DOI 10.15468/ts7wsb) and ships as a versioned
+Darwin Core Archive from ChecklistBank dataset 2073, no credentials required.
+The ICNafp register is therefore harvested and shipped like LPSN's, not queried
+live; see docs/adr/0002-two-files-for-licence-containment.md.
+
+This module remains the live query-and-cite path for MycoBank, whose own site
+terms are still unverified. It is not on the runtime path: the shipped server
+reads local data only.
 """
 
 from __future__ import annotations

@@ -102,9 +102,18 @@ points at code you did not ship.
 `data/*.sqlite` — built from NCBI's `taxdump` archive by
 `binomen-build-index`. **Not in git**, deliberately: it is hundreds of MB, and
 freezing a taxonomy inside a repo reintroduces the exact staleness the project
-exists to detect. Users fetch a prebuilt one with `binomen-fetch-index`.
+exists to detect. The databases the extension ships are built from it and
+gitignored for the same reason; each records the release it came from, so a
+snapshot always says how old it is.
 
-It comes in two stages, and the split is the main design idea in the codebase:
+Since v0.3.0 the extension carries its own data and users fetch nothing.
+`binomen-build-ambiguity` reduces stage 1 to the names that carry an
+*ambiguity* — 1,007,862 rows to 661,406, 107 MB to 48 MB — and
+`binomen-harvest-registers` builds the register file beside it. Anyone wanting
+ranks, lineages or author citations can still fetch the full index with
+`binomen-fetch-index`; the server prefers it when it is there.
+
+The build stages, and the split that is the main design idea in the codebase:
 
 - **Stage 1** (`binomen-stage1.sqlite`) — small and fast. Answers only "is
   there anything about this name worth a closer look?" This is what

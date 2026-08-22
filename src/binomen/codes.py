@@ -244,10 +244,30 @@ def normalize_status(source: str, native_term: str, note: str | None = None) -> 
     """
     vocab = _VOCABULARIES.get(source.lower(), {})
     key = native_term.strip()
-    normalized = vocab.get(key) or vocab.get(key.lower()) or Status.UNKNOWN
-    if normalized is Status.UNKNOWN and note is None:
-        note = f"'{native_term}' is not in binomen's vocabulary map for {source}; "\
-               "the native term is authoritative here."
+    normalized = vocab.get(key) or vocab.get(key.lower())
+
+    if normalized is None and "(" in key:
+        # LPSN qualifies a status in parentheses: the live service returns
+        # "correct name (and explicitly recommended for medical use)" where
+        # this table only had "correct name". Exact matching dropped the whole
+        # thing to UNKNOWN, discarding both the status AND the qualifier --
+        # and for a clinical caller that qualifier is the most useful field on
+        # the record, because it is the register saying which of two competing
+        # names to put in a report.
+        #
+        # So: match on the head term, and carry the qualifier out in `note`
+        # rather than flattening it away. The enum stays a small closed set;
+        # the source's own words survive alongside it.
+        head, _, tail = key.partition("(")
+        normalized = vocab.get(head.strip()) or vocab.get(head.strip().lower())
+        if normalized is not None and note is None:
+            note = f"{source} qualifies this status: {tail.rstrip(')').strip()}"
+
+    if normalized is None:
+        normalized = Status.UNKNOWN
+        if note is None:
+            note = f"'{native_term}' is not in binomen's vocabulary map for {source}; "\
+                   "the native term is authoritative here."
     return TaxonStatus(normalized=normalized, native=native_term, source=source, note=note)
 
 

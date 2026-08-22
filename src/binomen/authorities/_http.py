@@ -30,7 +30,8 @@ def offline() -> bool:
     return os.environ.get("BINOMEN_OFFLINE", "").lower() in {"1", "true", "yes"}
 
 
-def get_json(source: str, url: str, params: dict | None = None, timeout: float = 20.0):
+def get_json(source: str, url: str, params: dict | None = None, timeout: float = 20.0,
+             auth=None, headers: dict | None = None):
     """Return (payload, retrieved_iso, from_cache).
 
     Raises `LookupError` when offline with no cached entry, so callers can
@@ -47,7 +48,14 @@ def get_json(source: str, url: str, params: dict | None = None, timeout: float =
         return payload, _iso(fetched), True
     if offline():
         raise LookupError(f"{source}: offline and no cached entry for {url} {params or ''}")
-    with httpx.Client(timeout=timeout, headers={"User-Agent": USER_AGENT}) as client:
+    # `auth` is not part of the cache key on purpose: credentials change who may
+    # ask, not what the answer is. LPSN returns the same record to every
+    # authorised caller, so keying on them would just fragment the cache.
+    # Per-request headers merge over the default UA. Used for bearer tokens,
+    # which are NOT part of the cache key: credentials decide who may ask, not
+    # what the answer is.
+    hdrs = {"User-Agent": USER_AGENT, **(headers or {})}
+    with httpx.Client(timeout=timeout, headers=hdrs, auth=auth) as client:
         r = client.get(url, params=params)
         r.raise_for_status()
         payload = r.json()

@@ -58,14 +58,19 @@ const REASON = {
   unknown: "no record of this name in the indexed release",
 };
 
-class Resolver {
+/* The fetched stage-2 index, as a store.
+ *
+ * Kept in this file rather than beside AmbiguityStore because it is the shape
+ * everything else was written against: the adapter came second, and this is what
+ * it had to match.
+ */
+class FieldStore {
   constructor(indexFile) {
     this.db = new DatabaseSync(indexFile, { readOnly: true });
     this.meta = {};
     for (const r of this.db.prepare("SELECT key, value FROM meta").all()) {
       this.meta[r.key] = r.value;
     }
-    this._blooms = null;
     this._stmt = {
       lookup: this.db.prepare(
         "SELECT norm, taxid, verdict, code FROM lookup WHERE norm = ?"),
@@ -82,15 +87,51 @@ class Resolver {
   }
 
   get release() { return this.meta.version || "unknown"; }
+  get hasEnumeration() { return true; }
+  get bundled() { return false; }
+
+  lookupRows(norm) { return this._stmt.lookup.all(norm); }
+  taxonRow(taxid) { return this._stmt.taxon.get(taxid) || null; }
+  noteRow(norm) { return this._stmt.note.get(norm) || null; }
+  expandRows(pattern) { return this._stmt.expand.all(pattern); }
+  bloomRows() { return this.db.prepare("SELECT code, blob FROM bloom").all(); }
+  close() { this.db.close(); }
+}
+
+class Resolver {
+  /* Takes a path to the fetched index, or any store that answers the same four
+   * questions. Two backends exist -- the fetched stage-2 index and the bundled
+   * ambiguity database -- and the tool logic below is written once for both,
+   * because two copies of it is the drift ADR-0003 exists to prevent. */
+  constructor(index) {
+    this.store = typeof index === "string" ? new FieldStore(index) : index;
+    this.meta = this.store.meta || {};
+    this._blooms = null;
+  }
+
+  get release() { return this.store.release || this.meta.version || "unknown"; }
 
   get blooms() {
     if (!this._blooms) {
       this._blooms = new Map();
-      for (const r of this.db.prepare("SELECT code, blob FROM bloom").all()) {
+      for (const r of this.store.bloomRows()) {
         this._blooms.set(r.code, BloomFilter.load(Buffer.from(r.blob)));
       }
     }
     return this._blooms;
+  }
+
+  /* One place where a name becomes rows.
+   *
+   * The bundled store carries the accepted display name on the row rather than
+   * in a taxa table, so it is stashed here for taxonRow to fall back on: a
+   * cluster with a single name is not packed at all, and without this the
+   * accepted form would come back lowercased.
+   */
+  _lookup(norm) {
+    const rows = this.store.lookupRows(norm);
+    this._acceptedHint = rows.length ? rows[0].accepted || null : null;
+    return rows;
   }
 
   codesMatching(name) {
@@ -101,14 +142,14 @@ class Resolver {
   }
 
   taxon(taxid) {
-    const t = this._stmt.taxon.get(taxid);
+    const t = this.store.taxonRow(taxid, this._acceptedHint);
     if (!t) return null;
     t.synonyms = t.synonyms ? JSON.parse(t.synonyms) : [];
     return t;
   }
 
   note(name) {
-    const r = this._stmt.note.get(normalizeName(name));
+    const r = this.store.noteRow(normalizeName(name));
     return r ? JSON.parse(r.payload) : null;
   }
 
@@ -122,12 +163,46 @@ class Resolver {
     };
   }
 
+  get registers() {
+    if (this._registers === undefined) {
+      const { Registers } = require("./registers.js");
+      this._registers = new Registers();
+    }
+    return this._registers;
+  }
+
+  /* Every answer that names a taxon carries what the registers say about it.
+   *
+   * It used to be attached here at one call site, so a model that went straight
+   * to resolve_name was told NCBI's answer and never learned that the ICNP
+   * register recommends a different name for medical use. Consulting the
+   * registers is part of what a resolved name IS, not a decoration one entry
+   * point remembers to add.
+   *
+   * A failure degrades to the backbone's answer rather than to no answer: a
+   * broken register file must never take a lookup down with it. */
+  _withRegisters(out, name, detail = null) {
+    try {
+      return detail
+        ? this.registers.annotateDetailed(out, name, detail)
+        : this.registers.annotateTerse(out, name);
+    } catch {
+      return out;
+    }
+  }
+
   // ------------------------------------------------------------- stage 1
+  /* Stage 1, then the registers' second opinion. Wrapping rather than editing
+   * the body keeps the rule enforceable: annotation only ADDS keys. */
   checkName(name) {
+    return this._withRegisters(this._checkNameNcbi(name), String(name || "").trim());
+  }
+
+  _checkNameNcbi(name) {
     const q = String(name || "").trim();
     if (!q) return { name: q, verdict: "unknown", escalate: false, reason: "empty query" };
 
-    const rows = this._stmt.lookup.all(normalizeName(q));
+    const rows = this._lookup(normalizeName(q));
     if (rows.length) return this._verdict(q, rows);
 
     const codes = this.codesMatching(q);
@@ -154,7 +229,7 @@ class Resolver {
     const split = splitDesignation(q);
     if (split) {
       const [binomial, designation] = split;
-      const brows = this._stmt.lookup.all(normalizeName(binomial));
+      const brows = this._lookup(normalizeName(binomial));
       if (brows.length) {
         const v = this._verdict(binomial, brows);
         v.name = q;
@@ -207,7 +282,7 @@ class Resolver {
     // comes back too: "spermophilus elegans aureus" answers 's% aureus'. It
     // abbreviates to "S. e. aureus", not "S. aureus", so it goes on token count.
     const want = rest.split(/\s+/).length + 1;
-    const names = this._stmt.expand.all(`${initial}% ${esc}`)
+    const names = this.store.expandRows(`${initial}% ${esc}`)
       .map((r) => r.norm)
       .filter((n) => n[0] === initial && n.split(/\s+/).length === want);
     if (!names.length) return null;
@@ -225,7 +300,7 @@ class Resolver {
 
     const expanded = names[0];
     const via = { abbreviation: q, expanded: capitaliseGenus(expanded) };
-    const rows = this._stmt.lookup.all(expanded);
+    const rows = this._lookup(expanded);
     if (!rows.length) {
       const codes = this.codesMatching(expanded);
       if (codes.length !== 1) return null;
@@ -258,14 +333,14 @@ class Resolver {
   resolveName(name) {
     const q = String(name || "").trim();
     const warnings = [];
-    let rows = this._stmt.lookup.all(normalizeName(q));
+    let rows = this._lookup(normalizeName(q));
     let designation = null;
 
     if (!rows.length) {
       const split = splitDesignation(q);
-      if (split && this._stmt.lookup.all(normalizeName(split[0])).length) {
+      if (split && this._lookup(normalizeName(split[0])).length) {
         [, designation] = split;
-        rows = this._stmt.lookup.all(normalizeName(split[0]));
+        rows = this._lookup(normalizeName(split[0]));
         warnings.push(
           `'${q}' was resolved through its species name '${split[0]}'; the designation ` +
           `'${split[1]}' is a laboratory identifier, not governed by any nomenclatural ` +
@@ -342,17 +417,23 @@ class Resolver {
     if (warnings.length) out.warnings = warnings;
     const stale = this._stalenessWarning();
     if (stale) (out.warnings ||= []).push(stale);
-    return out;
+    // Stage 2 is where detail belongs: standing in the register's own words,
+    // the rank each source holds the name at, and the link the licence requires.
+    return this._withRegisters(out, q, {
+      code: out.governing_code && out.governing_code.code,
+      currentName: candidates.length ? candidates[0].accepted_name : null,
+      rank: candidates.length ? candidates[0].rank || null : null,
+    });
   }
 
   getSynonyms(name) {
     const q = String(name || "").trim();
-    let rows = this._stmt.lookup.all(normalizeName(q));
+    let rows = this._lookup(normalizeName(q));
     let designation = null;
     if (!rows.length) {
       const split = splitDesignation(q);
       if (split) {
-        const brows = this._stmt.lookup.all(normalizeName(split[0]));
+        const brows = this._lookup(normalizeName(split[0]));
         if (brows.length) { rows = brows; [, designation] = split; }
       }
     }
@@ -383,7 +464,13 @@ class Resolver {
       out.contested = true;
       out.warnings = [`AUTHORITIES DISAGREE. ${note.guidance || ""}`.trim()];
     }
-    return out;
+    // An enumeration of names is exactly where a register's alternative belongs:
+    // a caller asking for every name recorded for a taxon must not be handed a
+    // list the ICNP register would add to.
+    return this._withRegisters(out, q, {
+      code: rows[0] && rows[0].code,
+      currentName: accepted,
+    });
   }
 
   expandQuery(name, { includeAbbreviated = true } = {}) {
@@ -434,7 +521,7 @@ class Resolver {
            "transfers are missing.";
   }
 
-  close() { this.db.close(); }
+  close() { this.store.close(); }
 }
 
-module.exports = { Resolver, REASON };
+module.exports = { Resolver, FieldStore, REASON };

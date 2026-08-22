@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "binomen-probe2",
   "display_name": "binomen capability probe",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Throwaway diagnostic: reports which runtime capabilities a Claude Desktop extension actually gets on this host.",
   "author": { "name": "binomen" },
   "license": "MIT",

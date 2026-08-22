@@ -23,9 +23,11 @@ the model. If two authorities disagree, it says so rather than picking one.
 ## Before you start
 
 - **Claude Desktop**, updated. Download it from <https://claude.ai/download>.
-- **About 130 MB of free disk space** for the name index.
+- **About 70 MB of free disk space** for the name data, which is inside the
+  extension.
 - **Windows or macOS.** Linux works too.
-- **A few minutes** on first use, while the index downloads.
+- **No wait, and no download.** Everything the tool needs is in the file you
+  install.
 
 You do not need a Claude subscription tier beyond whatever you already use for
 chatting, and you do not need an API key.
@@ -53,9 +55,8 @@ chatting, and you do not need an API key.
 
    > Is *Clostridium difficile* still the accepted name?
 
-   The first time, binomen downloads its name index — about 46 MB, once. If it
-   is not ready yet, it will say so plainly rather than guess. Wait a minute and
-   ask again.
+   It answers straight away. The name data ships inside the extension, so there
+   is no first-run download and nothing to wait for.
 
 That's the whole installation.
 
@@ -145,9 +146,10 @@ from Settings → Extensions. Make sure you are on the latest release — versio
 before 0.2.4 fail to start under some Claude Desktop configurations.
 
 **It says the index is unavailable.**
-It could not download the 46 MB index. Check your internet connection, then
-restart Claude Desktop. On an institutional network, a proxy or firewall may be
-blocking GitHub — worth asking your IT group.
+The data ships inside the extension, so this should not happen. It usually means
+the install did not complete. Remove the extension from Settings → Extensions,
+install it again, and restart Claude Desktop fully — quitting the window is not
+enough, since extensions only start when the app does.
 
 **Claude answers about a name without checking.**
 Ask it explicitly, using one of the prompts above. This is a known limitation,
